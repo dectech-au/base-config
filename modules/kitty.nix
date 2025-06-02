@@ -15,8 +15,4 @@
     shellIntegration.enableFishIntegration = true;
 	};
 
-  fonts.fonts = with pkgs; [
-    (nerdfonts.override { fonts = [ "JetbrainsMono"]; })
-  ];
-
 }
