@@ -4,6 +4,19 @@
 {
 	programs.kitty = {
 		enable = true;
-		shellIntegration.enableFishIntegration = true;
+		
+    font = {
+      name = "JetBrainsMono Nerd Font";
+      size = 12;
+    };
+
+    theme = "Gruvbox Dark";
+
+    shellIntegration.enableFishIntegration = true;
 	};
+
+  fonts.fonts = with pkgs; [
+    (nerdfonts.override { fonts = [ "JetbrainsMono"]; })
+  ];
+
 }
