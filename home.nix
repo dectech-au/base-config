@@ -18,6 +18,8 @@
     userEmail = "zozano@protonmail.com";
   };
 
-  # home.file.".config/kitty/kitty.conf".text = "source/config/kitty/kitty.conf";
+  home.file.".local/share/applications/documents.conf".text = ''
+    test
+  '';
 }
 
