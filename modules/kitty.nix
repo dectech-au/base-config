@@ -2,5 +2,8 @@
 { config, lib, pkgs, ... }:
 
 {
-	programs.kitty.enable = true;
+	programs.kitty = {
+		enable = true;
+		shellIntegration.enableFishIntegration = true;
+	};
 }
