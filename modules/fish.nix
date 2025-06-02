@@ -2,5 +2,9 @@
 { config, lib, pkgs, ... }:
 
 {
-	programs.fish.enable = true;
+	programs.fish = {
+    enable = true;
+    shellInit = "cd ~/.dotfiles/";
+    shellInitLast = "fastfetch";
+  };
 }
