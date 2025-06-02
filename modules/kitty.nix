@@ -10,9 +10,8 @@
       size = 12;
     };
 
-    themeFile = "https://github.com/kovidgoyal/kitty-themes/blob/master/themes/GruvboxMaterialDarkMedium.conf";
+    themeFile = "../themeFile/GruvboxMaterialDarkMedium";
 
     shellIntegration.enableFishIntegration = true;
 	};
-
 }
