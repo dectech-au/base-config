@@ -5,7 +5,7 @@
    cd /home/dectec/.dotfiles
    git add *
    git commit -m "$(date '+%F_%H:%M:%S')" 
-   git push github main
+   git push origin main
 
    # Define the timestamp file
    STAMP_FILE="/tmp/nix_flake_update.timestamp"
