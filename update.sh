@@ -19,7 +19,7 @@
     echo "Skipping nix flake update (ran recently)."
    fi
 
-   sudo nixos-rebuild switch --upgrade --flake /home/dectec/.dotfiles/#z-nixos
+   sudo nixos-rebuild switch --upgrade --flake /home/dectec/.dotfiles/#
 
    echo "Done!"
    sleep 2  # short pause before closing
