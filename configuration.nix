@@ -12,8 +12,9 @@
       		./modules/onlyoffice.nix
 		#./modules/kitty.nix
       		#./modules/git.nix
-		./modules/neovim.nix
-      		./modules/firefox.nix
+		#./modules/neovim.nix
+      		./modules/nixvim.nix
+		./modules/firefox.nix
       		#./modules/fish.nix
 		#./modules/mako.nix
 		./modules/gparted.nix
