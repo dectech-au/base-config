@@ -6,12 +6,17 @@
 		enable = true;
 		
     font = {
-      name = "JetBrainsMono Nerd Font";
+      name = "JetBrains Mono";
       size = 12;
     };
 
-    themeFile = "./themeFile/GruvboxMaterialDarkMedium";
+    themeFile = "GruvboxMaterialDarkMedium";
 
     shellIntegration.enableFishIntegration = true;
+    settings.shell = "fish";
 	};
+
+  home.packages = with pkgs; [
+    jetbrains-mono
+  ];
 }
