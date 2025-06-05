@@ -36,7 +36,7 @@
           modules = [
             ./configuration.nix
             { 
-              imports = [ aagl.nixosModules.default ]
+              imports = [ aagl.nixosModules.default ];
               nix.settings = aagl.nixConfig;
               programs.anime-game-launcher.enable = true; # Adds launcher and /etc/hosts rules
               programs.anime-games-launcher.enable = true;      # Genshin Impact
