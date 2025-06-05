@@ -19,6 +19,7 @@
 	  ./modules/gparted.nix
 	  ./modules/evolution.nix
 	  ./modules/teams.nix
+    ./modules/wine.nix
 	  ];
   
   # Bootloader.
