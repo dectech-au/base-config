@@ -3,7 +3,6 @@
 {
   imports = [
   ./modules/fastfetch.nix
-  ./modules/star-rail.nix
 	./modules/fish.nix
 	./modules/kitty.nix
 	./modules/git.nix
