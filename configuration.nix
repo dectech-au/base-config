@@ -5,23 +5,22 @@
 { config, lib, pkgs, ... }:
 
 {
-  	imports = [
-
-      		./hardware-configuration.nix
-		./modules/chrome.nix
-      		./modules/onlyoffice.nix
-		#./modules/kitty.nix
-      		#./modules/git.nix
-		#./modules/neovim.nix
-      		./modules/nixvim.nix
-		./modules/firefox.nix
-      		#./modules/fish.nix
-		#./modules/mako.nix
-		./modules/gparted.nix
-		./modules/evolution.nix
-		./modules/teams.nix
-	];
-
+  imports = [
+    ./hardware-configuration.nix
+	  ./modules/chrome.nix
+    ./modules/onlyoffice.nix
+	  #./modules/kitty.nix    # home-manager
+    #./modules/git.nix      # home-manager
+	  #./modules/neovim.nix   # home-manager
+    ./modules/nixvim.nix
+	  ./modules/firefox.nix
+    #./modules/fish.nix     # home-manager
+	  #./modules/mako.nix     # home-manager
+	  ./modules/gparted.nix
+	  ./modules/evolution.nix
+	  ./modules/teams.nix
+	  ];
+  
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;

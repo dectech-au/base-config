@@ -3,6 +3,7 @@
 {
   imports = [
   ./modules/fastfetch.nix
+  ./modules/star-rail.nix
 	./modules/fish.nix
 	./modules/kitty.nix
 	./modules/git.nix
@@ -18,7 +19,7 @@
     userEmail = "zozano@protonmail.com";
   };
 
-  home.file.".local/share/applications/documents.conf".text = ''
+  home.file.".local/share/applications/teams.desktop".text = ''
     test
   '';
 }
