@@ -43,7 +43,7 @@
               # programs.anime-game-launcher.enable = true; # Adds launcher and /etc/hosts rules
               # programs.anime-games-launcher.enable = true;      # Genshin Impact
               programs.honkers-railway-launcher.enable = true;  # Honkai: Star Rail
-              # programs.honkers-launcher.enable = true;          # Honkai: Impact 3rd
+              programs.honkers-launcher.enable = true;          # Honkai: Impact 3rd
               # programs.wavey-launcher.enable = true;            # ???
               # programs.sleepy-launcher.enable = true;           # Zenless Zone Zero
             }
