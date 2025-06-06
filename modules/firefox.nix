@@ -1,10 +1,6 @@
 #~/.dotfiles/modules/firefox.nix
 { config, lib, pkgs, ... }:
 {
-	environment.systemPackages = with pkgs; [
-    nurl
-  ];
-
   programs.firefox = {
     enable = true;
     profiles.default = {
