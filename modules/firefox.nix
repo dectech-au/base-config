@@ -3,8 +3,8 @@
 {
 	programs.firefox = {
     enable = true;
-    profiles.default.extensions.packages = [
-      "uBlock0@raymondhill.net"
+    profiles.default.extensions.packages = with pkgs.firefox-addons; [
+      ublock-origin
     ];
   };
 }
