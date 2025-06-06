@@ -12,6 +12,7 @@
 	  #./modules/kitty.nix    # home-manager
     #./modules/git.nix      # home-manager
 	  #./modules/neovim.nix   # home-manager
+    ./modules/nurl.nix
     ./modules/nixvim.nix
 	  #./modules/firefox.nix  # home-manager
     #./modules/fish.nix     # home-manager
