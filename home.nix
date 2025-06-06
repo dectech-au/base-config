@@ -3,7 +3,8 @@
 {
   imports = [
   ./modules/fastfetch.nix
-	./modules/fish.nix
+	./modules/firefox.nix
+  ./modules/fish.nix
 	./modules/kitty.nix
 	./modules/git.nix
   ];
