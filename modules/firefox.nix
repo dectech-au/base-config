@@ -4,7 +4,7 @@
 	programs.firefox = {
     enable = true;
     profiles.default.extensions.packages = [
-      ublock-origin
+      "uBlock0@raymondhill.net"
     ];
   };
 }
