@@ -5,7 +5,7 @@
     enable = true;
   };
 
-  programs.libreworlf = {
+  programs.librewolf = {
     enable = true;
   };
 }

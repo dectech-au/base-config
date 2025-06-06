@@ -40,7 +40,7 @@
               imports = [ aagl.nixosModules.default ];
               nix.settings = aagl.nixConfig;
               aagl.enableNixpkgsReleaseBranchCheck = false;
-              # programs.anime-game-launcher.enable = true;     # Genshin Impact
+              # programs.anime-games-launcher.enable = true;    # Hoyo Launcher
               programs.honkers-railway-launcher.enable = true;  # Honkai: Star Rail
               programs.honkers-launcher.enable = true;          # Honkai: Impact 3rd
               # programs.sleepy-launcher.enable = true;         # Zenless Zone Zero
