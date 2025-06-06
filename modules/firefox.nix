@@ -4,4 +4,8 @@
   programs.firefox = {
     enable = true;
   };
+
+  programs.libreworlf = {
+    enable = true;
+  };
 }
