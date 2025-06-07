@@ -10,7 +10,7 @@
       settings = {
         # settings go here
       };
-      extensions = with inputs.firefox-addons.packages.${pkgs.system}; [
+      extensions = with pkgs.firefox-addons; [
         ublock-origin
       ];
     };
