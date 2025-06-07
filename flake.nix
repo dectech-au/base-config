@@ -1,4 +1,4 @@
-#/etc/nixos/flake.nix
+#~/.dotfiles/flake.nix
 {
   description = "DecTec default flake";
 
@@ -30,6 +30,11 @@
         inherit system;
         config.allowUnfree = true;
       };
+      overlays = [
+        (final: prev: {
+          firefox-addons = inputs.firefox-addons.packages.${system};
+         })
+      ];
     in {
       nixosConfigurations = {
         nixos = lib.nixosSystem {
@@ -54,6 +59,12 @@
             }
 	          nixvim.nixosModules.nixvim
           ];
+          specialArgs = {
+            inherit inputs;
+          };
+          pkgs = import nixpkgs {
+            inherit system overlays;
+          };
         };
       };
     };
