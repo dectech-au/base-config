@@ -7,8 +7,8 @@ in {
   programs.firefox = {
     enable = true;
     profiles.default = {
-      extensions = with firefox-addons; [
-        ublock-origin
+      extensions = with pkgs; [
+        nur.repos.rycee.firefox-addons.ublock-origin
       ];
     };
   };
