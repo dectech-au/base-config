@@ -25,13 +25,14 @@
   outputs = { self, nixpkgs, home-manager, nixvim, aagl, ... }@inputs:
     let
       system = "x86_64-linux";
+      lib = nixpkgs.lib; 
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
       };
     in {
       nixosConfigurations = {
-        nixos = nixpkgs.lib.nixosSystem {
+        nixos = lib.nixosSystem {
           inherit system;
           modules = [
             ./configuration.nix
