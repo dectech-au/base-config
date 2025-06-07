@@ -1,19 +1,15 @@
 #~/.dotfiles/modules/firefox.nix
 { config, lib, pkgs, inputs, ... }:
 
-  let
-    addons = with pkgs.firefox-addons; [
-      ublock-origin
-    ];
-  in
-  
-{
+let
+  firefox-addons = pkgs.callPackage <nixpkgs/pkgs/applications/networking/browsers/firefox/extensions.nix> {};
+in {
   programs.firefox = {
     enable = true;
     profiles.default = {
-      extensions = {
-        packages = addons;
-      };
+      extensions = with firefox-addons; [
+        ublock-origin
+      ];
     };
   };
 
