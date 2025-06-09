@@ -61,7 +61,7 @@
 	          nixvim.nixosModules.nixvim
           ];
           specialArgs = {
-            inherit (inputs.firefox-addons.packages.${system}) ublock-origin;
+            inherit inputs pkgs;
           };
           pkgs = import nixpkgs {
             inherit system overlays;
