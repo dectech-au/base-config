@@ -4,16 +4,16 @@
 {
   programs.firefox = {
     enable = true;
-    profiles.default = {
-      id = 0;
-      name = "Default";
-      settings = {
-        # settings go here
-      };
-      extensions = with pkgs.firefox-addons; [
-        ublock-origin
-      ];
-    };
+    # profiles.default = {
+    #   id = 0;
+    #   name = "Default";
+    #   settings = {
+    #     # settings go here
+    #   };
+    #   extensions = with pkgs.firefox-addons; [
+    #     ublock-origin
+    #   ];
+    # };
   };
 
   programs.librewolf = {
