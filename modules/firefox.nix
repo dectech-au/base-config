@@ -44,8 +44,4 @@
       };
     };
   };
-
-  programs.librewolf = {
-    enable = true;
-  };
 }
