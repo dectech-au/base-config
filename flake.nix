@@ -39,10 +39,9 @@
       nixosConfigurations = {
         nixos = lib.nixosSystem {
           inherit system;
-          config.allowUnfree = true;
           modules = [
             ./configuration.nix
-            
+            { config.allowUnfree = true; }
             { 
               imports = [ aagl.nixosModules.default ];
               nix.settings = aagl.nixConfig;
