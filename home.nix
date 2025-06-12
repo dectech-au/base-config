@@ -3,7 +3,7 @@
 {
   imports = [
   ./modules/fastfetch.nix
-	./modules/firefox.nix
+	#./modules/firefox.nix # Moved to configuration.nix
   ./modules/fish.nix
 	./modules/kitty.nix
 	./modules/git.nix
