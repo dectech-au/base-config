@@ -41,7 +41,7 @@
           inherit system;
           modules = [
             ./configuration.nix
-            { config.allowUnfree = true; }
+            { nixpkgs.config.allowUnfree = true; }
             { 
               imports = [ aagl.nixosModules.default ];
               nix.settings = aagl.nixConfig;
