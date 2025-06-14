@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 {
-  environment.systemPacakages = with pkgs; [
+  environment.systemPackages = with pkgs; [
     btrfs-progs
     parted
   ];
