@@ -10,6 +10,7 @@
 	  ./modules/chrome.nix
     ./modules/onlyoffice.nix
 	  ./modules/bluetooth.nix
+    ./modules/btrfs.nix
     #./modules/kitty.nix    # home-manager
     #./modules/git.nix      # home-manager
 	  #./modules/neovim.nix   # home-manager
