@@ -4,7 +4,7 @@
   programs.fastfetch.enable = true;
 
   environment.systemPackages = with pkgs; [
-    btrfs
+    btrfs-progs
     parted
   ];
 }
