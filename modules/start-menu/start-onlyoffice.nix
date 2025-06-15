@@ -5,7 +5,7 @@
     name = "Office";
     #description = "Document Editor";
     comment = "Edit office documents";
-    exec = "onlyoffice-desktopeditors";
+    exec = "onlyoffice-desktopeditors %U";
     icon = "ms-office";
     terminal = false;
     type = "Application";

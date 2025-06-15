@@ -9,6 +9,6 @@
     icon = "teams-for-linux";
     terminal = false;
     type = "Application";
-    categories = [ "Internet" ];
+    categories = [ "X-Internet" ];
   };
 }
