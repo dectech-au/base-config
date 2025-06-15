@@ -4,7 +4,7 @@
   xdg.desktopEntries.only-office = {
     name = "ONLYOFFICE";
     exec = "onlyoffice-desktopeditors";
-    icon = "wps-office-wpsmain";
+    icon = "ms-office";
     terminal = false;
     type = "Application";
     categories = [ "Office" ];
