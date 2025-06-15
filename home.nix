@@ -9,6 +9,7 @@
   ./modules/librewolf.nix
 	./modules/git.nix
   ./modules/start-menu/start-onlyoffice.nix
+  ./modules/start-menu/teams.nix
   ];
 
   home.username = "dectec";

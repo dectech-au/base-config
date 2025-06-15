@@ -2,7 +2,7 @@
 { config, lib, pkgs, ... }:
 {
   xdg.desktopEntries.ONLYOFFICE = {
-    name = "ONLYOFFICE";
+    name = "Office";
     #description = "Document Editor";
     comment = "Edit office documents";
     exec = "onlyoffice-desktopeditors";
