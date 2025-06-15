@@ -3,7 +3,7 @@
 {
   xdg.desktopEntries.ONLYOFFICE = {
     name = "ONLYOFFICE";
-    description = "Document Editor";
+    #description = "Document Editor";
     comment = "Edit office documents";
     exec = "onlyoffice-desktopeditors";
     icon = "ms-office";

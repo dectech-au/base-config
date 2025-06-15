@@ -3,7 +3,7 @@
 {
   xdg.desktopEntries.teams = {
     name = "Teams";
-    description = "";
+    #description = "";
     comment = "Unofficial Microsoft Teams client for Linux";
     exec = "teams-for-linux";
     icon = "teams-for-linux";
