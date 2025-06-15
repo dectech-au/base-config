@@ -20,7 +20,8 @@
 	  #./modules/mako.nix     # home-manager
 	  ./modules/gparted.nix
 	  ./modules/evolution.nix
-	  ./modules/teams.nix
+	  ./modules/papirus.nix
+    ./modules/teams.nix
     ./modules/wine.nix
 	  ];
   
