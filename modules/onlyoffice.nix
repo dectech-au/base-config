@@ -7,4 +7,12 @@
 		onlyoffice-bin
 	];
 
+  xdg.desktopEntries.only-office = {
+    name = "OnlyOffice";
+    exec = "onlyoffice-desktopeditors";
+    icon = "ms-office";
+    terminal = false;
+    type = "Application";
+    categories = [ "Office" ];
+  };
 }
