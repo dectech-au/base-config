@@ -2,7 +2,7 @@
 { config, lib, pkgs, ... }:
 {
   xdg.desktopEntries.only-office = {
-    name = "OnlyOffice";
+    name = "ONLYOFFICE";
     exec = "onlyoffice-desktopeditors";
     icon = "wps-office-wpsmain";
     terminal = false;
