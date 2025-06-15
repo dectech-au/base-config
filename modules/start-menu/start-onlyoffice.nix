@@ -1,0 +1,12 @@
+#~/.dotfiles/modules/start-menu/start-onlyoffice.nix
+{ config, lib, pkgs, ... }:
+{
+  xdg.desktopEntries.only-office = {
+    name = "OnlyOffice";
+    exec = "onlyoffice-desktopeditors";
+    icon = "ms-office";
+    terminal = false;
+    type = "Application";
+    categories = [ "Office" ];
+  };
+}

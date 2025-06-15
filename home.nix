@@ -8,6 +8,7 @@
 	./modules/kitty.nix
   ./modules/librewolf.nix
 	./modules/git.nix
+  ./modules/start-menu/start-onlyoffice.nix
   ];
 
   home.username = "dectec";
@@ -20,8 +21,8 @@
     userEmail = "zozano@protonmail.com";
   };
 
-  home.file.".local/share/applications/teams.desktop".text = ''
-    test
-  '';
+  # home.file.".local/share/applications/teams.desktop".text = ''
+  #   test
+  # '';
 }
 
