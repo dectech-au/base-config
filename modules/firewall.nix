@@ -3,7 +3,7 @@
 {
   networking.firewall = {
     enable = true;
-    allowedTCPPorts = [ 6666 ];
-    allowedUDPPorts = [ 6666 ];
+    allowedTCPPorts = [ 6666 ]; # remote mouse
+    allowedUDPPorts = [ 6666 ]; # remote mouse 
   };
 }
