@@ -30,38 +30,41 @@
         inherit system;
         config.allowUnfree = true;
       };
+
+      MODULES = { 
+        bluetooth = ./modules/bluetooth.nix;
+        btrfs = ./modules/btrfs.nix;
+        chrome = ./modules/chrome.nix;
+        dropbox = ./modules/dropbox.nix;
+        evolution = ./modules/evolution.nix;
+        fish = ./modules/fish.nix;
+        firefox = ./modules/firefox.nix;
+        git = ./modules/git.nix;
+        gparted = ./modules/gparted.nix;
+        kitty = ./modules/kitty.nix;
+        librewolf = ./modules/librewolf.nix;
+        nixvim = ./modules/nixvim.nix;
+        onlyoffice = ./modules/onlyoffice.nix;
+        papirus = ./modules/papirus.nix;
+        teams = ./modules/teams.nix;
+        wine = ./modules/wine.nix;
+        start-menu_onlyoffice = ./modules/start-menu/start-onlyoffice.nix;
+        start-menu_teams = ./modules/start-menu/start-teams.nix;
+      };
+
       overlays = [
         (final: prev: {
           firefox-addons = inputs.firefox-addons.packages.${system};
          })
       ];
+    
     in {
       nixosConfigurations = {
         
         enterprise-base = lib.nixosSystem {
           inherit system;
           specialArgs = { 
-            MODULES = { 
-              bluetooth = ./modules/bluetooth.nix;
-              btrfs = ./modules/btrfs.nix;
-              chrome = ./modules/chrome.nix;
-              dropbox = ./modules/dropbox.nix;
-              evolution = ./modules/evolution.nix;
-              fish = ./modules/fish.nix;
-              firefox = ./modules/firefox.nix;
-              git = ./modules/git.nix;
-              gparted = ./modules/gparted.nix;
-              kitty = ./modules/kitty.nix;
-              librewolf = ./modules/librewolf.nix;
-              nixvim = ./modules/nixvim.nix;
-              onlyoffice = ./modules/onlyoffice.nix;
-              papirus = ./modules/papirus.nix;
-              teams = ./modules/teams.nix;
-              wine = ./modules/wine.nix;
-
-              start-menu_onlyoffice = ./modules/start-menu/start-onlyoffice.nix;
-              start-menu_teams = ./modules/start-menu/start-teams.nix;
-            };
+            inherit MODULES;
           };
 
           modules = [
@@ -90,27 +93,7 @@
         personal-tim = lib.nixosSystem {
           inherit system;
           specialArgs = { 
-            MODULES = {
-              bluetooth = ./modules/bluetooth.nix;
-              btrfs = ./modules/btrfs.nix;
-              chrome = ./modules/chrome.nix;
-              dropbox = ./modules/dropbox.nix;
-              evolution = ./modules/evolution.nix;
-              fish = ./modules/fish.nix;
-              firefox = ./modules/firefox.nix;
-              git = ./modules/git.nix;
-              gparted = ./modules/gparted.nix;
-              kitty = ./modules/kitty.nix;
-              librewolf = ./modules/librewolf.nix;
-              nixvim = ./modules/nixvim.nix;
-              onlyoffice = ./modules/onlyoffice.nix;
-              papirus = ./modules/papirus.nix;
-              teams = ./modules/teams.nix;
-              wine = ./modules/wine.nix;
-
-              start-menu_onlyoffice = ./modules/start-menu/start-onlyoffice.nix;
-              start-menu_teams = ./modules/start-menu/start-teams.nix;
-            };
+            inherit MODULES;
           };
 
           modules = [
