@@ -4,12 +4,12 @@ let
   remotemouse = pkgs.buildFHSEnv {
     name = "remotemouse";
     targetPkgs = pkgs: with pkgs; [
+      glib
       xclip
       xorg.libxcb
       xorg.libX11
       xorg.libXinerama
       zlib
-      libgthread
       # add other missing libs as needed
     ];
     runScript = "./modules/RemoteMouse_x86_64/RemoteMouse"; # actual binary
