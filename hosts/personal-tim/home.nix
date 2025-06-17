@@ -10,8 +10,8 @@
 	  ../../modules/git.nix
 	  ../../modules/kitty.nix
     ../../modules/librewolf.nix
-    ../../modules/start-menu/start-onlyoffice.nix
-    ../../modules/start-menu/start-teams.nix
+    ../../modules/start-menu/onlyoffice.nix
+    ../../modules/start-menu/teams.nix
   ];
 
   home.username = "dectec";
