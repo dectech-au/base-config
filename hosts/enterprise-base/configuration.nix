@@ -7,23 +7,19 @@
 {
   imports = [
     ./hardware-configuration.nix
-	  ./modules/chrome.nix
-    ./modules/onlyoffice.nix
-	  ./modules/bluetooth.nix
-    ./modules/btrfs.nix
-    #./modules/kitty.nix    # home-manager
-    #./modules/git.nix      # home-manager
-	  #./modules/neovim.nix   # home-manager
-    ./modules/nixvim.nix
-	  ./modules/firefox.nix
-    #./modules/fish.nix     # home-manager
-	  #./modules/mako.nix     # home-manager
-	  ./modules/gparted.nix
-	  ./modules/evolution.nix
-	  ./modules/papirus.nix
-    ./modules/teams.nix
-    ./modules/wine.nix
-	  ];
+	  ../../modules/chrome.nix
+    ../../modules/onlyoffice.nix
+	  ../../modules/bluetooth.nix
+    ../../modules/btrfs.nix
+    ../../modules/nixvim.nix
+	  ../../modules/firefox.nix
+	  ../../modules/gparted.nix
+	  ../../modules/evolution.nix
+	  ../../modules/papirus.nix
+    ../../modules/plasma.nix
+    ../../modules/teams.nix
+    ../../modules/wine.nix
+	];
   
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -56,14 +52,6 @@
     LC_TELEPHONE = "en_AU.UTF-8";
     LC_TIME = "en_AU.UTF-8";
   };
-
-  # Enable the X11 windowing system.
-  # You can disable this if you're only using the Wayland session.
-  services.xserver.enable = true;
-
-  # Enable the KDE Plasma Desktop Environment.
-  services.displayManager.sddm.enable = true;
-  services.desktopManager.plasma6.enable = true;
 
   # Configure keymap in X11
   services.xserver.xkb = {
