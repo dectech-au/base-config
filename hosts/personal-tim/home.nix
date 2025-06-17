@@ -12,7 +12,7 @@
     ../../modules/librewolf.nix
     ../../modules/start-menu/onlyoffice.nix
     ../../modules/start-menu/teams.nix
-    ./personalisation/wallpaper.nix
+    #./personalisation/wallpaper.nix
   ];
 
   home.username = "dectec";
