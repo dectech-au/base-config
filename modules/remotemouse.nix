@@ -22,6 +22,7 @@ let
       xorg.libxcb
       xorg.libX11
       xorg.libXinerama
+      xorg.libxcb-image
       xorg.libXext
       xorg.libXtst
       xorg.libXrender
