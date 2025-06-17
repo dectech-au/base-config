@@ -9,6 +9,7 @@
     ../../modules/chrome.nix
     ../../modules/evolution.nix
     ../../modules/firefox.nix
+    ../../modules/firewall.nix
     ../../modules/gparted.nix
     ../../modules/killall.nix
     ../../modules/nixvim.nix
