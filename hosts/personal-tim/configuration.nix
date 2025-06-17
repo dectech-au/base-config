@@ -17,7 +17,7 @@
     ../../modules/plasma.nix
     ../../modules/teams.nix
     ../../modules/wine.nix
-    ./personalisation/wallpaper-service.nix
+    #./personalisation/wallpaper-service.nix
 	];
   
   # Bootloader.
