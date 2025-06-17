@@ -18,6 +18,7 @@ let
       qt5.qtbase
       qt5.qttools
       qt5.qtwayland
+      xorg.xcbutil
       xorg.xcbutilwm
       xorg.libxcb
       xorg.libX11
