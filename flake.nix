@@ -81,7 +81,7 @@
               };
             }
 
-            nixvim.nixosModules.nixvim
+            nixvim.nixosModules.nixvim;
           ];
         };
 
