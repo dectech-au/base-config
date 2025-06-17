@@ -62,8 +62,7 @@
               start-menu_onlyoffice = ./modules/start-menu/start-onlyoffice.nix;
               start-menu_teams = ./modules/start-menu/start-teams.nix;
             };
-          };
-          modules = [
+          }
             { nixpkgs.config.allowUnfree = true; }
             ./hosts/enterprise-base/configuration.nix
             
@@ -71,7 +70,14 @@
               home-manager = {
                 useGlobalPkgs = true;
                 useUserPackages = true;
-                users.dectec = import ./hosts/enterprise-base/home.nix;
+                # users.dectec = import ./hosts/enterprise-base/home.nix;
+                users.dectec = home-manager.lib.homeManagerConfiguration {
+                  pkgs = pkgs;
+                  extraSpecialArgs = {
+                    inherit MODULES;
+                  };
+                  modules = [ ./hosts/enterprise-base/home.nix]
+                };
               };
             }
 
@@ -116,7 +122,14 @@
               home-manager = {
                 useGlobalPkgs = true;
                 useUserPackages = true;
-                users.dectec = import ./hosts/personal-tim/home.nix;
+                # users.dectec = import ./hosts/personal-tim/home.nix;
+                users.dectec = home-manager.lib.homeManagerConfiguration {
+                  pkgs = pkgs;
+                  extraSpecialArgs = {
+                    inherit MODULES;
+                  };
+                  modules = [ ./hosts/personal-tim/home.nix ]
+                };
               };
             }
 
