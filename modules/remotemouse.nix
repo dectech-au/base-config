@@ -5,6 +5,7 @@ let
     name = "remotemouse";
     targetPkgs = pkgs: with pkgs; [
       glib
+      libGL
       xclip
       xorg.libxcb
       xorg.libX11
