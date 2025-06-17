@@ -18,6 +18,7 @@
 	  ../../modules/papirus.nix
     ../../modules/plasma.nix
     ../../modules/teams.nix
+    ../../modules/teamviewer.nix
     ../../modules/wine.nix
     #./personalisation/wallpaper-service.nix
 	];
