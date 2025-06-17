@@ -10,6 +10,7 @@
     ../../modules/evolution.nix
     ../../modules/firefox.nix
     ../../modules/gparted.nix
+    ../../modules/killall.nix
     ../../modules/nixvim.nix
     ../../modules/onlyoffice.nix
 	  ../../modules/papirus.nix
