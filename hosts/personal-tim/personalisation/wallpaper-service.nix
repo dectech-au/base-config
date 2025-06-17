@@ -7,9 +7,7 @@
       description = "Set KDE Plasma Wallpaper";
       wantedBy = [ "graphical-session.target" ];
       serviceConfig = {
-        ExecStart = [
-          "/run/current-system/sw/bin/plasma-apply-wallpaperimage /home/dectec/.dotfiles/hosts/personal-tim/personalisation/wallpaper.png"
-        ];
+        ExecStart = [ "/run/current-system/sw/bin/plasma-apply-wallpaperimage /home/dectec/.dotfiles/hosts/personal-tim/personalisation/wallpaper.png" ];
       };
     };
   };
