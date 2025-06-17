@@ -4,6 +4,7 @@ let
   remotemouse-fhs = pkgs.buildFHSEnv {
     name = "remotemouse";
     targetPkgs = pkgs: with pkgs; [
+      eglfs
       xclip
       glib
       gtk3
