@@ -38,7 +38,7 @@
     in {
       nixosConfigurations = {
         
-        enterprise-base = {
+        enterprise-base = lib.nixosSystem {
           inherit system;
           modules = [
             { nixpkgs.config.allowUnfree = true; }
@@ -54,7 +54,7 @@
           ];
         };
 
-        personal-tim = {
+        personal-tim = lib.nixosSystem {
           inherit system;
           modules = [
             { nixpkgs.config.allowUnfree = true; }
