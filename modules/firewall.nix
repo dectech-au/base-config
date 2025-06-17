@@ -6,4 +6,8 @@
     allowedTCPPorts = [ 6666 ]; # remote mouse
     allowedUDPPorts = [ 6666 ]; # remote mouse 
   };
+
+  environment.systemPackages = with pkgs; [
+    socat
+  ];
 }
