@@ -30,7 +30,7 @@ let
 
     # Force xcb platform to avoid wayland issues
     runScript = ''
-      env QT_QPA_PLATFORM=xcb /home/dectec/miniconda3/envs/remote-mouse-linux/bin/RemoteMouse
+      env QT_QPA_PLATFORM=xcb /home/dectec/.dotfiles/modules/RemoteMouse_x86_64/RemoteMouse
     '';
   };
 in {
