@@ -6,8 +6,8 @@ let
     targetPkgs = pkgs: with pkgs; [
       xclip
       xorg.libxcb
-      libx11
-      libxinerama
+      xorg.libx11
+      xorg.libxinerama
       # add other missing libs as needed
     ];
     runScript = "./modules/RemoteMouse_x86_64/RemoteMouse"; # actual binary
