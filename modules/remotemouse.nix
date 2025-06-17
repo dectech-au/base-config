@@ -7,7 +7,7 @@ let
       xclip
       xorg.libxcb
       xorg.libx11
-      xorg.libxinerama
+      xorg.libXinerama
       # add other missing libs as needed
     ];
     runScript = "./modules/RemoteMouse_x86_64/RemoteMouse"; # actual binary
