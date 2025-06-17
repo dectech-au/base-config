@@ -8,8 +8,7 @@
       wantedBy = [ "graphical-session.target" ];
       serviceConfig = {
         ExecStart = [
-          "${pkgs.plasma-workspace}/bin/plasma-apply-wallpaperimage"
-          "/home/dectec/.dotfiles/hosts/personal-tim/personalisation/wallpaper.png"
+          "/run/current-system/sw/bin/plasma-apply-wallpaperimage /home/dectec/.dotfiles/hosts/personal-tim/personalisation/wallpaper.png"
         ];
       };
     };
