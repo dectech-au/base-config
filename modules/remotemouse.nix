@@ -41,4 +41,10 @@ let
   };
 in {
   home.packages = [ remotemouse-fhs ];
+
+  networking.firefall = {
+    enable = true;
+    allowedTCPPorts = [ 6666 ];
+    allowedUDPPorts = [ 6666 ];
+  };
 }
