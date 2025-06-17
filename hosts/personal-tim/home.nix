@@ -10,7 +10,7 @@
 	  ../../modules/git.nix
 	  ../../modules/kitty.nix
     ../../modules/librewolf.nix
-    ../../moedules/remotemouse.nix
+    ../../modules/remotemouse.nix
     ../../modules/start-menu/onlyoffice.nix
     ../../modules/start-menu/teams.nix
     ./personalisation/wallpaper.nix
