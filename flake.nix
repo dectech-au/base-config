@@ -79,7 +79,6 @@
                 useUserPackages = true;
                 # users.dectec = import ./hosts/enterprise-base/home.nix;
                 users.dectec = home-manager.lib.homeManagerConfiguration {
-                  pkgs = pkgs;
                   modules = [ ./hosts/enterprise-base/home.nix ];
                 };
               };
@@ -104,7 +103,6 @@
                 useUserPackages = true;
                 # users.dectec = import ./hosts/personal-tim/home.nix;
                 users.dectec = home-manager.lib.homeManagerConfiguration {
-                  pkgs = pkgs;
                   modules = [ ./hosts/personal-tim/home.nix ];
                 };
               };
