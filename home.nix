@@ -2,6 +2,7 @@
 
 {
   imports = [
+  ./modules/dropbox.nix
   ./modules/fastfetch.nix
 	#./modules/firefox.nix # Moved to configuration.nix
   ./modules/fish.nix
