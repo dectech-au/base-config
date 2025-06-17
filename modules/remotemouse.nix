@@ -1,22 +1,23 @@
 # ~/.dotfiles/modules/remotemouse.nix or similar
 { config, lib, pkgs, ... }:
 let
-  remotemouse = pkgs.buildFHSEnv {
+  remotemouse-fhs = pkgs.buildFHSEnv {
     name = "remotemouse";
     targetPkgs = pkgs: with pkgs; [
-      dbus
-      freetype
-      fontconfig
+      xclip
       glib
       gtk3
+      dbus
       libGL
-      python37
-      python37Packages.pyqt5
-      qt5.qtbase
-      qt5.qtwayland
-      qt5.qttools
+      zlib
+      freetype
+      fontconfig
       stdenv.cc.cc
-      xclip
+
+      # Qt and X11 dependencies
+      qt5.qtbase
+      qt5.qttools
+      qt5.qtwayland
       xorg.libxcb
       xorg.libX11
       xorg.libXinerama
@@ -25,11 +26,13 @@ let
       xorg.libXrender
       xorg.libXrandr
       xorg.libXfixes
-      zlib
-      # add other missing libs as needed
     ];
-    runScript = "./modules/RemoteMouse_x86_64/RemoteMouse"; # actual binary
+
+    # Force xcb platform to avoid wayland issues
+    runScript = ''
+      env QT_QPA_PLATFORM=xcb /home/ruan/miniconda3/envs/remote-mouse-linux/bin/RemoteMouse
+    '';
   };
 in {
-  home.packages = [ remotemouse ];
+  home.packages = [ remotemouse-fhs ];
 }
