@@ -3,7 +3,7 @@
 
 {
   imports = [
-    HOME-MODULES.dropbox
+    # HOME-MODULES.dropbox
    #  HOME-MODULES.fastfetch
 	  # # HOME-MODULES.firefox # Moved to configuration.nix
    #  HOME-MODULES.fish
