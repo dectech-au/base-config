@@ -4,7 +4,7 @@
 pkgs.buildFHSEnv {
   name = "remotemouse";
 
-  runScript = "${toString ~/Downloads/RemoteMouse_x86_64/RemoteMouse}";
+  runScript = "${toString "./RemoteMouse_x86_64/RemoteMouse}";
 
   nativeBuildInputs = with pkgs; [
     clip
