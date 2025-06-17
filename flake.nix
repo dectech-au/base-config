@@ -62,7 +62,9 @@
               start-menu_onlyoffice = ./modules/start-menu/start-onlyoffice.nix;
               start-menu_teams = ./modules/start-menu/start-teams.nix;
             };
-          }
+          };
+
+          modules = [
             { nixpkgs.config.allowUnfree = true; }
             ./hosts/enterprise-base/configuration.nix
             
@@ -110,7 +112,6 @@
               start-menu_teams = ./modules/start-menu/start-teams.nix;
             };
           };
-
 
           modules = [
             { nixpkgs.config.allowUnfree = true; }
