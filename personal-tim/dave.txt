@@ -1,4 +1,0 @@
-crm   
-d365
-focus
-bi
