@@ -1,12 +1,7 @@
 # ~/.dotfiles/modules/remotemouse.nix or similar
-{ pkgs ? import <nixpkgs> {} }:
-  
-pkgs.buildFHSEnv {
-  name = "remotemouse";
-
-  runScript = "${toString ./RemoteMouse_x86_64/RemoteMouse}";
-
-  nativeBuildInputs = with pkgs; [
+{ config, lib, pkgs, ... }:
+{
+  environment.systemPackages = with pkgs; [
     clip
     glib
     gtk3
@@ -36,10 +31,4 @@ pkgs.buildFHSEnv {
     xorg.xcbutilkeysyms
     xorg.xcbutilrenderutil
   ];
-
-  extraPkgs = with pkgs; [];
-
-  shellHook = ''
-    export DISPLAY=$DISPLAY
-  '';
 }
