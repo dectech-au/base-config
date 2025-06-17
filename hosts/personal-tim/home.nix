@@ -1,17 +1,17 @@
 #~/.dotfiles/hosts/personal-tim/home.nix
-{ config, pkgs, MODULES, ... }:
+{ config, pkgs, HOME-MODULES, ... }:
 
 {
   imports = [
-    MODULES.dropbox
-    MODULES.fastfetch
-	  # MODULES.firefox # Moved to configuration.nix
-    MODULES.fish
-	  MODULES.kitty
-    MODULES.librewolf
-	  MODULES.git
-    MODULES.start-menu_onlyoffice
-    MODULES.start-menu_teams
+    HOME-MODULES.dropbox
+    HOME-MODULES.fastfetch
+	  # HOME-MODULES.firefox # Moved to configuration.nix
+    HOME-MODULES.fish
+	  HOME-MODULES.kitty
+    HOME-MODULES.librewolf
+	  HOME-MODULES.git
+    HOME-MODULES.start-menu_onlyoffice
+    HOME-MODULES.start-menu_teams
   ];
 
   home.username = "dectec";

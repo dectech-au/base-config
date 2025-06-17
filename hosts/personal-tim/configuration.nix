@@ -1,20 +1,20 @@
 #~/.dotfiles/hosts/personal-tim/configuration.nix
-{ config, lib, pkgs, MODULES, ... }:
+{ config, lib, pkgs, SYS-MODULES, ... }:
 
 {
   imports = [
     ./hardware-configuration.nix
-	  MODULES.bluetooth
-    MODULES.btrfs
-    MODULES.chrome
-    MODULES.evolution
-    MODULES.firefox
-    MODULES.gparted
-    MODULES.nixvim
-    MODULES.onlyoffice
-	  MODULES.papirus
-    MODULES.teams
-    MODULES.wine
+	  SYS-MODULES.bluetooth
+    SYS-MODULES.btrfs
+    SYS-MODULES.chrome
+    SYS-MODULES.evolution
+    SYS-MODULES.firefox
+    SYS-MODULES.gparted
+    SYS-MODULES.nixvim
+    SYS-MODULES.onlyoffice
+	  SYS-MODULES.papirus
+    SYS-MODULES.teams
+    SYS-MODULES.wine
 	];
   
   # Bootloader.
