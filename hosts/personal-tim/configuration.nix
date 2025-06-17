@@ -1,24 +1,20 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
-{ config, lib, pkgs, ... }:
+#~/.dotfiles/hosts/personal-tim/configuration.nix
+{ config, lib, pkgs, MODULES, ... }:
 
 {
   imports = [
     ./hardware-configuration.nix
-	  ${MODULES}/chrome.nix
-    ${MODULES}/onlyoffice.nix
-	  ${MODULES}/bluetooth.nix
-    ${MODULES}/btrfs.nix
-    ${MODULES}/nixvim.nix
-	  ${MODULES}/firefox.nix
-	  #${MODULES}/mako.nix     # home-manager
-	  ${MODULES}/gparted.nix
-	  ${MODULES}/evolution.nix
-	  ${MODULES}/papirus.nix
-    ${MODULES}/teams.nix
-    ${MODULES}/wine.nix
+	  ( MODULES + "/chrome.nix" )
+    ( MODULES + "/onlyoffice.nix" )
+	  ( MODULES + "/bluetooth.nix" )
+    ( MODULES + "/btrfs.nix" )
+    ( MODULES + "/nixvim.nix" )
+	  ( MODULES + "/firefox.nix" )
+	  ( MODULES + "/gparted.nix" )
+	  ( MODULES + "/evolution.nix" )
+	  ( MODULES + "/papirus.nix" )
+    ( MODULES + "/teams.nix" )
+    ( MODULES + "/wine.nix" )
 	  ];
   
   # Bootloader.
