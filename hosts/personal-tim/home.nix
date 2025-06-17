@@ -11,7 +11,7 @@
     ../../modules/kdeconnect.nix
 	  ../../modules/kitty.nix
     ../../modules/librewolf.nix
-    ../../modules/remotemouse.nix
+    #../../modules/remotemouse.nix
     ../../modules/start-menu/onlyoffice.nix
     ../../modules/start-menu/teams.nix
     ./personalisation/wallpaper.nix

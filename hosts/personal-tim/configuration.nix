@@ -17,6 +17,7 @@
     ../../modules/onlyoffice.nix
 	  ../../modules/papirus.nix
     ../../modules/plasma.nix
+    ../../modules/remotemouse.nix
     ../../modules/teams.nix
     ../../modules/teamviewer.nix
     ../../modules/wine.nix
