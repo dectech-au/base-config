@@ -4,11 +4,11 @@ let
   remotemouse-fhs = pkgs.buildFHSEnv {
     name = "remotemouse";
     targetPkgs = pkgs: with pkgs; [
-      xcb
-      xclip
+      clip
       glib
       gtk3
       dbus
+      libxkbcommon
       libGL
       zlib
       freetype
