@@ -68,9 +68,6 @@
         
         enterprise-base = lib.nixosSystem {
           inherit system;
-          specialArgs = { 
-            inherit SYS-MODULES;
-          };
 
           modules = [
             { nixpkgs.config.allowUnfree = true; }
@@ -83,9 +80,6 @@
                 # users.dectec = import ./hosts/enterprise-base/home.nix;
                 users.dectec = home-manager.lib.homeManagerConfiguration {
                   pkgs = pkgs;
-                  extraSpecialArgs = {
-                    inherit HOME-MODULES;
-                  };
                   modules = [ ./hosts/enterprise-base/home.nix ];
                 };
               };
@@ -97,9 +91,6 @@
 
         personal-tim = lib.nixosSystem {
           inherit system;
-          specialArgs = { 
-            inherit SYS-MODULES;
-          };
 
           modules = [
             { nixpkgs.config.allowUnfree = true; }
@@ -114,9 +105,6 @@
                 # users.dectec = import ./hosts/personal-tim/home.nix;
                 users.dectec = home-manager.lib.homeManagerConfiguration {
                   pkgs = pkgs;
-                  extraSpecialArgs = {
-                    inherit HOME-MODULES;
-                  };
                   modules = [ ./hosts/personal-tim/home.nix ];
                 };
               };

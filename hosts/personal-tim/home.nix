@@ -3,15 +3,15 @@
 
 {
   imports = [
-    HOME-MODULES.dropbox
-    HOME-MODULES.fastfetch
-	  # HOME-MODULES.firefox # Moved to configuration.nix
-    HOME-MODULES.fish
-	  HOME-MODULES.git
-	  HOME-MODULES.kitty
-    HOME-MODULES.librewolf
-    HOME-MODULES.start-menu_onlyoffice
-    HOME-MODULES.start-menu_teams
+    ../../modules/dropbox.nix
+    ../../modules/fastfetch.nix
+	  #../../modules/firefox.nix # Moved to configuration.nix
+    ../../modules/fish.nix
+	  ../../modules/git.nix
+	  ../../modules/kitty.nix
+    ../../modules/librewolf.nix
+    ../../modules/start-menu/start-onlyoffice.nix
+    ../../modules/start-menu/start-teams.nix
   ];
 
   home.username = "dectec";
