@@ -11,7 +11,7 @@
     ../../modules/firefox.nix
     ../../modules/firewall.nix
     ../../modules/gparted.nix
-    #../../modules/kdeconnect.nix
+    ../../modules/kdeconnect-firewall.nix
     ../../modules/killall.nix
     ../../modules/nixvim.nix
     ../../modules/onlyoffice.nix
