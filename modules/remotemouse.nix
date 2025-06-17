@@ -1,5 +1,5 @@
 # ~/.dotfiles/modules/remotemouse.nix or similar
-{ config, lib, pkgs, ... }:
+{ pkgs ? import <nixpkgs> {} }:
   
 pkgs.buildFHSEnv {
   name = "remotemouse";
