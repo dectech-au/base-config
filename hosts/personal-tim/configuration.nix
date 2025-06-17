@@ -7,22 +7,18 @@
 {
   imports = [
     ./hardware-configuration.nix
-	  ../../modules/chrome.nix
-    ../../modules/onlyoffice.nix
-	  ../../modules/bluetooth.nix
-    ../../modules/btrfs.nix
-    #../../modules/kitty.nix    # home-manager
-    #../../modules/git.nix      # home-manager
-	  #../../modules/neovim.nix   # home-manager
-    ../../modules/nixvim.nix
-	  ../../modules/firefox.nix
-    #../../modules/fish.nix     # home-manager
-	  #../../modules/mako.nix     # home-manager
-	  ../../modules/gparted.nix
-	  ../../modules/evolution.nix
-	  ../../modules/papirus.nix
-    ../../modules/teams.nix
-    ../../modules/wine.nix
+	  ${MODULES}/chrome.nix
+    ${MODULES}/onlyoffice.nix
+	  ${MODULES}/bluetooth.nix
+    ${MODULES}/btrfs.nix
+    ${MODULES}/nixvim.nix
+	  ${MODULES}/firefox.nix
+	  #${MODULES}/mako.nix     # home-manager
+	  ${MODULES}/gparted.nix
+	  ${MODULES}/evolution.nix
+	  ${MODULES}/papirus.nix
+    ${MODULES}/teams.nix
+    ${MODULES}/wine.nix
 	  ];
   
   # Bootloader.

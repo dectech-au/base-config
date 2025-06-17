@@ -40,14 +40,17 @@
         
         enterprise-base = lib.nixosSystem {
           inherit system;
+          specialArgs = { MODULES = ./modules; };
           modules = [
             { nixpkgs.config.allowUnfree = true; }
             ./hosts/enterprise-base/configuration.nix
             
             home-manager.nixosModules.home-manager {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.dectec = import ./hosts/enterprise-base/home.nix;
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                users.dectec = import ./hosts/enterprise-base/home.nix;
+              };
             }
 
             nixvim.nixosModules.nixvim
@@ -56,6 +59,7 @@
 
         personal-tim = lib.nixosSystem {
           inherit system;
+          specialArgs = { MODULES = ./modules; };
           modules = [
             { nixpkgs.config.allowUnfree = true; }
             ./hosts/personal-tim/configuration.nix
@@ -84,6 +88,7 @@
 
         nixos = lib.nixosSystem {
           inherit system;
+          specialArgs = { MODULES = ./modules; };
           modules = [
             ./configuration.nix
             { nixpkgs.config.allowUnfree = true; }
