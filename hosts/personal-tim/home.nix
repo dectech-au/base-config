@@ -18,6 +18,8 @@
   home.username = "dectec";
   home.homeDirectory = "/home/dectec";
   home.stateVersion = "25.05"; # Do not change this after initial setup
+  home-manager.backupFileExtension = "backup";
+
 
   programs.git = {
     enable = true;
