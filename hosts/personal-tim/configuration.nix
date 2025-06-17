@@ -4,18 +4,18 @@
 {
   imports = [
     ./hardware-configuration.nix
-	  ( MODULES + "/chrome.nix" )
-    ( MODULES + "/onlyoffice.nix" )
-	  ( MODULES + "/bluetooth.nix" )
-    ( MODULES + "/btrfs.nix" )
-    ( MODULES + "/nixvim.nix" )
-	  ( MODULES + "/firefox.nix" )
-	  ( MODULES + "/gparted.nix" )
-	  ( MODULES + "/evolution.nix" )
-	  ( MODULES + "/papirus.nix" )
-    ( MODULES + "/teams.nix" )
-    ( MODULES + "/wine.nix" )
-	  ];
+	  MODULES.chrome
+    MODULES.onlyoffice
+	  MODULES.bluetooth
+    MODULES.btrfs
+    MODULES.nixvim
+	  MODULES.firefox
+	  MODULES.gparted
+	  MODULES.evolution
+	  MODULES.papirus
+    MODULES.teams.nix
+    MODULES.wine.nix
+	];
   
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
