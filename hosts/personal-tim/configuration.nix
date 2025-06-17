@@ -4,14 +4,14 @@
 {
   imports = [
     ./hardware-configuration.nix
-	  MODULES.chrome
-    MODULES.onlyoffice
 	  MODULES.bluetooth
     MODULES.btrfs
+    MODULES.chrome
+    MODULES.evolution
+    MODULES.firefox
+    MODULES.gparted
     MODULES.nixvim
-	  MODULES.firefox
-	  MODULES.gparted
-	  MODULES.evolution
+    MODULES.onlyoffice
 	  MODULES.papirus
     MODULES.teams
     MODULES.wine

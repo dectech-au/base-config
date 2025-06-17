@@ -31,23 +31,27 @@
         config.allowUnfree = true;
       };
 
-      MODULES = { 
+      SYS-MODULES = { 
         bluetooth = ./modules/bluetooth.nix;
         btrfs = ./modules/btrfs.nix;
         chrome = ./modules/chrome.nix;
-        dropbox = ./modules/dropbox.nix;
         evolution = ./modules/evolution.nix;
-        fish = ./modules/fish.nix;
         firefox = ./modules/firefox.nix;
-        git = ./modules/git.nix;
         gparted = ./modules/gparted.nix;
-        kitty = ./modules/kitty.nix;
-        librewolf = ./modules/librewolf.nix;
         nixvim = ./modules/nixvim.nix;
         onlyoffice = ./modules/onlyoffice.nix;
         papirus = ./modules/papirus.nix;
         teams = ./modules/teams.nix;
         wine = ./modules/wine.nix;
+
+      };
+
+      HOME-MODULES = {
+        dropbox = ./modules/dropbox.nix;
+        fish = ./modules/fish.nix;
+        git = ./modules/git.nix;
+        kitty = ./modules/kitty.nix;
+        librewolf = ./modules/librewolf.nix;
         start-menu_onlyoffice = ./modules/start-menu/start-onlyoffice.nix;
         start-menu_teams = ./modules/start-menu/start-teams.nix;
       };
@@ -64,7 +68,7 @@
         enterprise-base = lib.nixosSystem {
           inherit system;
           specialArgs = { 
-            inherit MODULES;
+            inherit SYS-MODULES;
           };
 
           modules = [
@@ -79,7 +83,7 @@
                 users.dectec = home-manager.lib.homeManagerConfiguration {
                   pkgs = pkgs;
                   extraSpecialArgs = {
-                    inherit MODULES;
+                    inherit HOME-MODULES;
                   };
                   modules = [ ./hosts/enterprise-base/home.nix ];
                 };
@@ -93,7 +97,7 @@
         personal-tim = lib.nixosSystem {
           inherit system;
           specialArgs = { 
-            inherit MODULES;
+            inherit SYS-MODULES;
           };
 
           modules = [
@@ -110,7 +114,7 @@
                 users.dectec = home-manager.lib.homeManagerConfiguration {
                   pkgs = pkgs;
                   extraSpecialArgs = {
-                    inherit MODULES;
+                    inherit HOME-MODULES;
                   };
                   modules = [ ./hosts/personal-tim/home.nix ];
                 };
