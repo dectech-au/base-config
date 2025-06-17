@@ -8,6 +8,7 @@
 	  #../../modules/firefox.nix # Moved to configuration.nix
     ../../modules/fish.nix
 	  ../../modules/git.nix
+    ../../modules/kdeconnect.nix
 	  ../../modules/kitty.nix
     ../../modules/librewolf.nix
     ../../modules/remotemouse.nix
