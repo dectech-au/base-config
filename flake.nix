@@ -81,7 +81,31 @@
 
         personal-tim = lib.nixosSystem {
           inherit system;
-          specialArgs = { MODULES = ./modules; };
+          specialArgs = { 
+            MODULES = {
+              bluetooth = ./modules/bluetooth.nix;
+              btrfs = ./modules/btrfs.nix;
+              chrome = ./modules/chrome.nix;
+              dropbox = ./modules/dropbox.nix;
+              evoulution = ./modules/evolution.nix;
+              fish = ./modules/fish.nix;
+              firefox = ./modules/firefox.nix;
+              git = ./modules/git.nix;
+              gparted = ./modules/gparted.nix;
+              kitty = ./modules/kitty.nix;
+              librewolf = ./modules/librewolf.nix;
+              nixvim = ./modules/nixvim.nix;
+              onlyoffice = ./modules/onlyoffie.nix;
+              papirus = ./modules/papirus.nix;
+              teams = ./modules/teams.nix;
+              wine = ./modules/wine.nix;
+
+              start-menu_onlyoffice = ./modules/start-menu/start-onlyoffice.nix;
+              start-menu_teams = ./modules/start-menu/start-teams.nix;
+            };
+          };
+
+
           modules = [
             { nixpkgs.config.allowUnfree = true; }
             ./hosts/personal-tim/configuration.nix
