@@ -30,7 +30,6 @@ let
       xorg.xcbutilimage
       xorg.xcbutilkeysyms
       xorg.xcbutilrenderutil
-      xorg.libxcbcommon
     ];
 
     # Force xcb platform to avoid wayland issues
