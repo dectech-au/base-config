@@ -4,17 +4,17 @@
 {
   imports = [
     ./hardware-configuration.nix
-	  # SYS-MODULES.bluetooth
-   #  SYS-MODULES.btrfs
-   #  SYS-MODULES.chrome
-   #  SYS-MODULES.evolution
-   #  SYS-MODULES.firefox
-   #  SYS-MODULES.gparted
-   #  SYS-MODULES.nixvim
-   #  SYS-MODULES.onlyoffice
-	  # SYS-MODULES.papirus
-   #  SYS-MODULES.teams
-   #  SYS-MODULES.wine
+	  SYS-MODULES.bluetooth
+    SYS-MODULES.btrfs
+    SYS-MODULES.chrome
+    SYS-MODULES.evolution
+    SYS-MODULES.firefox
+    SYS-MODULES.gparted
+    SYS-MODULES.nixvim
+    SYS-MODULES.onlyoffice
+	  SYS-MODULES.papirus
+    SYS-MODULES.teams
+    SYS-MODULES.wine
 	];
   
   # Bootloader.
