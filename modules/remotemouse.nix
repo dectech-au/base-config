@@ -12,6 +12,7 @@
     freetype
     fontconfig
     stdenv.cc.cc
+    patchelf
 
     # Qt and X11 dependencies
     qt5.qtbase
