@@ -1,7 +1,7 @@
 # ~/.dotfiles/modules/remotemouse.nix or similar
 { config, lib, pkgs, ... }:
 let
-  remotemouse = pkgs.buildFHSUserEnv {
+  remotemouse = pkgs.buildFHSEnv {
     name = "remotemouse";
     targetPkgs = pkgs: with pkgs; [
       xclip
