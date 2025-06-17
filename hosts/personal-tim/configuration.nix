@@ -13,8 +13,8 @@
 	  MODULES.gparted
 	  MODULES.evolution
 	  MODULES.papirus
-    MODULES.teams.nix
-    MODULES.wine.nix
+    MODULES.teams
+    MODULES.wine
 	];
   
   # Bootloader.
