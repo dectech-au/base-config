@@ -76,7 +76,7 @@
                   extraSpecialArgs = {
                     inherit MODULES;
                   };
-                  modules = [ ./hosts/enterprise-base/home.nix]
+                  modules = [ ./hosts/enterprise-base/home.nix ];
                 };
               };
             }
@@ -128,7 +128,7 @@
                   extraSpecialArgs = {
                     inherit MODULES;
                   };
-                  modules = [ ./hosts/personal-tim/home.nix ]
+                  modules = [ ./hosts/personal-tim/home.nix ];
                 };
               };
             }
