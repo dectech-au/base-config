@@ -116,7 +116,7 @@
             { nixpkgs.config.allowUnfree = true; }
             ./hosts/personal-tim/configuration.nix
 
-            nixvim.nixosModules.nixvim
+            nixvim.nixosModules.nixvim;
 
             home-manager.nixosModules.home-manager {
               home-manager = {
