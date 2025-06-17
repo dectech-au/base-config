@@ -46,7 +46,7 @@
               btrfs = ./modules/btrfs.nix;
               chrome = ./modules/chrome.nix;
               dropbox = ./modules/dropbox.nix;
-              evoulution = ./modules/evolution.nix;
+              evolution = ./modules/evolution.nix;
               fish = ./modules/fish.nix;
               firefox = ./modules/firefox.nix;
               git = ./modules/git.nix;
