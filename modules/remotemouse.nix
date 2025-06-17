@@ -6,7 +6,7 @@ let
     targetPkgs = pkgs: with pkgs; [
       xclip
       xorg.libxcb
-      xorg.libx11
+      xorg.libX11
       xorg.libXinerama
       # add other missing libs as needed
     ];
