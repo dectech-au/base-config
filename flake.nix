@@ -54,7 +54,7 @@
               kitty = ./modules/kitty.nix;
               librewolf = ./modules/librewolf.nix;
               nixvim = ./modules/nixvim.nix;
-              onlyoffice = ./modules/onlyoffie.nix;
+              onlyoffice = ./modules/onlyoffice.nix;
               papirus = ./modules/papirus.nix;
               teams = ./modules/teams.nix;
               wine = ./modules/wine.nix;
@@ -95,7 +95,7 @@
               kitty = ./modules/kitty.nix;
               librewolf = ./modules/librewolf.nix;
               nixvim = ./modules/nixvim.nix;
-              onlyoffice = ./modules/onlyoffie.nix;
+              onlyoffice = ./modules/onlyoffice.nix;
               papirus = ./modules/papirus.nix;
               teams = ./modules/teams.nix;
               wine = ./modules/wine.nix;
