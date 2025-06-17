@@ -22,12 +22,15 @@ let
       xorg.libxcb
       xorg.libX11
       xorg.libXinerama
-      xorg.libxcb-image
       xorg.libXext
       xorg.libXtst
       xorg.libXrender
       xorg.libXrandr
       xorg.libXfixes
+      xorg.xcbbutilimage
+      xorg.xcbutilkeysyms
+      xorg.xcbutilrenderutil
+      xorg.libxcbcommon
     ];
 
     # Force xcb platform to avoid wayland issues
