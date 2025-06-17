@@ -27,7 +27,7 @@ let
       xorg.libXrender
       xorg.libXrandr
       xorg.libXfixes
-      xorg.xcbbutilimage
+      xorg.xcbutilimage
       xorg.xcbutilkeysyms
       xorg.xcbutilrenderutil
       xorg.libxcbcommon
