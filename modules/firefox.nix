@@ -17,7 +17,7 @@
       DisablePocket = true;
       DisableFirefoxScreenshots = true;
       OverrideFirstRunPage = "";
-      OverrisePostUpdatePage = "";
+      OverridePostUpdatePage = "";
       DontCheckDefaultBrowser = true;
       DisplayBookmarksToolbar = "always";
       DisplayMenuBar = "default-off";
