@@ -18,6 +18,7 @@ let
       qt5.qtbase
       qt5.qttools
       qt5.qtwayland
+      xcbutilwm
       xorg.libxcb
       xorg.libX11
       xorg.libXinerama
