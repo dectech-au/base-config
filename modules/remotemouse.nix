@@ -5,7 +5,7 @@ let
     name = "remotemouse";
     targetPkgs = pkgs: with pkgs; [
       xclip
-      libxcb
+      xorg.libxcb
       libx11
       libxinerama
       # add other missing libs as needed
