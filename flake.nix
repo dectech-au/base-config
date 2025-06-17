@@ -77,6 +77,7 @@
               home-manager = {
                 useGlobalPkgs = true;
                 useUserPackages = true;
+                backupFileExtension = "backup";
                 users.dectec = import ./hosts/enterprise-base/home.nix;
               };
             }
@@ -98,6 +99,7 @@
               home-manager = {
                 useGlobalPkgs = true;
                 useUserPackages = true;
+                backupFileExtension = "backup";
                 users.dectec = import ./hosts/personal-tim/home.nix;
               };
             }
