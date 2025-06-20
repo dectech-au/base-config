@@ -19,6 +19,7 @@
     ../../modules/onlyoffice.nix
 	  ../../modules/papirus.nix
     ../../modules/plasma.nix
+    ../../modules/protonmail.nix
     #../../modules/remotemouse.nix
     ../../modules/steam.nix
     ../../modules/teams.nix
