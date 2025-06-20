@@ -12,6 +12,7 @@
     ../../modules/firewall.nix
     ../../modules/github-desktop.nix
     ../../modules/gparted.nix
+    ../../modules/kcalc.nix
     ../../modules/kdeconnect-firewall.nix
     ../../modules/killall.nix
     ../../modules/nixvim.nix
