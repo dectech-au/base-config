@@ -12,6 +12,7 @@
 	  ../../modules/kitty.nix
     ../../modules/librewolf.nix
     #../../modules/remotemouse.nix
+    ../../modules/vscode.nix
     ../../modules/start-menu/onlyoffice.nix
     ../../modules/start-menu/teams.nix
     ./personalisation/wallpaper.nix
