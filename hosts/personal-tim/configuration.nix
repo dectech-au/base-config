@@ -10,6 +10,7 @@
     ../../modules/evolution.nix
     ../../modules/firefox.nix
     ../../modules/firewall.nix
+    ../../modules/github-desktop.nix
     ../../modules/gparted.nix
     ../../modules/kdeconnect-firewall.nix
     ../../modules/killall.nix
