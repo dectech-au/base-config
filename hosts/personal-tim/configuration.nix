@@ -21,6 +21,7 @@
     ../../modules/plasma.nix
     ../../modules/protonmail-bridge.nix
     #../../modules/remotemouse.nix
+    ../../modules/signal-desktop.nix
     ../../modules/steam.nix
     ../../modules/teams.nix
     ../../modules/teamviewer.nix
