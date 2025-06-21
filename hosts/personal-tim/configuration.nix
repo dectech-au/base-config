@@ -20,7 +20,7 @@
 	  ../../modules/papirus.nix
     ../../modules/plasma.nix
     ../../modules/protonmail-bridge.nix
-    #../../modules/remotemouse.nix
+    ../../modules/remotemouse.nix
     ../../modules/signal-desktop.nix
     ../../modules/steam.nix
     ../../modules/teams.nix
