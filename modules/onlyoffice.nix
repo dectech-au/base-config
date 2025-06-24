@@ -2,12 +2,12 @@
 { config, lib, pkgs, ... }:
 
 {
-	# services.onlyoffice.enable = true;
+	services.onlyoffice.enable = true;
 	# environment.systemPackages = with pkgs; [
 	# 	onlyoffice-bin
 	# ];
 
-  programs.onlyoffice = {
-    enable = true;
-  };
+  # programs.onlyoffice = {
+  #   enable = true;
+  # };
 }
