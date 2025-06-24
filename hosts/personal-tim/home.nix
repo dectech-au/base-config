@@ -16,6 +16,7 @@
     ../../modules/vscode.nix
     ../../modules/start-menu/onlyoffice.nix
     ../../modules/start-menu/teams.nix
+    ../../modules/start-menu/windows.nix
     ./personalisation/wallpaper.nix
   ];
 
