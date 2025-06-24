@@ -3,7 +3,11 @@
 
 {
 	# services.onlyoffice.enable = true;
-	environment.systemPackages = with pkgs; [
-		onlyoffice-bin
-	];
+	# environment.systemPackages = with pkgs; [
+	# 	onlyoffice-bin
+	# ];
+
+  programs.onlyoffice = {
+    enable = true;
+  };
 }

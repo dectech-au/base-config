@@ -11,6 +11,7 @@
     ../../modules/kdeconnect.nix
 	  ../../modules/kitty.nix
     ../../modules/librewolf.nix
+    ../../modules/onlyoffice.nix
     #../../modules/remotemouse.nix
     ../../modules/thunderbird.nix
     ../../modules/vscode.nix
