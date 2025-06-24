@@ -6,7 +6,7 @@
     comment = "Restart to Windows";
     exec = "sudo systemctl reboot --boot-loader-entry=auto-windows";
     icon = "distributor-logo-windows";
-    termianl = false;
+    terminal = false;
     type = "Application";
     categories = [ "System" ];
   };
