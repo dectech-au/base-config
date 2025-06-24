@@ -68,6 +68,7 @@
         
         enterprise-base = lib.nixosSystem {
           inherit system;
+          specialArgs = { inherit inputs; };
 
           modules = [
             { nixpkgs.config.allowUnfree = true; }
@@ -88,10 +89,12 @@
 
         personal-tim = lib.nixosSystem {
           inherit system;
+          specialArgs = { inherit inputs; };
 
           modules = [
             { nixpkgs.config.allowUnfree = true; }
             ./hosts/personal-tim/configuration.nix
+            ./modules/autoupdate.nix
 
             nixvim.nixosModules.nixvim
 
