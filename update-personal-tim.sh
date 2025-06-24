@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#~/.dotfiles/update-personal-tim.sh
 (
    set -euo pipefail
 

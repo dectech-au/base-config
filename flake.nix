@@ -73,7 +73,7 @@
           modules = [
             { nixpkgs.config.allowUnfree = true; }
             ./hosts/enterprise-base/configuration.nix
-            ./modules/autoupdate.nix 
+            ./modules/autoupdate-enterprise-base.nix 
             home-manager.nixosModules.home-manager {
               home-manager = {
                 useGlobalPkgs = true;
@@ -94,7 +94,7 @@
           modules = [
             { nixpkgs.config.allowUnfree = true; }
             ./hosts/personal-tim/configuration.nix
-            ./modules/autoupdate.nix
+            ./modules/autoupdate-personal-tim.nix
 
             nixvim.nixosModules.nixvim
 
