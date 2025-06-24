@@ -72,7 +72,7 @@
           modules = [
             { nixpkgs.config.allowUnfree = true; }
             ./hosts/enterprise-base/configuration.nix
-            
+            ./modules/autoupdate.nix 
             home-manager.nixosModules.home-manager {
               home-manager = {
                 useGlobalPkgs = true;
