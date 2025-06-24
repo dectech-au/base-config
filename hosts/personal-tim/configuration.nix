@@ -15,6 +15,7 @@
     ../../modules/kcalc.nix
     ../../modules/kdeconnect-firewall.nix
     ../../modules/killall.nix
+    ../../modules/libreoffice.nix
     ../../modules/nixvim.nix
     ../../modules/onlyoffice.nix
 	  ../../modules/papirus.nix
