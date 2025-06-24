@@ -16,7 +16,7 @@
     ../../modules/kdeconnect-firewall.nix
     ../../modules/killall.nix
     ../../modules/nixvim.nix
-    #../../modules/onlyoffice.nix
+    ../../modules/onlyoffice.nix
 	  ../../modules/papirus.nix
     ../../modules/plasma.nix
     ../../modules/protonmail-bridge.nix
