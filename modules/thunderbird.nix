@@ -14,6 +14,10 @@
     };
   };
 
+  environment.systemPackages = with pkgs; [
+    birdtray
+  ];
+
   xdg.configFile = {
     "autostart/birdtray.desktop".text = ''
       [Desktop Entry]
