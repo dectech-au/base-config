@@ -112,7 +112,7 @@
 
   # Enable automatic login for the user.
   services.displayManager.autoLogin = {
-	enable = true;
+	enable = false;
   	user = "dectec";
   };
   
