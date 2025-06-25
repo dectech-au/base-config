@@ -37,7 +37,7 @@
 
       /******Adjust and color unified toolbar******/
       #unifiedToolbar {
-        height:  60px  !important;
+        height:  32px  !important;
         padding-block:   1px  !important;
         margin-block:    0px  !important;
         background:  #6D859C  !important;
