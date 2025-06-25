@@ -4,7 +4,8 @@
 {
   imports = [
     ./hardware-configuration.nix
-	  ../../modules/bluetooth.nix
+	  ../../modules/birdtray.nix
+    ../../modules/bluetooth.nix
     ../../modules/btrfs.nix
     ../../modules/chrome.nix
     ../../modules/evolution.nix
