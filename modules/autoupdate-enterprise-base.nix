@@ -4,7 +4,7 @@ let
   scriptPath = "${config.users.users.dectec.home}/.dotfiles/update-enterprise-base.sh";
 in
 {
-  systemd.user.services.nix-flake-update = {
+  systemd.user.services.nix-flake-update-enterprise-base = {
     description = "Auto update flake + switch";
     serviceConfig = {
       Type = "oneshot";
