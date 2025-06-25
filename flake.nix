@@ -31,32 +31,6 @@
         config.allowUnfree = true;
       };
 
-      SYS-MODULES = { 
-        bluetooth = ./modules/bluetooth.nix;
-        btrfs = ./modules/btrfs.nix;
-        chrome = ./modules/chrome.nix;
-        evolution = ./modules/evolution.nix;
-        firefox = ./modules/firefox.nix;
-        gparted = ./modules/gparted.nix;
-        nixvim = ./modules/nixvim.nix;
-        onlyoffice = ./modules/onlyoffice.nix;
-        papirus = ./modules/papirus.nix;
-        teams = ./modules/teams.nix;
-        wine = ./modules/wine.nix;
-
-      };
-
-      HOME-MODULES = {
-        dropbox = ./modules/dropbox.nix;
-        fastfetch = ./modules/fastfetch.nix;
-        fish = ./modules/fish.nix;
-        git = ./modules/git.nix;
-        kitty = ./modules/kitty.nix;
-        librewolf = ./modules/librewolf.nix;
-        start-menu_onlyoffice = ./modules/start-menu/start-onlyoffice.nix;
-        start-menu_teams = ./modules/start-menu/start-teams.nix;
-      };
-
       overlays = [
         (final: prev: {
           firefox-addons = inputs.firefox-addons.packages.${system};
@@ -73,7 +47,7 @@
           modules = [
             { nixpkgs.config.allowUnfree = true; }
             ./hosts/enterprise-base/configuration.nix
-            ./modules/autoupdate-enterprise-base.nix 
+            ./flake-modules/autoupdate-enterprise-base.nix 
             home-manager.nixosModules.home-manager {
               home-manager = {
                 useGlobalPkgs = true;
@@ -94,7 +68,7 @@
           modules = [
             { nixpkgs.config.allowUnfree = true; }
             ./hosts/personal-tim/configuration.nix
-            ./modules/autoupdate-personal-tim.nix
+            ./flake-modules/autoupdate-personal-tim.nix
 
             nixvim.nixosModules.nixvim
 

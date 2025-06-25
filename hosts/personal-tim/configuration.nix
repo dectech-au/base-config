@@ -4,30 +4,30 @@
 {
   imports = [
     ./hardware-configuration.nix
-	  ../../modules/birdtray.nix
-    ../../modules/bluetooth.nix
-    ../../modules/btrfs.nix
-    ../../modules/chrome.nix
-    ../../modules/evolution.nix
-    ../../modules/firefox.nix
-    ../../modules/firewall.nix
-    ../../modules/github-desktop.nix
-    ../../modules/gparted.nix
-    ../../modules/kcalc.nix
-    ../../modules/kdeconnect-firewall.nix
-    ../../modules/killall.nix
-    ../../modules/libreoffice.nix
-    ../../modules/nixvim.nix
-    ../../modules/onlyoffice.nix
-	  ../../modules/papirus.nix
-    ../../modules/plasma.nix
-    ../../modules/protonmail-bridge.nix
-    ../../modules/remotemouse.nix
-    ../../modules/signal-desktop.nix
-    ../../modules/steam.nix
-    ../../modules/teams.nix
-    ../../modules/teamviewer.nix
-    ../../modules/wine.nix
+	  ../../sys-modules/birdtray.nix
+    ../../sys-modules/bluetooth.nix
+    ../../sys-modules/btrfs.nix
+    ../../sys-modules/chrome.nix
+    ../../sys-modules/evolution.nix
+    ../../sys-modules/firefox.nix
+    ../../sys-modules/firewall.nix
+    ../../sys-modules/github-desktop.nix
+    ../../sys-modules/gparted.nix
+    ../../sys-modules/kcalc.nix
+    ../../sys-modules/kdeconnect-firewall.nix
+    ../../sys-modules/killall.nix
+    ../../sys-modules/libreoffice.nix
+    ../../sys-modules/nixvim.nix
+    ../../sys-modules/onlyoffice.nix
+	  ../../sys-modules/papirus.nix
+    ../../sys-modules/plasma.nix
+    ../../sys-modules/protonmail-bridge.nix
+    ../../sys-modules/remotemouse.nix
+    ../../sys-modules/signal-desktop.nix
+    ../../sys-modules/steam.nix
+    ../../sys-modules/teams.nix
+    ../../sys-modules/teamviewer.nix
+    ../../sys-modules/wine.nix
     #./personalisation/wallpaper-service.nix
 	];
   

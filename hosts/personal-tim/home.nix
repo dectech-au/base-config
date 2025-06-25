@@ -3,21 +3,21 @@
 
 {
   imports = [
-    ../../modules/dropbox.nix
-    ../../modules/fastfetch.nix
-	  #../../modules/firefox.nix # Moved to configuration.nix
-    ../../modules/fish.nix
-	  ../../modules/git.nix
-    ../../modules/kdeconnect.nix
-	  ../../modules/kitty.nix
-    ../../modules/librewolf.nix
-    #../../modules/onlyoffice.nix
-    #../../modules/remotemouse.nix
-    ../../modules/thunderbird.nix
-    ../../modules/vscode.nix
-    ../../modules/start-menu/onlyoffice.nix
-    ../../modules/start-menu/teams.nix
-    ../../modules/start-menu/windows.nix
+    ../../home-modules/dropbox.nix
+    ../../home-modules/fastfetch.nix
+	  #../../home-modules/firefox.nix # Moved to configuration.nix
+    ../../home-modules/fish.nix
+	  ../../home-modules/git.nix
+    ../../home-modules/kdeconnect.nix
+	  ../../home-modules/kitty.nix
+    ../../home-modules/librewolf.nix
+    #../../home-modules/onlyoffice.nix
+    #../../home-modules/remotemouse.nix
+    ../../home-modules/thunderbird.nix
+    ../../home-modules/vscode.nix
+    ../../home-modules/start-menu/onlyoffice.nix
+    ../../home-modules/start-menu/teams.nix
+    ../../home-modules/start-menu/windows.nix
     ./personalisation/wallpaper.nix
   ];
 
