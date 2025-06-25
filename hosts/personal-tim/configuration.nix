@@ -11,6 +11,7 @@
     ../../sys-modules/evolution.nix
     ../../sys-modules/firefox.nix
     ../../sys-modules/firewall.nix
+    ../../sys-modules/fonts.nix
     ../../sys-modules/github-desktop.nix
     ../../sys-modules/gparted.nix
     ../../sys-modules/kcalc.nix
@@ -106,15 +107,14 @@
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
       kdePackages.kate
-    #  thunderbird
     ];
   };
 
   # Enable automatic login for the user.
-  services.displayManager.autoLogin = {
-	enable = false;
-  	user = "dectec";
-  };
+ #  services.displayManager.autoLogin = {
+	# enable = false;
+ #  	user = "dectec";
+ #  };
   
   # Allow unfree packages
   # nixpkgs.config.allowUnfree = true;

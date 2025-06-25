@@ -3,5 +3,6 @@
 {
 	fonts.fonts = with pkgs; [
 		corefonts
+    cantarell-fonts
 	];
 }

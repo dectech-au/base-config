@@ -3,9 +3,12 @@
 {
   services = {
     xserver.enable = true;
-    displayManager.sddm = {
-      enable = true;
-      #defaultSession = "plasma.desktop";
+    displayManager = {
+      sddm.enable = true; 
+      autoLogin = {
+        enable = false;
+        user = "dectec";
+      };
     };
     desktopManager.plasma6.enable = true;
   };
