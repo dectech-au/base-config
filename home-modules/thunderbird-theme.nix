@@ -3,6 +3,7 @@
 {
   home.file = {
     ".thunderbird/default/chrome/userChrome.css".text = ''
+      
       /*******Move tool bar above unified bar*******/
       toolbar#toolbar-menubar {
         Order:            -1 !important;
@@ -14,7 +15,8 @@
       }
 
       /***** Move window controls up to the menu bar ******/
-      .titlebar-buttonbox-container { position: fixed;
+      .titlebar-buttonbox-container { 
+        position: fixed;
         top: 0px; 
         right: 0px; 
         height: 19px !important;
@@ -24,7 +26,7 @@
 
       /******Adjust and color unified toolbar******/
       #unifiedToolbar {
-        height:  32px  !important;
+        height:  64px  !important;
         padding-block:   1px  !important;
         margin-block:    0px  !important;
         background:  #6D859C  !important;
@@ -35,7 +37,8 @@
       *|*:root {
         --listbox-hover: transparent !important;
       }
-      .container:hover { background-color: transparent !important;
+      .container:hover { 
+        background-color: transparent !important;
       }
       tr[is="thread-row"]:hover {
       background-color: transparent !important;
@@ -43,35 +46,41 @@
 
       /*******Background color on folder list******/
       #folderPane,
-      #folderPaneHeaderBar { background-color: #E4E4E6 !important; }
+      #folderPaneHeaderBar { 
+        background-color: #E4E4E6 !important; 
+      }
       
       /******Fix the new message button*******/
-      #folderPaneWriteMessage { background-color: #6D859C !important; border: 2px solid white !important; color: white !important; }
-        
+      #folderPaneWriteMessage { 
+        background-color: #6D859C !important; 
+        border: 2px solid white !important; 
+        color: white !important; 
+      }
+
       /*******Change universal fonts *******/
       *{ font-family: Aptos !important; }
 
       /*******Color selected items*******/
       li.selected > .container {
-      color: black !important;
-      background-color: #6D859C !important;
+        color: black !important;
+        background-color: #6D859C !important;
 
-      [is="tree-view-table-body"] > .selected {
-      color: black !important;
-      background-color: #6D859C !important;
-      }
+        [is="tree-view-table-body"] > .selected {
+          color: black !important;
+          background-color: #6D859C !important;
+        }
 
-      .tree-table,
-      .card-container {
-      background-color: #f0f0f0 !important;
-      }
+        .tree-table,
+        .card-container {
+          background-color: #f0f0f0 !important;
+        }
 
-      .card-container {
-        background-color: var(--tag-color) !important;
-      }
+        .card-container {
+          background-color: var(--tag-color) !important;
+        }
 
-      /*******Detailed Colors*******/
-      :root {
+        /*******Detailed Colors*******/
+        :root {
         
         /* Specify colors for unread messages */
         
@@ -200,13 +209,13 @@
         /*hover*/
         &:hover {
           color: var(--text-hover) !important;      /* Text color */
-            background-color: var(--bg-hover) !important;      /* Background color */
-            outline: 0px solid var(--border-hover) !important;      /* Border color */
+          background-color: var(--bg-hover) !important;      /* Background color */
+          outline: 0px solid var(--border-hover) !important;      /* Border color */
           
-            .tree-view-row-unread > .tree-button-unread > img {
-              fill: var(--button-hover-0) !important;
-              stroke: var(--button-hover-0) !important;        /* button color */
-            }
+          .tree-view-row-unread > .tree-button-unread > img {
+            fill: var(--button-hover-0) !important;
+            stroke: var(--button-hover-0) !important;        /* button color */
+          }
         }
         
         /*selected*/
@@ -242,8 +251,7 @@
               fill: var(--button-current-selected-0) !important;
               stroke: var(--button-current-selected-0) !important;      /* button color */
             }
-          }
-          
+          } 
         }
       }
 
@@ -261,8 +269,6 @@
           color: var(--read-text-hover) !important;    /* Text color */
           background-color: var(--read-bg-hover) !important;    /* Background color */
           outline: 0px solid var(--read-border-hover) !important;    /* Border color */
-
-
         }
 
         /*selected*/
@@ -270,7 +276,6 @@
           color: var(--read-text-select) !important;    /* Text color */
           background-color: var(--read-bg-select) !important;    /* Background color */
           outline: 1px solid var(--read-border-select) !important;    /* Border color */
-          
         }
         
         /*current*/
@@ -284,24 +289,18 @@
             color: var(--read-text-current-selected) !important;      /* Text color */
             background-color: var(--read-bg-current-selected) !important;      /* Background color */
             outline: 1px solid var(--read-border-current-selected) !important;      /* Border color */
-            
           }
-          
         }
       }
 
-/*******Fix tabs***********/
-#tabmail-arrowscrollbox { background-color: #E4E4E6 !important; }
- 
-.tab-line[selected=true] { background-color:transparent !important; }
- 
-:root { --tabs-toolbar-background-color: #E4E4E6 !important; }
+      /*******Fix tabs***********/
+      #tabmail-arrowscrollbox { background-color: #E4E4E6 !important; }
+      .tab-line[selected=true] { background-color:transparent !important; }
+      :root { --tabs-toolbar-background-color: #E4E4E6 !important; }
 
-/******Fix New Event and New Task buttons***********/
-#sidePanelNewEvent { background-color: #E4E4E6 !important; border: 1px solid white !important; color: white !important; }
- 
-#sidePanelNewTask { background-color: #E4E4E6 !important; border: 1px solid white !important; color: white !important; }
-
+      /******Fix New Event and New Task buttons***********/
+      #sidePanelNewEvent { background-color: #E4E4E6 !important; border: 1px solid white !important; color: white !important; }
+      #sidePanelNewTask { background-color: #E4E4E6 !important; border: 1px solid white !important; color: white !important; }
     '';
 
     ".thunderbird/default/chrome/userContent.css".text = ''
