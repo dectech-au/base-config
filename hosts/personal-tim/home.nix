@@ -14,7 +14,7 @@
     #../../home-modules/onlyoffice.nix
     #../../home-modules/remotemouse.nix
     ../../home-modules/thunderbird.nix
-    ../../home-modules/thunderbird-theme.nix
+    #../../home-modules/thunderbird-theme.nix
     ../../home-modules/vscode.nix
     ../../home-modules/start-menu/onlyoffice.nix
     ../../home-modules/start-menu/teams.nix
