@@ -6,6 +6,7 @@
     hostName = "localhost";
     config = {
       adminpassFile = "/etc/nextcloud-admin-pass";
+      dbtype = "sqlite";
     };
   };
 }
