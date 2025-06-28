@@ -3,6 +3,7 @@
 {
   services.nextcloud = {
     enable = true;
-    hostName = "nextcloud-default-hostname";
+    hostName = "localhost";
+    adminpassFile = "/etc/nextcloud-admin-pass";
   };
 }
