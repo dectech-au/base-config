@@ -19,6 +19,7 @@
     ../../sys-modules/killall.nix
     ../../sys-modules/libreoffice.nix
     ../../sys-modules/nixvim.nix
+    ../../sys-modules/nextcloud.nix
     ../../sys-modules/nvidia.nix
     ../../sys-modules/onlyoffice.nix
 	  ../../sys-modules/papirus.nix
