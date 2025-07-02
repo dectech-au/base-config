@@ -2,7 +2,7 @@
 { inputs, ... }:
 {
   imports = [
-    ./systems.nix
+    ./system.nix
     ./home.nix
     ./aagl.nix
   ];
