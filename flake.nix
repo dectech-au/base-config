@@ -23,7 +23,7 @@
   outputs = inputs@{ self, flake-parts, ... }:
   flake-parts.lib.mkFlake { inherit inputs; } {
     systems = [ "x86_64-linux" ];
-    modules = [
+    imports = [
       ./flake-parts/overlays.nix
       ./flake-parts/systems/enterprise-base.nix
       ./flake-parts/systems/personal-tim.nix
