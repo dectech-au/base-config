@@ -17,70 +17,16 @@
     aagl.url = "github:ezKEa/aagl-gtk-on-nix/release-25.05";
     aagl.inputs.nixpkgs.follows = "nixpkgs";
 
+    #firefox-addons.url = "github:nix-community/nur";
   };
 
-  outputs = inputs@{ self, flake-parts, nixpkgs, ... }:
+  outputs = inputs@{ self, flake-parts, ... }:
   flake-parts.lib.mkFlake { inherit inputs; } {
     systems = [ "x86_64-linux" ];
-
-    perSystem = { config, self', inputs', system, lib, pkgs, ... }: {
-      _module.args.pkgs = import nixpkgs {
-        inherit system;
-        overlays = [
-          (final: prev: {
-            firefox-addons = inputs.firefox-addons.packages.${system};
-          })
-        ];
-        config.allowUnfree = true;
-      };
-    };
-
-    flake.nixosConfigurations = {
-      
-      enterprise-base = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = { inherit inputs; };
-        modules = [
-          { nixpkgs.config.allowUnfree = true; }
-          ./hosts/enterprise-base/configuration.nix
-          ./flake-modules/autoupdate-enterprise-base.nix
-          inputs.home-manager.nixosModules.home-manager {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              backupFileExtensions = "backup";
-              users.dectec = import ./hosts/enterprise-base/home.nix;
-            };
-          }
-          inputs.nixvim.nixosModules.nixvim
-        ];
-      };
-
-      personal-tim = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = { inherit inputs; };
-        modules = [
-          { nixpkgs.config.allowUnfree = true; }
-          ./hosts/personal-tim/configuration.nix
-          ./flake-modules/autoupdate-personal-tim.nix
-          inputs.nixvim.nixosModules.nixvim
-          inputs.home-manager.nixosModules.home-manager {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              backupFileExtension = "backup";
-              users.dectec = import ./hosts/personal-tim/home.nix;
-            };
-          }
-          {
-            imports = [ inputs.aagl.nixosModules.default ];
-            nix.settings = inputs.aagl.nixConfig;
-            aagl.enableNixpkgsReleaseBranchCheck = false;
-            programs.honkers-railway-launcher.enable = true;
-            programs.honkers-launcher.enable = true;
-          }
-        ];
-      };
-    };
+    modules = [
+      ./flake-parts/overlays.nix
+      ./flake-parts/systems/enterprise-base.nix
+      ./flake-parts/systems/personal-tim.nix
+    ];
   };
 }
