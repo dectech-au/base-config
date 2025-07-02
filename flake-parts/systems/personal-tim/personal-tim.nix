@@ -7,15 +7,15 @@
 
     modules = [
       { nixpkgs.config.allowUnfree = true; }
-      ../../hosts/personal-tim/configuration.nix
-      ../../flake-modules/autoupdate-personal-tim.nix
+      ../../../hosts/personal-tim/configuration.nix
+      ../../../flake-modules/autoupdate-personal-tim.nix
       inputs.nixvim.nixosModules.nixvim
       inputs.home-manager.nixosModules.home-manager {
         home-manager = {
           useGlobalPkgs = true;
           useUserPackages = true;
           backupFileExtension = "backup";
-          users.dectec = import ../../hosts/personal-tim/home.nix;
+          users.dectec = import ../../../hosts/personal-tim/home.nix;
         };
       }
       {
