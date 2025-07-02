@@ -5,119 +5,82 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
 
-    home-manager = {
-      url = "github:nix-community/home-manager/release-25.05";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    #flake-parts.inputs.nixpkgs.follows = "nixpkgs";
 
-    nixvim = {
-       url = "github:nix-community/nixvim";
-     inputs.nixpkgs.follows = "nixpkgs";
-    };
+    home-manager.url = "github:nix-community/home-manager/release-25.05";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    aagl = {
-      url = "github:ezKEa/aagl-gtk-on-nix/release-25.05";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    nixvim.url = "github:nix-community/nixvim";
+    nixvim.inputs.nixpkgs.follows = "nixpkgs";
+
+    aagl.url = "github:ezKEa/aagl-gtk-on-nix/release-25.05";
+    aagl.inputs.nixpkgs.follows = "nixpkgs";
 
   };
 
-  outputs = { self, nixpkgs, home-manager, nixvim, aagl, ... }@inputs:
-    let
-      system = "x86_64-linux";
-      lib = nixpkgs.lib; 
-      pkgs = import nixpkgs {
+  outputs = inputs@{ self, flake-parts, nixpkgs, ... }:
+  flake-parts.lib.mkFlake { inherit inputs; } {
+    systems = [ "x86_64-linux" ];
+
+    perSystem = { config, self', inputs', system, lib, pkgs, ... }: {
+      _module.args.pkgs = import nixpkgs {
         inherit system;
+        overlays = [
+          (final: prev: {
+            firefox-addons = inputs.firefox-addons.packages.${system};
+          })
+        ];
         config.allowUnfree = true;
       };
+    };
 
-      overlays = [
-        (final: prev: {
-          firefox-addons = inputs.firefox-addons.packages.${system};
-         })
-      ];
-    
-    in {
-      nixosConfigurations = {
-        
-        enterprise-base = lib.nixosSystem {
-          inherit system;
-          specialArgs = { inherit inputs; };
+    flake.nixosConfigurations = {
+      
+      enterprise-base = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = { inherit inputs; };
+        modules = [
+          { nixpkgs.config.allowUnfree = true; }
+          ./hosts/enterprise-base/configuration.nix
+          ./flake-modules/autoupdate-enterprise-base.nix
+          inputs.home-manager.nixosModules.home-manager {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              backupFileExtensions = "backup";
+              users.dectec = import ./hosts/enterprise-base/home.nix;
+            };
+          }
+          inputs.nixvim.nixosModules.nixvim
+        ];
+      };
 
-          modules = [
-            { nixpkgs.config.allowUnfree = true; }
-            ./hosts/enterprise-base/configuration.nix
-            ./flake-modules/autoupdate-enterprise-base.nix 
-            home-manager.nixosModules.home-manager {
-              home-manager = {
-                useGlobalPkgs = true;
-                useUserPackages = true;
-                backupFileExtension = "backup";
-                users.dectec = import ./hosts/enterprise-base/home.nix;
-              };
-            }
-
-            nixvim.nixosModules.nixvim
-          ];
-        };
-
-        personal-tim = lib.nixosSystem {
-          inherit system;
-          specialArgs = { inherit inputs; };
-
-          modules = [
-            { nixpkgs.config.allowUnfree = true; }
-            ./hosts/personal-tim/configuration.nix
-            ./flake-modules/autoupdate-personal-tim.nix
-
-            nixvim.nixosModules.nixvim
-
-            home-manager.nixosModules.home-manager {
-              home-manager = {
-                useGlobalPkgs = true;
-                useUserPackages = true;
-                backupFileExtension = "backup";
-                users.dectec = import ./hosts/personal-tim/home.nix;
-              };
-            }
-
-            { 
-              imports = [ aagl.nixosModules.default ];
-              nix.settings = aagl.nixConfig;
-              aagl.enableNixpkgsReleaseBranchCheck = false;
-              # programs.anime-games-launcher.enable = true;    # Hoyo Launcher
-              programs.honkers-railway-launcher.enable = true;  # Honkai: Star Rail
-              programs.honkers-launcher.enable = true;          # Honkai: Impact 3rd
-              # programs.sleepy-launcher.enable = true;         # Zenless Zone Zero
-            }
-          ];
-        };
-
-        # nixos = lib.nixosSystem {
-        #   inherit system;
-        #   specialArgs = { MODULES = ./modules; };
-        #   modules = [
-        #     ./configuration.nix
-        #     { nixpkgs.config.allowUnfree = true; }
-        #     { 
-        #       imports = [ aagl.nixosModules.default ];
-        #       nix.settings = aagl.nixConfig;
-        #       aagl.enableNixpkgsReleaseBranchCheck = false;
-        #       # programs.anime-games-launcher.enable = true;    # Hoyo Launcher
-        #       programs.honkers-railway-launcher.enable = true;  # Honkai: Star Rail
-        #       programs.honkers-launcher.enable = true;          # Honkai: Impact 3rd
-        #       # programs.sleepy-launcher.enable = true;         # Zenless Zone Zero
-        #     }
-        #     
-        #     home-manager.nixosModules.home-manager {
-        #       home-manager.useGlobalPkgs = true;
-        #       home-manager.useUserPackages = true;
-        #       home-manager.users.dectec = import ./home.nix;
-        #     }
-	       #    nixvim.nixosModules.nixvim
-        #   ];
-        # };
+      personal-tim = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = { inherit inputs; };
+        modules = [
+          { nixpkgs.config.allowUnfree = true; }
+          ./hosts/personal-tim/configuration.nix
+          ./flake-modules/autoupdate-personal-tim.nix
+          inputs.nixvim.nixosModules.nixvim
+          inputs.home-manager.nixosModules.home-manager {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              backupFileExtension = "backup";
+              users.dectec = import ./hosts/personal-tim/home.nix;
+            };
+          }
+          {
+            imports = [ inputs.aagl.nixosModules.default ];
+            nix.settings = inputs.aagl.nixConfig;
+            aagl.enableNixpkgsReleaseBranchCheck = false;
+            programs.honkers-railway-launcher.enable = true;
+            programs.honkers-launcher.enable = true;
+          }
+        ];
       };
     };
+  };
 }
-
