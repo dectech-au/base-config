@@ -1,7 +1,10 @@
 #~/.dotfiles/sys-modules/wordpress.nix
 { config, lib, pkgs, ... }:
 {
-  environment.systemPackages = with pkgs; [
-    wordpress
-  ];
+  services.wordpress.sites."localhost" = {
+    languages = [ pkgs.wordpressPackages.languages.en_AU ];
+    settings = {
+      WPLANG = "en_AU";
+    };
+  };
 }
