@@ -7,6 +7,7 @@
     plugins.opengraph
   ];
 
+  services.wordpress.webserver = "httpd";
 
   services.wordpress.sites."localhost" = {
     virtualHost = {
