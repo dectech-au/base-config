@@ -1,6 +1,13 @@
 #~/.dotfiles/sys-modules/wordpress.nix
 { config, lib, pkgs, ... }:
 {
+  environment.systemPackages = with pkgs.wordpressPackages; [
+    themes.twentytwentythree
+    plugins.antispam-bee
+    plugins.opengraph
+  ];
+
+
   services.wordpress.sites."wordpress" = {
     virtualHost = {
       hostName = "wordpress.local";
