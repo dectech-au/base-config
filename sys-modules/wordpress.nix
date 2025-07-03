@@ -11,10 +11,10 @@
       user = "wp";
       password = "changeme";
     };
-    admin = {
-      user = "admin";
-      password = "changeme";
-      email = "admin@dectech.au";
-    };
+    # admin = {
+    #   user = "admin";
+    #   password = "changeme";
+    #   email = "admin@dectech.au";
+    # };
   };
 }
