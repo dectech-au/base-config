@@ -26,6 +26,7 @@
     ../../sys-modules/onlyoffice.nix
     ../../sys-modules/openssl.nix
 	  ../../sys-modules/papirus.nix
+    ../../sys-modules/pinegrow.nix
     ../../sys-modules/plasma.nix
     ../../sys-modules/protonmail-bridge.nix
     ../../sys-modules/remotemouse.nix
