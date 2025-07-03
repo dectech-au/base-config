@@ -3,8 +3,8 @@
 {
   services.wordpress.sites."wordpress" = {
     virtualHost = {
-      hostName = "localhost";
-      listen = [{ ip = "127.0.0.1"; port = 8080; }];
+      hostName = "wordpress.local";
+      #listen = [{ ip = "127.0.0.1"; port = 8080; }];
     };
     database = {
       name = "wordpress";
