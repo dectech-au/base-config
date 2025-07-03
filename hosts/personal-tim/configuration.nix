@@ -23,6 +23,7 @@
     ../../sys-modules/nextcloud.nix
     ../../sys-modules/nvidia.nix
     ../../sys-modules/onlyoffice.nix
+    ../../sys-modules/openssl.nix
 	  ../../sys-modules/papirus.nix
     ../../sys-modules/plasma.nix
     ../../sys-modules/protonmail-bridge.nix
