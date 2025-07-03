@@ -2,9 +2,9 @@
 { config, lib, pkgs, ... }:
 {
   services.wordpress.sites."localhost" = {
-    languages = [ pkgs.wordpressPackages.languages.en_AU ];
+    languages = [ pkgs.wordpressPackages.languages.en_GB ];
     settings = {
-      WPLANG = "en_AU";
+      WPLANG = "en_GB";
     };
   };
 }
