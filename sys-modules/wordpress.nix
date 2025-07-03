@@ -2,9 +2,19 @@
 { config, lib, pkgs, ... }:
 {
   services.wordpress.sites."wordpress" = {
-    # languages = [ pkgs.wordpressPackages.languages.en_US ];
-    # settings = {
-    #   WPLANG = "en_US";
-    # };
+    virtualHost = {
+      hostName = "localhost";
+      listen = [{ ip = "127.0.0.1"; port = 8080; }];
+    };
+    database = {
+      name = "wordpress";
+      user = "wp";
+      password = "changeme";
+    };
+    admin = {
+      user = "admin";
+      password = "changeme";
+      email = "admin@dectech.au";
+    };
   };
 }
