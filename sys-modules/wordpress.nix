@@ -8,7 +8,9 @@
     
     themes = {
       inherit (pkgs.wordpressPackages.themes)
+        twentytwentyfive
         twentytwentythree;
+
     };
     
     plugins = {
