@@ -8,9 +8,15 @@
     
     themes = {
       inherit (pkgs.wordpressPackages.themes)
-        twentytwentyfive
-        twentytwentythree;
-
+        geist
+        proton
+        twentytwenty
+        twentynineteen
+        twentytwentyone
+        twentytwentytwo
+        twentytwentythree
+        twentytwentyfour
+        twentytwentyfive;
     };
     
     plugins = {
