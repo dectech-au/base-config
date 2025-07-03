@@ -6,5 +6,8 @@
     enable = true;
     shellInit = "cd ~/.dotfiles/";
     shellInitLast = "fastfetch";
+    userAbbreviations = {
+      "update" = "bash ~/.dotfiles/update.sh";
+    };
   };
 }
