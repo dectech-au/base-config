@@ -11,15 +11,15 @@
   services.wordpress.sites."localhost" = {
     virtualHost = {
       hostName = "localhost";
-      themes = {
-        inherit (pkgs.wordpressPackages.themes)
-          twentytwentythree;
-      };
-      plugins = {
-        inherit (pkgs.wordpressPackages.plugins)
-          antispam-bee
-          opengraph;
-      };
+      # themes = {
+      #   inherit (pkgs.wordpressPackages.themes)
+      #     twentytwentythree;
+      # };
+      # plugins = {
+      #   inherit (pkgs.wordpressPackages.plugins)
+      #     antispam-bee
+      #     opengraph;
+      # };
     };
     # database = {
     #   name = "wordpress";
