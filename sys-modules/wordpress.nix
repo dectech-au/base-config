@@ -8,9 +8,9 @@
   ];
 
 
-  services.wordpress.sites."wordpress" = {
+  services.wordpress.sites."localhost" = {
     virtualHost = {
-      hostName = "wordpress.local";
+      hostName = "localhost";
       themes = {
         inherit (pkgs.wordpressPackages.themes)
           twentytwentythree;
