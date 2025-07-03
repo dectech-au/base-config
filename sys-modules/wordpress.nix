@@ -4,7 +4,15 @@
   services.wordpress.sites."wordpress" = {
     virtualHost = {
       hostName = "wordpress.local";
-      #listen = [{ ip = "127.0.0.1"; port = 8080; }];
+      themes = {
+        inherit (pkgs.wordpressPackages.themes)
+          twentytwentythree;
+      };
+      plugins = {
+        inherit (pkgs.wordpressPackages.plugins)
+          antispam-bee
+          opengraph;
+      };
     };
     # database = {
     #   name = "wordpress";
