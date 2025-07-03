@@ -7,7 +7,7 @@
     shellInit = "cd ~/.dotfiles/";
     shellInitLast = "fastfetch";
     userAbbreviations = {
-      "update" = "bash ~/.dotfiles/update.sh";
+      "update" = "bash ~/.dotfiles/update-personal-tim.sh";
     };
   };
 }
