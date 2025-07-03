@@ -8,7 +8,7 @@
     
     themes = {
       inherit (pkgs.wordpressPackages.themes)
-        geist
+        #geist
         proton
         twentytwenty
         twentynineteen
