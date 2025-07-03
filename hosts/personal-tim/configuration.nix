@@ -11,6 +11,7 @@
     ../../sys-modules/evolution.nix
     ../../sys-modules/firefox.nix
     ../../sys-modules/firewall.nix
+    ../../sys-modules/flatpak.nix
     ../../sys-modules/fonts.nix
     ../../sys-modules/github-desktop.nix
     ../../sys-modules/gparted.nix
