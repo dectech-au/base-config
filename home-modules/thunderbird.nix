@@ -1,4 +1,4 @@
-#~/.dotfiles/modules/thunderbird.nix
+#/.dotfiles/modules/thunderbird.nix
 { config, lib, pkgs, ... }:
 {
   programs.thunderbird = {
@@ -14,8 +14,8 @@
     };
   };
 
-  xdg.configFile = {
-  
+  # xdg.configFile = {
+  # 
   #   "autostart/birdtray.desktop".text = ''
   #     [Desktop Entry]
   #     Type=Application
@@ -26,16 +26,16 @@
   #     Name=Birdtray
   #     Comment=Thunderbird system tray integration
   #   '';
-
-    "autostart/thunderbird.desktop".text = ''
-      [Desktop Entry]
-      Type=Application
-      Exec=thunderbird --silent
-      Hidden=false
-      NoDisplay=false
-      X-GNOME-Autostart-enabled=true
-      Name=Thunderbird
-      Comment=Start Thunderbird at login
-    '';
-  };
+  #
+  #   "autostart/thunderbird.desktop".text = ''
+  #     [Desktop Entry]
+  #     Type=Application
+  #     Exec=thunderbird --silent
+  #     Hidden=false
+  #     NoDisplay=false
+  #     X-GNOME-Autostart-enabled=true
+  #     Name=Thunderbird
+  #     Comment=Start Thunderbird at login
+  #   '';
+  # };
 }
