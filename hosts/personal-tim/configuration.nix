@@ -8,6 +8,7 @@
     ../../sys-modules/bluetooth.nix
     ../../sys-modules/btrfs.nix
     ../../sys-modules/chrome.nix
+    ../../sys-modules/esphome.nix
     ../../sys-modules/evolution.nix
     ../../sys-modules/firefox.nix
     ../../sys-modules/firewall.nix
