@@ -1,9 +1,9 @@
 #~/.dotfiles/sys-modules/wordpress.nix
 { config, lib, pkgs, ... }:
 {
-  services.wordpress.sites."localhost" = {
+  services.wordpress.sites."wordpress.localhost" = {
     virtualHost = {
-      hostName = "localhost";
+      hostName = "wordpress.localhost";
     };
     
     themes = {
