@@ -6,24 +6,8 @@
 ##### Restart wine:
 # wineserver -k
 
-##### Test GrabPointer:
-# wine reg add "HKCU\\Software\\Wine\\X11 Driver" /v "GrabPointer" /d "Y" /f
-
-
-##### setup:
-
-##### Enable MouseWarpOverrive (maybe?)
-# wine reg add "HKCU\\Software\\Wine\\X11 Driver" /v "MouseWarpOverride" /d "force" /f
-
-##### Install .NET components (maybe?)
-# winetricks dotnet40
-
-##### Also try:
-# winetricks corefonts gdiplus vcrun6
-
-##### also try:
-# winetricks nocrashdialog
-# winetricks sandbox
+##### try:
+# winetricks corefonts gdiplus vcrun6 dotnet40 nocrashdialog sandbox dinput input8 directplay
 
 ##### Force Wine to handle keyboard and mouse input:
 # wine reg add "HKCU\\Software\\Wine\\X11 Driver" /v "UseTakeFocus" /d "Y" /f
@@ -31,9 +15,6 @@
 # wine reg add "HKCU\\Software\\Wine\\X11 Driver" /v "GrabKeyboard" /d "Y" /f
 # wine reg add "HKCU\\Software\\Wine\\X11 Driver" /v "GrabPointer" /d "Y" /f
 # wine reg add "HKCU\\Software\\Wine\\X11 Driver" /v "MouseWarpOverride" /d "force" /f
-
-##### Use winetricks to install input support libraries:
-# winetricks dinput dinput8 directplay
 
 ##### Input device permission test:
 # sudo groupadd uinput
