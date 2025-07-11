@@ -2,8 +2,10 @@
 { config, lib, pkgs, ... }:
 {
 
-  services.firewall.enableTCPPorts = [ 1978 ];
-  services.firewall.enableUDPPorts = [ 1978 ];
+  networking.firewall = {
+    enableTCPPorts = [ 1978 ];
+    enableUDPPorts = [ 1978 ];
+  };
   # environment.systemPackages = with pkgs; [
   #   clip
   #   glib
