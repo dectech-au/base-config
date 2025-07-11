@@ -6,6 +6,10 @@
     allowedTCPPorts = [ 1978 ];
     allowedUDPPorts = [ 1978 ];
   };
+
+  environment.systemPackages = with pkgs; [
+    winetricks
+  ];
   # environment.systemPackages = with pkgs; [
   #   clip
   #   glib
