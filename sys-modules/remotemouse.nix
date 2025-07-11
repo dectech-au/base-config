@@ -9,6 +9,7 @@
 
   environment.systemPackages = with pkgs; [
     winetricks
+    wineWowPackages.staging
   ];
   # environment.systemPackages = with pkgs; [
   #   clip
