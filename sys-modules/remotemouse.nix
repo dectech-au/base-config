@@ -1,13 +1,15 @@
-# ~/.dotfiles/modules/remotemouse.nix or similar
+# ~/.dotfiles/modules/remotemouse.nix
 
-##### Clean wine prefix and start again:
-# WINEPREFIX=~/wine-remote-clean winecfg
+# bash 
+# cd ~ && sudo rm -r .wine ##### clean wine prefix and start again
 
-##### Restart wine:
-# wineserver -k
+# wineserver -k                             ##### restart wine
 
-##### try:
-# winetricks corefonts gdiplus vcrun6 dotnet40 nocrashdialog sandbox dinput input8 directplay
+##### Install these libraries 
+# winetricks corefonts dinput directplay input8 nocrashdialog vcrun6 
+
+##### Libraries which breaks shit:
+# dotnet40 gdiplus
 
 ##### Force Wine to handle keyboard and mouse input:
 # wine reg add "HKCU\\Software\\Wine\\X11 Driver" /v "UseTakeFocus" /d "Y" /f
@@ -16,12 +18,11 @@
 # wine reg add "HKCU\\Software\\Wine\\X11 Driver" /v "GrabPointer" /d "Y" /f
 # wine reg add "HKCU\\Software\\Wine\\X11 Driver" /v "MouseWarpOverride" /d "force" /f
 
-##### Input device permission test:
-# sudo groupadd uinput
-# sudo usermod -aG input,uinput $(whoami)
+##### Input device permissions:
+# sudo groupadd uinput && sudo usermod -aG input,uinput $(whoami) 
 
-##### run remote mouse with
-# cd ~/.wine/drive_c/Program\ Files\ \(x86\)/Remote\ Mouse/ && WINEDEBUG=+cursor,+event,+x11drv wine RemoteMouse.exe
+##### Run remote mouse
+# cd ~/.wine/drive_c/Program\ Files\ \(x86\)/Remote\ Mouse/ && WINEDEBUG=+cursor,+event,+x11drv wine RemoteMouse.exe 
 
 
 { config, lib, pkgs, ... }:
@@ -36,35 +37,4 @@
     winetricks
     wineWowPackages.staging
   ];
-  # environment.systemPackages = with pkgs; [
-  #   clip
-  #   glib
-  #   gtk3
-  #   dbus
-  #   libxkbcommon
-  #   libGL
-  #   zlib
-  #   freetype
-  #   fontconfig
-  #   stdenv.cc.cc
-  #   patchelf
-  #
-  #   # Qt and X11 dependencies
-  #   qt5.qtbase
-  #   qt5.qttools
-  #   qt5.qtwayland
-  #   xorg.xcbutil
-  #   xorg.xcbutilwm
-  #   xorg.libxcb
-  #   xorg.libX11
-  #   xorg.libXinerama
-  #   xorg.libXext
-  #   xorg.libXtst
-  #   xorg.libXrender
-  #   xorg.libXrandr
-  #   xorg.libXfixes
-  #   xorg.xcbutilimage
-  #   xorg.xcbutilkeysyms
-  #   xorg.xcbutilrenderutil
-  # ];
 }
