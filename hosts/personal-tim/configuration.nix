@@ -17,6 +17,7 @@
     ../../sys-modules/github-desktop.nix
     ../../sys-modules/gnome-disks.nix
     ../../sys-modules/gparted.nix
+    ../../sys-modules/htop.nix
     ../../sys-modules/kcalc.nix
     ../../sys-modules/kdeconnect-firewall.nix
     ../../sys-modules/killall.nix
