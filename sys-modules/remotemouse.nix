@@ -3,8 +3,8 @@
 {
 
   networking.firewall = {
-    enableTCPPorts = [ 1978 ];
-    enableUDPPorts = [ 1978 ];
+    allowedTCPPorts = [ 1978 ];
+    allowedUDPPorts = [ 1978 ];
   };
   # environment.systemPackages = with pkgs; [
   #   clip
