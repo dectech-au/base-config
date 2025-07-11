@@ -33,6 +33,7 @@
     #../../sys-modules/pinegrow.nix
     ../../sys-modules/plasma.nix
     ../../sys-modules/protonmail-bridge.nix
+    ../../sys-modules/qt.nix
     ../../sys-modules/remotemouse.nix
     ../../sys-modules/signal-desktop.nix
     ../../sys-modules/sshfs.nix
