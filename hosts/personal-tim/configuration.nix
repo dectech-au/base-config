@@ -120,7 +120,7 @@
   users.users.dectec = {
     isNormalUser = true;
     description = "dectec";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "vboxusers" ];
     packages = with pkgs; [
       kdePackages.kate
     ];
