@@ -19,11 +19,11 @@
         };
       }
       {
-        imports = [ inputs.aagl.nixosModules.default ];
-        nix.settings = inputs.aagl.nixConfig;
-        aagl.enableNixpkgsReleaseBranchCheck = false;
-        programs.honkers-railway-launcher.enable = true;
-        programs.honkers-launcher.enable = true;
+        # imports = [ inputs.aagl.nixosModules.default ];
+        # nix.settings = inputs.aagl.nixConfig;
+        # aagl.enableNixpkgsReleaseBranchCheck = false;
+        # programs.honkers-railway-launcher.enable = true;
+        # programs.honkers-launcher.enable = true;
       }
     ];
   };
