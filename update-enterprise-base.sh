@@ -4,7 +4,7 @@
 
    cd /etc/nixos
    eval "$(ssh-agent -s)"
-   ssh-add ~/.ssh/id_ed25519
+   ssh-add ~/.ssh/id_nixos_readonly
    git fetch origin
    git reset --hard origin/main
 
