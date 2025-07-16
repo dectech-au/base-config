@@ -8,7 +8,7 @@ let
 in
 {
   imports = [
-    ./hardware-configuration.nix
+    ../../hardware-configuration.nix
     ../../sys-modules/chrome.nix
     ../../sys-modules/onlyoffice.nix
     ../../sys-modules/bluetooth.nix
