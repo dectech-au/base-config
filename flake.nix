@@ -1,5 +1,4 @@
 #~/.dotfiles/flake.nix
-#test
 {
   description = "DecTec default flake";
 
