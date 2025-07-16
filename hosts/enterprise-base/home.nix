@@ -4,11 +4,11 @@
   imports = [
   ../../home-modules/dropbox.nix
   ../../home-modules/fastfetch.nix
-	#../../home-modules/firefox.nix # Moved to configuration.nix
+  #../../home-modules/firefox.nix # Moved to configuration.nix
   ../../home-modules/fish.nix
-	../../home-modules/kitty.nix
+  ../../home-modules/kitty.nix
   ../../home-modules/librewolf.nix
-	../../home-modules/git.nix
+  ../../home-modules/git.nix
   ../../home-modules/start-menu/start-onlyoffice.nix
   ../../home-modules/start-menu/teams.nix
   ];
