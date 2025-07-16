@@ -94,8 +94,8 @@
 
   # Enable automatic login for the user.
   services.displayManager.autoLogin = {
-	enable = true;
-  	user = "dectec";
+	enable = false;
+  	# user = "dectec";
   };
   
   # Allow unfree packages
