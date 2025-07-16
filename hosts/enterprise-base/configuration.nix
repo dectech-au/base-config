@@ -7,18 +7,18 @@
 {
   imports = [
     ./hardware-configuration.nix
-	  ../../modules/chrome.nix
-    ../../modules/onlyoffice.nix
-	  ../../modules/bluetooth.nix
-    ../../modules/btrfs.nix
-    ../../modules/nixvim.nix
-	  ../../modules/firefox.nix
-	  ../../modules/gparted.nix
-	  ../../modules/evolution.nix
-	  ../../modules/papirus.nix
-    ../../modules/plasma.nix
-    ../../modules/teams.nix
-    ../../modules/wine.nix
+	  ../../sys-modules/chrome.nix
+    ../../sys-modules/onlyoffice.nix
+	  ../../sys-modules/bluetooth.nix
+    ../../sys-modules/btrfs.nix
+    ../../sys-modules/nixvim.nix
+	  ../../sys-modules/firefox.nix
+	  ../../sys-modules/gparted.nix
+	  ../../sys-modules/evolution.nix
+	  ../../sys-modules/papirus.nix
+    ../../sys-modules/plasma.nix
+    ../../sys-modules/teams.nix
+    ../../sys-modules/wine.nix
 	];
   
   # Bootloader.
