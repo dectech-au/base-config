@@ -2,7 +2,7 @@
 (
    set -euo pipefail
 
-   cd {HOME}/.dotfiles
+   cd /etc/nixos
    git add *
    git commit -m "$(date '+%F_%H:%M:%S')" 
    git push origin main
