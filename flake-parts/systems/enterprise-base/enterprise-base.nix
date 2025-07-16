@@ -1,10 +1,7 @@
 #~/.dotfiles/flake-parts/systems/enterprise-base.nix
 { inputs, ... }:
-let
-  host = builtins.getEnv "SYSTEM_HOSTNAME";
-in
 {
-  flake.nixosConfigurations."${host}" = inputs.nixpkgs.lib.nixosSystem {
+  flake.nixosConfigurations.enterprise-base = inputs.nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
     specialArgs = { inherit inputs; };
 
