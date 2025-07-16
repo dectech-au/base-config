@@ -3,9 +3,8 @@
    set -euo pipefail
 
    cd /etc/nixos
-   git add *
-   git commit -m "$(date '+%F_%H:%M:%S')" 
-   git push origin main
+   git fetch origin
+   git reset --hard origin/main
 
    # Define the timestamp file
    STAMP_FILE="/tmp/nix_flake_update.timestamp"
