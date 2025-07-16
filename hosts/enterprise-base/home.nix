@@ -2,15 +2,15 @@
 
 {
   imports = [
-  ./modules/dropbox.nix
-  ./modules/fastfetch.nix
-	#./modules/firefox.nix # Moved to configuration.nix
-  ./modules/fish.nix
-	./modules/kitty.nix
-  ./modules/librewolf.nix
-	./modules/git.nix
-  ./modules/start-menu/start-onlyoffice.nix
-  ./modules/start-menu/teams.nix
+  ../../home-modules/dropbox.nix
+  ../../home-modules/fastfetch.nix
+	#../../home-modules/firefox.nix # Moved to configuration.nix
+  ../../home-modules/fish.nix
+	../../home-modules/kitty.nix
+  ../../home-modules/librewolf.nix
+	../../home-modules/git.nix
+  ../../home-modules/start-menu/start-onlyoffice.nix
+  ../../home-modules/start-menu/teams.nix
   ];
 
   home.username = "dectec";
