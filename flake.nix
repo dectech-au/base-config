@@ -25,7 +25,6 @@
     systems = [ "x86_64-linux" ];
     imports = [
       ./flake-parts/overlays.nix
-      ./flake-parts/windows-reboot.nix
       ./flake-parts/systems/enterprise-base/enterprise-base.nix
       ./flake-parts/systems/personal-tim/personal-tim.nix
     ];
