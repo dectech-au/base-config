@@ -19,6 +19,7 @@ in
     ../../sys-modules/evolution.nix
     ../../sys-modules/papirus.nix
     ../../sys-modules/plasma.nix
+    ../../sys-modules/ssh.nix
     ../../sys-modules/teams.nix
     ../../sys-modules/windows-reboot.nix
     ../../sys-modules/wine.nix
