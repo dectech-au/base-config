@@ -3,6 +3,8 @@
    set -euo pipefail
 
    cd /etc/nixos
+   eval "$(ssh-agent -s)"
+   ssh-add ~/.ssh/id_ed25519
    git fetch origin
    git reset --hard origin/main
 
