@@ -3,19 +3,21 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, lib, pkgs, ... }:
-
+let
+  host = builtins.getEnv "SYSTEM_HOSTNAME";
+in
 {
   imports = [
     ./hardware-configuration.nix
-	  ../../sys-modules/chrome.nix
+    ../../sys-modules/chrome.nix
     ../../sys-modules/onlyoffice.nix
-	  ../../sys-modules/bluetooth.nix
+    ../../sys-modules/bluetooth.nix
     ../../sys-modules/btrfs.nix
     ../../sys-modules/nixvim.nix
-	  ../../sys-modules/firefox.nix
-	  ../../sys-modules/gparted.nix
-	  ../../sys-modules/evolution.nix
-	  ../../sys-modules/papirus.nix
+    ../../sys-modules/firefox.nix
+    ../../sys-modules/gparted.nix
+    ../../sys-modules/evolution.nix
+    ../../sys-modules/papirus.nix
     ../../sys-modules/plasma.nix
     ../../sys-modules/teams.nix
     ../../sys-modules/wine.nix
@@ -25,7 +27,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = builtins.readFile /etc/nixos/system-hostname.txt;
+  networking.hostName = host;
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
