@@ -9,8 +9,9 @@
   ../../home-modules/kitty.nix
   ../../home-modules/librewolf.nix
   ../../home-modules/git.nix
-  #../../home-modules/start-menu/start-onlyoffice.nix
-  #../../home-modules/start-menu/teams.nix
+  ../../home-modules/start-menu/onlyoffice.nix
+  ../../home-modules/start-menu/teams.nix
+  ../../home-modules/start-menu/windows.nix
   ];
 
   home.username = "dectec";
