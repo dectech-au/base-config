@@ -19,7 +19,7 @@
     echo "Skipping nix flake update (ran recently)."
    fi
 
-   sudo nixos-rebuild switch --upgrade --flake ${HOME}/.dotfiles/#enterprise-base
+   sudo nixos-rebuild switch --upgrade --flake /etc/nixos/#enterprise-base
 
    echo "Done!"
    sleep 2  # short pause before closing
