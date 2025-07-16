@@ -20,6 +20,7 @@ in
     ../../sys-modules/papirus.nix
     ../../sys-modules/plasma.nix
     ../../sys-modules/teams.nix
+    ../../sys-modules/windows-reboot.nix
     ../../sys-modules/wine.nix
 	];
   
