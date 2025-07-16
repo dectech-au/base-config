@@ -10,14 +10,14 @@ in
 
     modules = [
       { nixpkgs.config.allowUnfree = true; }
-      ./hosts/enterprise-base/configuration.nix
-      ./flake-modules/autoupdate-enterprise-base.nix
+      ../../../hosts/enterprise-base/configuration.nix
+      ../../../flake-modules/autoupdate-enterprise-base.nix
       inputs.home-manager.nixosModules.home-manager {
         home-manager = {
           useGlobalPkgs = true;
           useUserPackages = true;
           backupFileExtension = "backup";
-          users.dectec = import ./hosts/enterprise-base/home.nix;
+          users.dectec = import ../../../hosts/enterprise-base/home.nix;
         };
       }
       inputs.nixvim.nixosModules.nixvim
