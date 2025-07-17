@@ -21,7 +21,6 @@ let
   xdoPath   = lib.optionalString (xdotool != null) "${lib.makeBinPath [ xdotool ]}";
   xhostPath = lib.makeBinPath [ xhost ];
 
-  # host libs needed in addition to vendor bundle (Qt libs provided by vendor)
   runtimeLibPath = lib.makeLibraryPath [
     glib dbus zlib freetype fontconfig libxkbcommon libGL alsa-lib
     stdenv.cc.cc.lib stdenv.cc.libc
@@ -76,7 +75,7 @@ EOF
     makeWrapper $out/opt/remotemouse/RemoteMouse $out/bin/remotemouse \
       --chdir $out/opt/remotemouse \
       --run 'if [ -z "${XAUTHORITY:-}" ] || [ ! -r "$XAUTHORITY" ]; then for f in "$HOME/.Xauthority" /run/user/$(id -u)/xauth_*; do [ -r "$f" ] && export XAUTHORITY="$f" && break; done; fi' \
-      --run '"${xhostPath}"/xhost +SI:localuser:$(whoami) >/dev/null 2>&1 || true' \
+      --run '"${xhostPath}"/xhost +SI:localuser:$USER >/dev/null 2>&1 || true' \
       --set LD_LIBRARY_PATH "$vendorLib:$vendorLib/PyQt5:$vendorQtLib:${runtimeLibPath}" \
       --set PYTHONHOME "$vendorLib" \
       --set PYTHONPATH "$vendorLib" \
