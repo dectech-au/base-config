@@ -39,6 +39,7 @@
             alsa-lib = pkgs.alsa-lib;
             xorg = pkgs.xorg;
             xdotool = pkgs.xdotool;
+            xhost = pkgs.xorg.xhost;
           };
         };
 
