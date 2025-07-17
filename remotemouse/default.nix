@@ -1,4 +1,3 @@
-#/etc/nixos/remotemouse/default.nix
 { lib
 , stdenv
 , fetchzip
@@ -21,17 +20,17 @@
 let
   xdoPath = lib.optionalString (xdotool != null) "${lib.makeBinPath [ xdotool ]}";
 
-  # host-side libs Qt/xcb may reach for (NO qt5.* here; use vendor's Qt)
+  # Host-side libs Qt/xcb may reach for (DO NOT add qt5.*; vendor ships its own)
   runtimeLibPath = lib.makeLibraryPath [
     glib dbus zlib freetype fontconfig libxkbcommon libGL alsa-lib
     stdenv.cc.cc.lib stdenv.cc.libc
 
-    # Core X + extensions
+    # Core X + extensions & xcb utils (fixes 'xcb plugin' load failures)
     xorg.libX11 xorg.libXext xorg.libXrender xorg.libXtst xorg.libXi
     xorg.libXcursor xorg.libXrandr xorg.libSM xorg.libICE
     xorg.libxcb
     xorg.xcbutil
-    xorg.xcbutilwm          # provides libxcb-icccm.so.*
+    xorg.xcbutilwm          # libxcb-icccm.so.*
     xorg.xcbutilimage
     xorg.xcbutilkeysyms
     xorg.xcbutilrenderutil
@@ -56,7 +55,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/opt/remotemouse
     cp -r RemoteMouse lib images $out/opt/remotemouse/
 
-    # optional desktop integration
+    # .desktop file
     mkdir -p $out/share/applications
     cat >$out/share/applications/remotemouse.desktop <<EOF
 [Desktop Entry]
@@ -69,18 +68,19 @@ Terminal=false
 Categories=Utility;
 EOF
 
+    # icon
     if [ -f images/RemoteMouse.png ]; then
       mkdir -p $out/share/pixmaps
       cp images/RemoteMouse.png $out/share/pixmaps/remotemouse.png
     fi
 
-    # Paths for wrapper env
+    # Vendor paths
     vendorLib="$out/opt/remotemouse/lib"
     vendorQtLib="$vendorLib/PyQt5/Qt5/lib"
     vendorQtPlugins="$vendorLib/PyQt5/Qt5/plugins"
     vendorQtQml="$vendorLib/PyQt5/Qt5/qml"
 
-    # Generate wrapper
+    # Wrapper
     mkdir -p $out/bin
     makeWrapper $out/opt/remotemouse/RemoteMouse $out/bin/remotemouse \
       --chdir $out/opt/remotemouse \
@@ -102,14 +102,14 @@ EOF
       --set-rpath "$out/opt/remotemouse/lib:$out/opt/remotemouse/lib/PyQt5:$out/opt/remotemouse/lib/PyQt5/Qt5/lib:${runtimeLibPath}" \
       $out/opt/remotemouse/RemoteMouse || true
 
-    # patch top-level vendor libs (shallow)
+    # patch top-level vendor libs (shallow; enough for this app)
     for so in $out/opt/remotemouse/lib/*.so*; do
       [ -e "$so" ] || continue
       patchelf --set-rpath "$out/opt/remotemouse/lib:$out/opt/remotemouse/lib/PyQt5:$out/opt/remotemouse/lib/PyQt5/Qt5/lib:${runtimeLibPath}" "$so" || true
     done
   '';
 
-  dontPatchELF = true;
+  dontPatchELF = true;  # we patched explicitly
   dontStrip = true;
 
   meta = with lib; {
