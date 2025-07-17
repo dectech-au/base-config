@@ -45,16 +45,37 @@ stdenv.mkDerivation rec {
     cp -r RemoteMouse lib images $out/opt/remotemouse/
 
     mkdir -p $out/share/applications
-    cat >$out/share/applications/remotemouse.desktop <<'EOF'
-[Desktop Entry]
-Type=Application
-Name=Remote Mouse
-Comment=Control this PC from your phone
-Exec=remotemouse
-Icon=remotemouse
-Terminal=false
-Categories=Utility;
+    cat >$out/bin/remotemouse <<'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+
+vendor="$out/opt/remotemouse"
+libdir="$vendor/lib"
+
+# Fix XAUTHORITY if missing
+if [ -z "${XAUTHORITY:-}" ] || [ ! -r "$XAUTHORITY" ]; then
+  if [ -r "$HOME/.Xauthority" ]; then
+    export XAUTHORITY="$HOME/.Xauthority"
+  else
+    guess=$(ls /run/user/$(id -u)/xauth_* 2>/dev/null | head -n1 || true)
+    [ -n "$guess" ] && export XAUTHORITY="$guess"
+  fi
+fi
+
+# Optional: uncomment to auto-authorize yourself (security tradeoff)
+# xhost +SI:localuser:$(whoami) >/dev/null 2>&1 || true
+
+export LD_LIBRARY_PATH="$libdir:$libdir/PyQt5:$libdir/PyQt5/Qt5/lib:${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH}"
+export PYTHONHOME="$libdir"
+export PYTHONPATH="$libdir"
+export QT_PLUGIN_PATH="$libdir/PyQt5/Qt5/plugins"
+export QT_QPA_PLATFORM_PLUGIN_PATH="$libdir/PyQt5/Qt5/plugins/platforms"
+export QML2_IMPORT_PATH="$libdir/PyQt5/Qt5/qml"
+
+exec "$vendor/RemoteMouse" "$@"
 EOF
+    chmod +x $out/bin/remotemouse
+
 
     if [ -f images/RemoteMouse.png ]; then
       mkdir -p $out/share/pixmaps
