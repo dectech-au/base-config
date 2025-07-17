@@ -5,7 +5,7 @@
 { config, lib, pkgs, ... }:
 let
   host = builtins.getEnv "SYSTEM_HOSTNAME";
-  let hwConfig = /etc/nixos/hardware-configuration.nix;in
+  hwConfig = /etc/nixos/hardware-configuration.nix;in
 {
   imports = [
     ../../sys-modules/chrome.nix
