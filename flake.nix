@@ -1,4 +1,4 @@
-#~/.dotfiles/flake.nix
+#/etc/nixos/flake.nix
 {
   description = "DecTec default flake";
   
