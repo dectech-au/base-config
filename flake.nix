@@ -40,6 +40,7 @@
             xorg = pkgs.xorg;
             xdotool = pkgs.xdotool;
           };
+        };
 
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
