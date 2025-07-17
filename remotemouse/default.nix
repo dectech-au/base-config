@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchzip
-, makeWrapper
 , patchelf
 
 , glib
@@ -12,29 +11,21 @@
 , libxkbcommon
 , libGL
 , alsa-lib
-
 , xorg
 , xdotool ? null
+, xhost   ? xorg.xhost
 }:
 
 let
-  xdoPath = lib.optionalString (xdotool != null) "${lib.makeBinPath [ xdotool ]}";
+  xdoBin    = lib.optionalString (xdotool != null) "${lib.makeBinPath [ xdotool ]}";
+  xhostBin  = lib.makeBinPath [ xhost ];
 
-  # host-side libs Qt/xcb may reach for (NO qt5.* here; use vendor's Qt)
+  # host libs we need in *addition* to vendor bundle (do NOT add Qt here; vendor ships its own)
   runtimeLibPath = lib.makeLibraryPath [
     glib dbus zlib freetype fontconfig libxkbcommon libGL alsa-lib
     stdenv.cc.cc.lib stdenv.cc.libc
-
-    # Core X + extensions
     xorg.libX11 xorg.libXext xorg.libXrender xorg.libXtst xorg.libXi
-    xorg.libXcursor xorg.libXrandr xorg.libSM xorg.libICE
-    xorg.libxcb
-    xorg.xcbutil
-    xorg.xcbutilwm          # provides libxcb-icccm.so.*
-    xorg.xcbutilimage
-    xorg.xcbutilkeysyms
-    xorg.xcbutilrenderutil
-    xorg.xcbutilcursor
+    xorg.libXcursor xorg.libXrandr xorg.libSM xorg.libICE xorg.libxcb
   ];
 in
 stdenv.mkDerivation rec {
@@ -47,7 +38,7 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ makeWrapper patchelf ];
+  nativeBuildInputs = [ patchelf ];
 
   installPhase = ''
     runHook preInstall
@@ -55,7 +46,13 @@ stdenv.mkDerivation rec {
     mkdir -p $out/opt/remotemouse
     cp -r RemoteMouse lib images $out/opt/remotemouse/
 
-    # optional desktop integration
+    # icons
+    if [ -f images/RemoteMouse.png ]; then
+      mkdir -p $out/share/pixmaps
+      cp images/RemoteMouse.png $out/share/pixmaps/remotemouse.png
+    fi
+
+    # desktop entry
     mkdir -p $out/share/applications
     cat >$out/share/applications/remotemouse.desktop <<EOF
 [Desktop Entry]
@@ -68,47 +65,70 @@ Terminal=false
 Categories=Utility;
 EOF
 
-    if [ -f images/RemoteMouse.png ]; then
-      mkdir -p $out/share/pixmaps
-      cp images/RemoteMouse.png $out/share/pixmaps/remotemouse.png
-    fi
-
-    # Paths for wrapper env
-    vendorLib="$out/opt/remotemouse/lib"
-    vendorQtLib="$vendorLib/PyQt5/Qt5/lib"
-    vendorQtPlugins="$vendorLib/PyQt5/Qt5/plugins"
-    vendorQtQml="$vendorLib/PyQt5/Qt5/qml"
-
-    # Generate wrapper
+    # Create wrapper
     mkdir -p $out/bin
-    makeWrapper $out/opt/remotemouse/RemoteMouse $out/bin/remotemouse \
-      --chdir $out/opt/remotemouse \
-      --prefix LD_LIBRARY_PATH : "$vendorLib:$vendorLib/PyQt5:$vendorQtLib:${runtimeLibPath}" \
-      --set PYTHONHOME "$vendorLib" \
-      --set PYTHONPATH "$vendorLib" \
-      --set QT_PLUGIN_PATH "$vendorQtPlugins" \
-      --set QT_QPA_PLATFORM_PLUGIN_PATH "$vendorQtPlugins/platforms" \
-      --set QML2_IMPORT_PATH "$vendorQtQml" \
-      ${lib.optionalString (xdoPath != "") "--prefix PATH : ${xdoPath}"}
+
+    cat >$out/bin/remotemouse <<'EOSH'
+#!/usr/bin/env bash
+set -euo pipefail
+
+vendor="@out@/opt/remotemouse"
+libdir="$vendor/lib"
+
+# Fallback XAUTHORITY if unset or unreadable
+if [ -z "${XAUTHORITY:-}" ] || [ ! -r "$XAUTHORITY" ]; then
+  if [ -r "$HOME/.Xauthority" ]; then
+    export XAUTHORITY="$HOME/.Xauthority"
+  else
+    guess=$(ls /run/user/$(id -u)/xauth_* 2>/dev/null | head -n1 || true)
+    [ -n "$guess" ] && export XAUTHORITY="$guess"
+  fi
+fi
+
+# Optional selective X access (ignore failure if xhost missing)
+"@xhostBin@"/xhost +SI:localuser:"$USER" >/dev/null 2>&1 || true
+
+# Runtime env
+export LD_LIBRARY_PATH="$libdir:$libdir/PyQt5:$libdir/PyQt5/Qt5/lib:@runtimeLibPath@${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+export PYTHONHOME="$libdir"
+export PYTHONPATH="$libdir"
+export QT_PLUGIN_PATH="$libdir/PyQt5/Qt5/plugins"
+export QT_QPA_PLATFORM_PLUGIN_PATH="$libdir/PyQt5/Qt5/plugins/platforms"
+export QML2_IMPORT_PATH="$libdir/PyQt5/Qt5/qml"
+
+# Optional: PATH injection for xdotool if shipped
+if [ -n "@xdoBin@" ]; then
+  export PATH="@xdoBin@:$PATH"
+fi
+
+cd "$vendor"
+exec "$vendor/RemoteMouse" "$@"
+EOSH
+
+    substituteInPlace $out/bin/remotemouse \
+      --subst-var out \
+      --subst-var-by xhostBin ${xhostBin} \
+      --subst-var-by runtimeLibPath ${runtimeLibPath} \
+      --subst-var-by xdoBin "${xdoBin}"
+
+    chmod +x $out/bin/remotemouse
 
     runHook postInstall
   '';
 
   postFixup = ''
     echo "Patching RemoteMouse ELF..."
-    patchelf \
-      --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
-      --set-rpath "$out/opt/remotemouse/lib:$out/opt/remotemouse/lib/PyQt5:$out/opt/remotemouse/lib/PyQt5/Qt5/lib:${runtimeLibPath}" \
-      $out/opt/remotemouse/RemoteMouse || true
+    patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
+             --set-rpath "$out/opt/remotemouse/lib:$out/opt/remotemouse/lib/PyQt5:$out/opt/remotemouse/lib/PyQt5/Qt5/lib:${runtimeLibPath}" \
+             $out/opt/remotemouse/RemoteMouse || true
 
-    # patch top-level vendor libs (shallow)
     for so in $out/opt/remotemouse/lib/*.so*; do
       [ -e "$so" ] || continue
       patchelf --set-rpath "$out/opt/remotemouse/lib:$out/opt/remotemouse/lib/PyQt5:$out/opt/remotemouse/lib/PyQt5/Qt5/lib:${runtimeLibPath}" "$so" || true
     done
   '';
 
-  dontPatchELF = true;
+  dontPatchELF = true; # we patched manually
   dontStrip = true;
 
   meta = with lib; {
