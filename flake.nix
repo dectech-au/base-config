@@ -14,9 +14,6 @@
     nixvim.url = "github:nix-community/nixvim";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
 
-    aagl.url = "github:ezKEa/aagl-gtk-on-nix/release-25.05";
-    aagl.inputs.nixpkgs.follows = "nixpkgs";
-
   };
 
   outputs = inputs@{ self, flake-parts, ... }:
