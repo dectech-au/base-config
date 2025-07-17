@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
-#~/.dotfiles/update-personal-tim.sh
 (
    set -euo pipefail
 
-   cd ${HOME}/.dotfiles
-   git add *
-   git commit -m "$(date '+%F_%H:%M:%S')" 
-   git push origin main
+   cd /etc/nixos
+
+   eval "$(ssh-agent -s)"
+   ssh-add ~/.ssh/id_nixos_readonly
+   git fetch origin
+   git reset --hard origin/main
 
    # Define the timestamp file
    STAMP_FILE="/tmp/nix_flake_update.timestamp"
@@ -20,7 +21,7 @@
     echo "Skipping nix flake update (ran recently)."
    fi
 
-   sudo nixos-rebuild switch --upgrade --flake ${HOME}/.dotfiles/#personal-tim
+   sudo nixos-rebuild switch --upgrade --flake /etc/nixos/#personal-tim --show-trace
 
    echo "Done!"
    sleep 2  # short pause before closing
