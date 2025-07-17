@@ -9,6 +9,7 @@ let
 in
 {
   imports = [
+    ../../hardware-configuration.nix
     ../../sys-modules/chrome.nix
     ../../sys-modules/onlyoffice.nix
     ../../sys-modules/bluetooth.nix
@@ -24,7 +25,6 @@ in
     ../../sys-modules/windows-reboot.nix
     ../../sys-modules/wine.nix
 	]
-    ++ lib.optional (builtins.pathExists (toString hwConfig)) hwConfig;
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
