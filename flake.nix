@@ -17,7 +17,6 @@
     aagl.url = "github:ezKEa/aagl-gtk-on-nix/release-25.05";
     aagl.inputs.nixpkgs.follows = "nixpkgs";
 
-    #firefox-addons.url = "github:nix-community/nur";
   };
 
   outputs = inputs@{ self, flake-parts, ... }:
