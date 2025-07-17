@@ -21,7 +21,7 @@
     echo "Skipping nix flake update (ran recently)."
    fi
 
-   sudo nixos-rebuild switch --upgrade --flake /etc/nixos/#personal-tim --show-trace
+   sudo nixos-rebuild switch --upgrade --flake /etc/nixos/#enterprise-base --show-trace
 
    echo "Done!"
    sleep 2  # short pause before closing
