@@ -1,10 +1,12 @@
-#~/.dotfiles/hosts/personal-tim/configuration.nix
+#/etc/nixos/hosts/personal-tim/configuration.nix
 { config, lib, pkgs, ... }:
-
+let
+  host = builtins.getEnv "SYSTEM_HOSTNAME";
+in
 {
   imports = [
-    ./hardware-configuration.nix
-	  ../../sys-modules/baobab.nix
+    ../../hardware-configuration.nix
+    ../../sys-modules/baobab.nix
     #../../sys-modules/birdtray.nix
     ../../sys-modules/bluetooth.nix
     ../../sys-modules/btrfs.nix
@@ -32,7 +34,7 @@
     ../../sys-modules/nvidia.nix
     ../../sys-modules/onlyoffice.nix
     ../../sys-modules/openssl.nix
-	  ../../sys-modules/papirus.nix
+    ../../sys-modules/papirus.nix
     #../../sys-modules/pinegrow.nix
     ../../sys-modules/plasma.nix
     ../../sys-modules/protonmail-bridge.nix
@@ -54,7 +56,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = host;
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
