@@ -8,6 +8,7 @@ let
 in
 {
   imports = [
+    ../../sys-modules/chrome.nix
     ../../sys-modules/onlyoffice.nix
     ../../sys-modules/bluetooth.nix
     ../../sys-modules/btrfs.nix
@@ -22,7 +23,7 @@ in
     ../../sys-modules/windows-reboot.nix
     ../../sys-modules/wine.nix
 	];
-++ (lib.optional (builtins.pathExists ../../hardware-configuration.nix) ../../hardware-configuration.nix)    ../../sys-modules/chrome.nix
+++ (lib.optional (builtins.pathExists ../../hardware-configuration.nix) ../../hardware-configuration.nix)    
 
 
   # Bootloader.
