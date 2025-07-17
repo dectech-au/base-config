@@ -30,6 +30,17 @@
 
     perSystem = { config, self', inputs', pkgs, system, ... }: {
       formatter = pkgs.nixpkgs-fmt;
+
+      devShells.default = pkgs.mkShell {
+        packages = with pkgs; [
+          git
+          nixpkgs-fmt
+          neovim
+        ];
+        shellHook = ''
+          echo "Welcome to the mutha' fuckin' dev shell, you stupid bitch."
+        '';
+      }
     };
 
   };
