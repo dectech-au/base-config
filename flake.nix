@@ -68,15 +68,20 @@
 
 
         packages = {
-
           remotemouse = pkgs.callPackage ./remotemouse {
-
-            xdotool = pkgs.xdotool; # drop if unneeded
-
+            libsForQt5 = pkgs.libsForQt5;
+            glib = pkgs.glib;
+            dbus = pkgs.dbus;
+            zlib = pkgs.zlib;
+            freetype = pkgs.freetype;
+            fontconfig = pkgs.fontconfig;
+            libxkbcommon = pkgs.libxkbcommon;
+            libGL = pkgs.libGL;
+            libGLU = pkgs.libGLU; # optional
+            xorg = pkgs.xorg;
+            alsa-lib = pkgs.alsa-lib;
+            xdotool = pkgs.xdotool;
           };
-
-          default = self'.packages.remotemouse;
-
         };
 
 
