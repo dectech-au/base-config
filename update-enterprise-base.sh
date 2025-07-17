@@ -5,7 +5,7 @@
    cd /etc/nixos
    if [[ -f /etc/nixos/hardware-configuration.nix ]]; then
         echo "Ensuring hardware-configuration.nix is in .gitignore..."
-        grep -qxF "hardware-configuration.nix" /etc/nixos/.gitignore || echo "hardware-configuration.nix" >> /etc/nixos.gitignore
+        grep -qxF "hardware-configuration.nix" /etc/nixos/.gitignore || echo "hardware-configuration.nix" >> /etc/nixos/.gitignore
    fi
 
    eval "$(ssh-agent -s)"
