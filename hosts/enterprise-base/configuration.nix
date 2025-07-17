@@ -5,11 +5,9 @@
 { config, lib, pkgs, ... }:
 let
   host = builtins.getEnv "SYSTEM_HOSTNAME";
-  hwConfig = ../../hardware-configuration.nix;
-in
+  let hwConfig = /etc/nixos/hardware-configuration.nix;in
 {
   imports = [
-    ../../hardware-configuration.nix
     ../../sys-modules/chrome.nix
     ../../sys-modules/onlyoffice.nix
     ../../sys-modules/bluetooth.nix
@@ -24,7 +22,8 @@ in
     ../../sys-modules/teams.nix
     ../../sys-modules/windows-reboot.nix
     ../../sys-modules/wine.nix
-	];
+	]
+++ lib.optional (builtins.pathExists hwConfig) hwConfig;
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
