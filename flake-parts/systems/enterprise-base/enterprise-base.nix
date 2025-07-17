@@ -8,7 +8,6 @@
     modules = [
       { nixpkgs.config.allowUnfree = true; }
       ../../../hosts/enterprise-base/configuration.nix
-      ../../../flake-modules/autoupdate-enterprise-base.nix
       inputs.home-manager.nixosModules.home-manager {
         home-manager = {
           useGlobalPkgs = true;
