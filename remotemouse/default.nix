@@ -1,3 +1,4 @@
+#/etc/nixos/remotemouse/default.nix
 { lib
 , stdenv
 , fetchzip
