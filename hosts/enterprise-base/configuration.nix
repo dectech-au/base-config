@@ -24,7 +24,7 @@ in
     ../../sys-modules/teams.nix
     ../../sys-modules/windows-reboot.nix
     ../../sys-modules/wine.nix
-	]
+	];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
