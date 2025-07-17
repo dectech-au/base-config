@@ -42,6 +42,7 @@ remotemouse = pkgs.callPackage ./remotemouse {
   xhost = pkgs.xorg.xhost;
 };
 
+
         };
 
         devShells.default = pkgs.mkShell {
