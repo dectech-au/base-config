@@ -1,13 +1,12 @@
-#/etc/nixos/modules/fish.nix
+#/etc/nixos/home-modules/fish.nix
 { config, lib, pkgs, ... }:
-
 {
-	programs.fish = {
+  programs.fish = {
     enable = true;
-    shellInit = "cd ~/.dotfiles/";
+    shellInit = "cd ~";
     shellInitLast = "fastfetch";
     shellAbbrs = {
-      "update" = "bash ~/.dotfiles/update-personal-tim.sh";
+      "update" = "bash /etc/nixos/update-personal-tim.sh";
     };
   };
 }
