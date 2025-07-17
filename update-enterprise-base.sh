@@ -3,6 +3,10 @@
    set -euo pipefail
 
    cd /etc/nixos
+   echo "preserving hardware-configuration.nix..."
+   TEMP_HW=$(mktemp)
+   sudo cp hardware-configuration.nix "$TEMP_HW"
+
    eval "$(ssh-agent -s)"
    ssh-add ~/.ssh/id_nixos_readonly
    git fetch origin
@@ -19,6 +23,10 @@
    else
     echo "Skipping nix flake update (ran recently)."
    fi
+
+   echo "restoring hardware-configuration.nix"
+   sudo cp "$TEMP_HW" /etc/nixos/hardware-configuration.nix
+   sudo chown root:root /etc/nixos/hardware-configuration.nix
 
    sudo nixos-rebuild switch --upgrade --flake /etc/nixos/#enterprise-base
 
