@@ -3,9 +3,6 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, lib, pkgs, ... }:
-let
-  host = builtins.getEnv "SYSTEM_HOSTNAME";
-  hwConfig = /etc/nixos/hardware-configuration.nix;in
 {
   imports = [
     ../../hardware-configuration.nix
