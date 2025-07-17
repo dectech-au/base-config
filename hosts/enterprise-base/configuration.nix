@@ -8,7 +8,6 @@ let
 in
 {
   imports = [
-  (lib.optional (builtins.pathExists ../../hardware-configuration.nix) ../../hardware-configuration.nix)    ../../sys-modules/chrome.nix
     ../../sys-modules/onlyoffice.nix
     ../../sys-modules/bluetooth.nix
     ../../sys-modules/btrfs.nix
@@ -23,7 +22,9 @@ in
     ../../sys-modules/windows-reboot.nix
     ../../sys-modules/wine.nix
 	];
-  
+++ (lib.optional (builtins.pathExists ../../hardware-configuration.nix) ../../hardware-configuration.nix)    ../../sys-modules/chrome.nix
+
+
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
