@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://www.remotemouse.net/downloads/linux/RemoteMouse_x86_64.zip";
-    hash = "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=";
+    hash = "sha256-eG0CG+ZxVRBPcL+0/zVoAFXYORhPdFniBkcima4F6Ww=";
     stripRoot = false;  # zip extracts files at top-level
   };
 
