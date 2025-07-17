@@ -1,10 +1,7 @@
-# /etc/nixos/sys-modules/remotemouse.nix
-{ config, lib, pkgs, inputs, ... }:
+{ config, lib, pkgs, ... }:
+
 let
-  rmPkg =
-    if inputs ? self
-    then inputs.self.packages.${pkgs.system}.remotemouse
-    else pkgs.callPackage ../remotemouse { xdotool = pkgs.xdotool; };
+  rmPkg = pkgs.callPackage ../remotemouse { xdotool = pkgs.xdotool; };
 in
 {
   environment.systemPackages = [ rmPkg ];
