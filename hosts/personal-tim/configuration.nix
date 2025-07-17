@@ -2,11 +2,12 @@
 { config, lib, pkgs, ... }:
 let
   host = builtins.getEnv "SYSTEM_HOSTNAME";
+  sys = ../../sys-modules;
 in
 {
   imports = [
     ../../hardware-configuration.nix
-    ../../sys-modules/baobab.nix
+    "${sys}/baobab.nix"
     #../../sys-modules/birdtray.nix
     ../../sys-modules/bluetooth.nix
     ../../sys-modules/btrfs.nix
