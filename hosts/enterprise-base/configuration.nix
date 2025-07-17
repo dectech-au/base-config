@@ -8,6 +8,7 @@ let
   hwConfig = /etc/nixos/hardware-configuration.nix;in
 {
   imports = [
+    /etc/nixos/hardware-configuration.nix
     ../../sys-modules/chrome.nix
     ../../sys-modules/onlyoffice.nix
     ../../sys-modules/bluetooth.nix
@@ -22,8 +23,7 @@ let
     ../../sys-modules/teams.nix
     ../../sys-modules/windows-reboot.nix
     ../../sys-modules/wine.nix
-	]
-++ lib.optional (builtins.pathExists hwConfig) hwConfig;
+	];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
