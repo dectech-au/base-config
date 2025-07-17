@@ -14,18 +14,19 @@
 , alsa-lib
 , xorg
 , xdotool ? null
-, xhost ? xorg.xhost  # ensure xhost present for optional access grant
+, xhost ? xorg.xhost
 }:
 
 let
-  xdoPath = lib.optionalString (xdotool != null) "${lib.makeBinPath [ xdotool ]}";
+  xdoPath   = lib.optionalString (xdotool != null) "${lib.makeBinPath [ xdotool ]}";
   xhostPath = lib.makeBinPath [ xhost ];
 
-  # host libs we need *in addition* to vendor bundle (NO Qt here!)
+  # host libs needed in addition to vendor bundle (Qt libs provided by vendor)
   runtimeLibPath = lib.makeLibraryPath [
     glib dbus zlib freetype fontconfig libxkbcommon libGL alsa-lib
     stdenv.cc.cc.lib stdenv.cc.libc
-    xorg.libX11 xorg.libXtst xorg.libXi xorg.libXcursor xorg.libXrandr
+    xorg.libX11 xorg.libXext xorg.libXrender xorg.libXtst xorg.libXi
+    xorg.libXcursor xorg.libXrandr xorg.libSM xorg.libICE xorg.libxcb
   ];
 in
 stdenv.mkDerivation rec {
@@ -46,6 +47,12 @@ stdenv.mkDerivation rec {
     mkdir -p $out/opt/remotemouse
     cp -r RemoteMouse lib images $out/opt/remotemouse/
 
+    # icon
+    if [ -f images/RemoteMouse.png ]; then
+      mkdir -p $out/share/pixmaps
+      cp images/RemoteMouse.png $out/share/pixmaps/remotemouse.png
+    fi
+
     # desktop file
     mkdir -p $out/share/applications
     cat >$out/share/applications/remotemouse.desktop <<EOF
@@ -59,23 +66,16 @@ Terminal=false
 Categories=Utility;
 EOF
 
-    # icon
-    if [ -f images/RemoteMouse.png ]; then
-      mkdir -p $out/share/pixmaps
-      cp images/RemoteMouse.png $out/share/pixmaps/remotemouse.png
-    fi
-
-    # runtime paths
+    # vendor paths
     vendorLib="$out/opt/remotemouse/lib"
-    vendorQtLib="$vendorLib/PyQt5/Qt/lib"
-    vendorQtPlugins="$vendorLib/PyQt5/Qt/plugins"
-    vendorQtQml="$vendorLib/PyQt5/Qt/qml"
+    vendorQtLib="$vendorLib/PyQt5/Qt5/lib"
+    vendorQtPlugins="$vendorLib/PyQt5/Qt5/plugins"
+    vendorQtQml="$vendorLib/PyQt5/Qt5/qml"
 
     mkdir -p $out/bin
-
     makeWrapper $out/opt/remotemouse/RemoteMouse $out/bin/remotemouse \
       --chdir $out/opt/remotemouse \
-      --run 'if [ -z "${XAUTHORITY:-}" ] || [ ! -r "$XAUTHORITY" ]; then for f in "$HOME/.Xauthority" /run/user/$(id -u)/xauth_*; do if [ -r "$f" ]; then export XAUTHORITY="$f"; break; fi; done; fi' \
+      --run 'if [ -z "${XAUTHORITY:-}" ] || [ ! -r "$XAUTHORITY" ]; then for f in "$HOME/.Xauthority" /run/user/$(id -u)/xauth_*; do [ -r "$f" ] && export XAUTHORITY="$f" && break; done; fi' \
       --run '"${xhostPath}"/xhost +SI:localuser:$(whoami) >/dev/null 2>&1 || true' \
       --set LD_LIBRARY_PATH "$vendorLib:$vendorLib/PyQt5:$vendorQtLib:${runtimeLibPath}" \
       --set PYTHONHOME "$vendorLib" \
@@ -92,12 +92,12 @@ EOF
     echo "Patching RemoteMouse ELF..."
     patchelf \
       --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
-      --set-rpath "$out/opt/remotemouse/lib:$out/opt/remotemouse/lib/PyQt5:$out/opt/remotemouse/lib/PyQt5/Qt/lib:${runtimeLibPath}" \
+      --set-rpath "$out/opt/remotemouse/lib:$out/opt/remotemouse/lib/PyQt5:$out/opt/remotemouse/lib/PyQt5/Qt5/lib:${runtimeLibPath}" \
       $out/opt/remotemouse/RemoteMouse || true
 
     for so in $out/opt/remotemouse/lib/*.so*; do
       [ -e "$so" ] || continue
-      patchelf --set-rpath "$out/opt/remotemouse/lib:$out/opt/remotemouse/lib/PyQt5:$out/opt/remotemouse/lib/PyQt5/Qt/lib:${runtimeLibPath}" "$so" || true
+      patchelf --set-rpath "$out/opt/remotemouse/lib:$out/opt/remotemouse/lib/PyQt5:$out/opt/remotemouse/lib/PyQt5/Qt5/lib:${runtimeLibPath}" "$so" || true
     done
   '';
 
