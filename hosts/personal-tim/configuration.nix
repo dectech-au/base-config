@@ -26,6 +26,7 @@ in
     ../../sys-modules/kdeconnect-firewall.nix
     ../../sys-modules/killall.nix
     #../../sys-modules/nix-ld.nix
+    ../../sys-modules/papirus-theme.nix
     ../../sys-modules/libreoffice.nix
     ../../sys-modules/morph.nix
     ../../sys-modules/nixvim.nix
