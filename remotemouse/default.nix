@@ -4,7 +4,6 @@
 , makeWrapper
 , patchelf
 
-# Core runtime
 , glib
 , dbus
 , zlib
@@ -12,40 +11,20 @@
 , fontconfig
 , libxkbcommon
 , libGL
-, libGLU ? null
-
-# X11 bits
-, xorg
 , alsa-lib
-
-# Qt5 (PyQt5 bindings in bundle need these)
-, libsForQt5
-
-# optional
+, xorg
 , xdotool ? null
 }:
 
 let
-  inherit (libsForQt5) qtbase qtmultimedia qtdeclarative qtsvg qttools qtwebsockets qtserialport qtwayland;
-
-  qtLibs = [
-    qtbase qtmultimedia qtdeclarative qtsvg qttools qtwebsockets qtserialport qtwayland
-  ];
-
   xdoPath = lib.optionalString (xdotool != null) "${lib.makeBinPath [ xdotool ]}";
 
-  runtimeLibPath = lib.makeLibraryPath (
-    [
-      glib dbus zlib freetype fontconfig libxkbcommon libGL alsa-lib
-      stdenv.cc.cc.lib stdenv.cc.libc
-      xorg.libX11 xorg.libXtst xorg.libXi xorg.libXcursor xorg.libXrandr
-    ]
-    ++ qtLibs
-    ++ lib.optional (libGLU != null) libGLU
-  );
-
-  qtPluginPath = "${qtbase.qtPluginPrefix or "${qtbase}/lib/qt-5/plugins"}";
-  qtQmlPath    = "${qtdeclarative.dev or qtdeclarative}/lib/qt-5/qml";
+  # host libs we need *in addition* to vendor bundle (NO Qt here!)
+  runtimeLibPath = lib.makeLibraryPath [
+    glib dbus zlib freetype fontconfig libxkbcommon libGL alsa-lib
+    stdenv.cc.cc.lib stdenv.cc.libc
+    xorg.libX11 xorg.libXtst xorg.libXi xorg.libXcursor xorg.libXrandr
+  ];
 in
 stdenv.mkDerivation rec {
   pname = "remotemouse";
@@ -82,14 +61,20 @@ EOF
       cp images/RemoteMouse.png $out/share/pixmaps/remotemouse.png
     fi
 
+    # Determine vendor Qt plugin & qml dirs at runtime w/ wrapper vars
+    vendorLib="$out/opt/remotemouse/lib"
+    vendorQtPlugins="$vendorLib/PyQt5/Qt/plugins"
+    vendorQtQml="$vendorLib/PyQt5/Qt/qml"
+
     mkdir -p $out/bin
     makeWrapper $out/opt/remotemouse/RemoteMouse $out/bin/remotemouse \
       --chdir $out/opt/remotemouse \
-      --set LD_LIBRARY_PATH "$out/opt/remotemouse/lib:${runtimeLibPath}" \
-      --set PYTHONHOME "$out/opt/remotemouse/lib" \
-      --set PYTHONPATH "$out/opt/remotemouse/lib" \
-      --set QT_PLUGIN_PATH "${qtPluginPath}" \
-      --set QML2_IMPORT_PATH "${qtQmlPath}" \
+      --set LD_LIBRARY_PATH "$vendorLib:$vendorLib/PyQt5:$vendorLib/PyQt5/Qt/lib:${runtimeLibPath}" \
+      --set PYTHONHOME "$vendorLib" \
+      --set PYTHONPATH "$vendorLib" \
+      --set QT_PLUGIN_PATH "$vendorQtPlugins" \
+      --set QT_QPA_PLATFORM_PLUGIN_PATH "$vendorQtPlugins/platforms" \
+      --set QML2_IMPORT_PATH "$vendorQtQml" \
       ${lib.optionalString (xdoPath != "") "--prefix PATH : ${xdoPath}"}
 
     runHook postInstall
@@ -99,12 +84,12 @@ EOF
     echo "Patching RemoteMouse ELF..."
     patchelf \
       --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
-      --set-rpath "$out/opt/remotemouse/lib:${runtimeLibPath}" \
+      --set-rpath "$out/opt/remotemouse/lib:$out/opt/remotemouse/lib/PyQt5:$out/opt/remotemouse/lib/PyQt5/Qt/lib:${runtimeLibPath}" \
       $out/opt/remotemouse/RemoteMouse || true
 
     for so in $out/opt/remotemouse/lib/*.so*; do
       [ -e "$so" ] || continue
-      patchelf --set-rpath "$out/opt/remotemouse/lib:${runtimeLibPath}" "$so" || true
+      patchelf --set-rpath "$out/opt/remotemouse/lib:$out/opt/remotemouse/lib/PyQt5:$out/opt/remotemouse/lib/PyQt5/Qt/lib:${runtimeLibPath}" "$so" || true
     done
   '';
 
