@@ -22,7 +22,7 @@ in
     ../../sys-modules/teams.nix
     ../../sys-modules/windows-reboot.nix
     ../../sys-modules/wine.nix
-	];
+	]
   ++ lib.optional (builtins.pathExists ../../hardware-configuration.nix) ../../hardware-configuration.nix;
 
   # Bootloader.
