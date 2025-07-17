@@ -27,5 +27,10 @@
       ./flake-parts/systems/enterprise-base/enterprise-base.nix
       ./flake-parts/systems/personal-tim/personal-tim.nix
     ];
+
+    perSystem = { config, self', inputs', pkgs, system, ... }: {
+      formatter = pkgs.nixpkgs-fmt;
+    };
+
   };
 }
