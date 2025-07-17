@@ -50,7 +50,7 @@ in
     # ../../sys-modules/wine.nix
     #../../sys-modules/wordpress.nix
     #./personalisation/wallpaper-service.nix
-	]);
+	];
   
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
