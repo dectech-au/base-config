@@ -4,7 +4,7 @@ set -euo pipefail
 sudo mkdir -p /mnt/btrfs-root
 sudo mount -o subvolid=0 /dev/disk/by-partlabel/dectech-enterprise /mnt/btrfs-root
 
-read -rp "Type the subvolume path relative to /mnt/btrfs-root/ (e.g. honkai-shared): " rest
+read -rp "Type the subvolume path relative to /mnt/btrfs-root/ (e.g. documents-shared): " rest
 cmd=(sudo btrfs subvolume create "/mnt/btrfs-root/$rest")
 echo "Running: ${cmd[*]}"
 "${cmd[@]}"
