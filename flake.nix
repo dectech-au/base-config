@@ -28,19 +28,20 @@
         formatter = pkgs.nixpkgs-fmt;
 
         packages = {
-          remotemouse = pkgs.callPackage ./remotemouse {
-            glib = pkgs.glib;
-            dbus = pkgs.dbus;
-            zlib = pkgs.zlib;
-            freetype = pkgs.freetype;
-            fontconfig = pkgs.fontconfig;
-            libxkbcommon = pkgs.libxkbcommon;
-            libGL = pkgs.libGL;
-            alsa-lib = pkgs.alsa-lib;
-            xorg = pkgs.xorg;
-            xdotool = pkgs.xdotool;
-            xhost = pkgs.xorg.xhost;
-          };
+remotemouse = pkgs.callPackage ./remotemouse {
+  glib = pkgs.glib;
+  dbus = pkgs.dbus;
+  zlib = pkgs.zlib;
+  freetype = pkgs.freetype;
+  fontconfig = pkgs.fontconfig;
+  libxkbcommon = pkgs.libxkbcommon;
+  libGL = pkgs.libGL;
+  alsa-lib = pkgs.alsa-lib;
+  xorg = pkgs.xorg;
+  xdotool = pkgs.xdotool;
+  xhost = pkgs.xorg.xhost;
+};
+
         };
 
         devShells.default = pkgs.mkShell {
