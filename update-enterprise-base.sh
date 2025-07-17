@@ -2,7 +2,7 @@
 (
    set -euo pipefail
 
-   cd /etc/nixox
+   cd /etc/nixos
 
    eval "$(ssh-agent -s)"
    ssh-add ~/.ssh/id_nixos_readonly
