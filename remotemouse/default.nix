@@ -1,4 +1,21 @@
-{ lib, stdenv, fetchzip, makeWrapper, patchelf, glib, dbus, zlib, freetype, fontconfig, libxkbcommon, libGL, alsa-lib, xorg, xdotool ? null }:
+{ lib
+, stdenv
+, fetchzip
+, makeWrapper
+, patchelf
+
+, glib
+, dbus
+, zlib
+, freetype
+, fontconfig
+, libxkbcommon
+, libGL
+, alsa-lib
+
+, xorg
+, xdotool ? null
+}:
 
 let
   xdoPath = lib.optionalString (xdotool != null) "${lib.makeBinPath [ xdotool ]}";
