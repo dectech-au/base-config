@@ -20,27 +20,34 @@
   };
 
   outputs = inputs@{ self, flake-parts, ... }:
-  flake-parts.lib.mkFlake { inherit inputs; } {
-    systems = [ "x86_64-linux" ];
-    imports = [
-      ./flake-parts/overlays.nix
-      ./flake-parts/systems/enterprise-base/enterprise-base.nix
-      ./flake-parts/systems/personal-tim/personal-tim.nix
-    ];
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [ "x86_64-linux" ];
+      imports = [
+        ./flake-parts/overlays.nix
+        ./flake-parts/systems/enterprise-base/enterprise-base.nix
+        ./flake-parts/systems/personal-tim/personal-tim.nix
+      ];
 
-    perSystem = { config, self', inputs', pkgs, system, ... }: {
-      formatter = pkgs.nixpkgs-fmt;
+      perSystem = { config, self', inputs', pkgs, system, ... }: {
+        formatter = pkgs.nixpkgs-fmt;
 
-      devShells.default = pkgs.mkShell {
-        packages = with pkgs; [
-          git
-          nixpkgs-fmt
-          neovim
-        ];
-        shellHook = ''
-          echo "Welcome to the mutha' fuckin' dev shell, you stupid bitch."
-        '';
+        packages = {
+          remotemouse = pkgs.callPackage ./remotemouse {
+            xdotool = pkgs.xdotool; # drop if unneeded
+          };
+          default = self'.packages.remotemouse;
+        };
+
+        devShells.default = pkgs.mkShell {
+          packages = with pkgs; [
+            git
+            nixpkgs-fmt
+            neovim
+          ];
+          shellHook = ''
+            echo "Welcome to the mutha' fuckin' dev shell, you stupid bitch."
+          '';
+        };
       };
     };
-  };
 }
