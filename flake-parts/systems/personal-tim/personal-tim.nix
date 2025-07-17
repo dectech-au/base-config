@@ -8,7 +8,6 @@
     modules = [
       { nixpkgs.config.allowUnfree = true; }
       ../../../hosts/personal-tim/configuration.nix
-      ../../../flake-modules/autoupdate-personal-tim.nix
       inputs.nixvim.nixosModules.nixvim
       inputs.home-manager.nixosModules.home-manager {
         home-manager = {
@@ -17,13 +16,6 @@
           backupFileExtension = "backup";
           users.dectec = import ../../../hosts/personal-tim/home.nix;
         };
-      }
-      {
-        # imports = [ inputs.aagl.nixosModules.default ];
-        # nix.settings = inputs.aagl.nixConfig;
-        # aagl.enableNixpkgsReleaseBranchCheck = false;
-        # programs.honkers-railway-launcher.enable = true;
-        # programs.honkers-launcher.enable = true;
       }
     ];
   };
