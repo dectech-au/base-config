@@ -3,7 +3,9 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, lib, pkgs, ... }:
+let
   host = builtins.getEnv "SYSTEM_HOSTNAME";
+in
 {
   imports = [
     ../../hardware-configuration.nix
