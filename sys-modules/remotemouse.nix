@@ -1,5 +1,5 @@
 #/etc/nixos/sys-modules/remotemouse.nix
-{ config, lib, pkgs, inputs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   rmPkg = pkgs.callPackage ../remotemouse { xdotool = pkgs.xdotool; };
