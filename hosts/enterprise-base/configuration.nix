@@ -8,6 +8,7 @@ let
 in
 {
   imports = [
+    lib.optional (builtins.pathExists ../../hardware-configuration.nix) ../../hardware-configuration.nix;
     ../../hardware-configuration.nix
     ../../sys-modules/chrome.nix
     ../../sys-modules/onlyoffice.nix
