@@ -3,22 +3,49 @@
 , fetchzip
 , makeWrapper
 , patchelf
-, libX11
-, libXtst
-, libXi
-, alsa-lib
+
+# Core runtime
+, glib
+, dbus
 , zlib
+, freetype
+, fontconfig
+, libxkbcommon
+, libGL
+, libGLU ? null
+
+# X11 bits
+, xorg
+, alsa-lib
+
+# Qt5 (PyQt5 bindings in bundle need these)
+, libsForQt5
+
+# optional
 , xdotool ? null
 }:
 
 let
+  inherit (libsForQt5) qtbase qtmultimedia qtdeclarative qtsvg qttools qtwebsockets qtserialport qtwayland;
+
+  qtLibs = [
+    qtbase qtmultimedia qtdeclarative qtsvg qttools qtwebsockets qtserialport qtwayland
+  ];
+
   xdoPath = lib.optionalString (xdotool != null) "${lib.makeBinPath [ xdotool ]}";
 
-  runtimeLibPath = lib.makeLibraryPath [
-    libX11 libXtst libXi alsa-lib zlib
-    stdenv.cc.cc.lib
-    stdenv.cc.libc
-  ];
+  runtimeLibPath = lib.makeLibraryPath (
+    [
+      glib dbus zlib freetype fontconfig libxkbcommon libGL alsa-lib
+      stdenv.cc.cc.lib stdenv.cc.libc
+      xorg.libX11 xorg.libXtst xorg.libXi xorg.libXcursor xorg.libXrandr
+    ]
+    ++ qtLibs
+    ++ lib.optional (libGLU != null) libGLU
+  );
+
+  qtPluginPath = "${qtbase.qtPluginPrefix or "${qtbase}/lib/qt-5/plugins"}";
+  qtQmlPath    = "${qtdeclarative.dev or qtdeclarative}/lib/qt-5/qml";
 in
 stdenv.mkDerivation rec {
   pname = "remotemouse";
@@ -61,6 +88,8 @@ EOF
       --set LD_LIBRARY_PATH "$out/opt/remotemouse/lib:${runtimeLibPath}" \
       --set PYTHONHOME "$out/opt/remotemouse/lib" \
       --set PYTHONPATH "$out/opt/remotemouse/lib" \
+      --set QT_PLUGIN_PATH "${qtPluginPath}" \
+      --set QML2_IMPORT_PATH "${qtQmlPath}" \
       ${lib.optionalString (xdoPath != "") "--prefix PATH : ${xdoPath}"}
 
     runHook postInstall
