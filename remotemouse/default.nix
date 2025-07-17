@@ -1,3 +1,4 @@
+#/etc/nixos/remotemouse/default.nix
 { lib, stdenv, fetchzip, makeWrapper, patchelf, glib, dbus, zlib, freetype, fontconfig, libxkbcommon, libGL, alsa-lib, xorg, xdotool ? null}:
 
 let
