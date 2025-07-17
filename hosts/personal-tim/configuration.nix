@@ -2,13 +2,12 @@
 { config, lib, pkgs, ... }:
 let
   host = builtins.getEnv "SYSTEM_HOSTNAME";
-  sys = ../../sys-modules;
 in
 {
-  imports = [
+  imports = [ 
     ../../hardware-configuration.nix
-    "${sys}/baobab.nix"
-    #../../sys-modules/birdtray.nix
+    ../../baobab.nix"
+    ../../birdtray.nix"
     ../../sys-modules/bluetooth.nix
     ../../sys-modules/btrfs.nix
     ../../sys-modules/chrome.nix
@@ -51,7 +50,7 @@ in
     # ../../sys-modules/wine.nix
     #../../sys-modules/wordpress.nix
     #./personalisation/wallpaper-service.nix
-	];
+	]);
   
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
