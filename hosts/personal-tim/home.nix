@@ -1,4 +1,4 @@
-#~/.dotfiles/hosts/personal-tim/home.nix
+#/etc/nixos/hosts/personal-tim/home.nix
 { config, pkgs, HOME-MODULES, ... }:
 
 {
