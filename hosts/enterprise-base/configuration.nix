@@ -5,6 +5,7 @@
 { config, lib, pkgs, ... }:
 let
   host = builtins.getEnv "SYSTEM_HOSTNAME";
+  hwConfig = ../../hardware-configuration.nix;
 in
 {
   imports = [
@@ -23,7 +24,7 @@ in
     ../../sys-modules/windows-reboot.nix
     ../../sys-modules/wine.nix
 	]
-  ++ lib.optional (builtins.pathExists ../../hardware-configuration.nix) ../../hardware-configuration.nix;
+    ++ lib.optional (builtins.pathExists (toString hwConfig)) hwConfig;
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
