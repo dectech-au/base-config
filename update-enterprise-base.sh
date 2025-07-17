@@ -2,12 +2,7 @@
 (
    set -euo pipefail
 
-   cd /etc/nixos
-   if [[ -f /etc/nixos/hardware-configuration.nix ]]; then
-        echo "Ensuring hardware-configuration.nix is in .gitignore..."
-        touch /etc/nixos/.gitignore
-        grep -qxF "hardware-configuration.nix" /etc/nixos/.gitignore || echo "hardware-configuration.nix" >> /etc/nixos/.gitignore
-   fi
+   cd /etc/nixox
 
    eval "$(ssh-agent -s)"
    ssh-add ~/.ssh/id_nixos_readonly
