@@ -21,7 +21,7 @@
   programs.git = {
     enable = true;
     userName = "DecTec";
-    userEmail = "admin@dectech.au";
+    userEmail = "zozano@protonmail.com";
   };
 
   # home.file.".local/share/applications/teams.desktop".text = ''
