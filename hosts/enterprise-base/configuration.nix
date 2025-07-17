@@ -23,8 +23,7 @@ in
     ../../sys-modules/windows-reboot.nix
     ../../sys-modules/wine.nix
 	];
-++ (lib.optional (builtins.pathExists ../../hardware-configuration.nix) ../../hardware-configuration.nix)    
-
+  ++ lib.optional (builtins.pathExists ../../hardware-configuration.nix) ../../hardware-configuration.nix;
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
