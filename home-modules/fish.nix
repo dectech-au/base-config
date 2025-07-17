@@ -6,7 +6,7 @@
     shellInit = "cd ~";
     shellInitLast = "fastfetch";
     shellAbbrs = {
-      "update" = "bash /etc/nixos/update-personal-tim.sh";
+      "update" = "bash /etc/nixos/hosts/personal-tim/switch.sh";
     };
   };
 }
