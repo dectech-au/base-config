@@ -18,10 +18,11 @@
     
     nvidia = {
       modesetting.enable = true;
+      nvidiaPersistenced = false;
+
       open = false;
       powerManagement = {
         enable = true;
-        nvidiaPersistenced = true;
         finegrained = false;
       };
 
