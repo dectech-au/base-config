@@ -22,7 +22,7 @@
       powerManagement = {
         enable = true;
         nvidiaPersistenced = true;
-        finegrained = true;
+        finegrained = false;
       };
 
       nvidiaSettings = true;
