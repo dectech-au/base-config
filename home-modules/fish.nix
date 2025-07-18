@@ -7,7 +7,7 @@
     shellInitLast = "fastfetch";
     shellAbbrs = {
       "update" = "bash /etc/nixos/hosts/personal-tim/switch.sh";
-      "server" = "ssh -i ~/.ssh/id_nixos_readonly z-home@192.168.1.157"
+      "server" = "ssh -i ~/.ssh/id_nixos_readonly z-home@192.168.1.157";
     };
   };
 }
