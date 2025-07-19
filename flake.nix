@@ -19,7 +19,7 @@
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];
       imports = [
-        ./flake-parts/overlays.nix
+        ./hosts/flake-overlays.nix
         ./hosts/enterprise-base/flake-part.nix
         ./hosts/personal-tim/flake-part.nix
       ];
@@ -28,19 +28,19 @@
         formatter = pkgs.nixpkgs-fmt;
 
         packages = {
-  remotemouse = pkgs.callPackage ./remotemouse {
-    glib = pkgs.glib;
-    dbus = pkgs.dbus;
-    zlib = pkgs.zlib;
-    freetype = pkgs.freetype;
-    fontconfig = pkgs.fontconfig;
-    libxkbcommon = pkgs.libxkbcommon;
-    libGL = pkgs.libGL;
-    alsa-lib = pkgs.alsa-lib;
-    xorg = pkgs.xorg;
-    xdotool = pkgs.xdotool;
-  };
-  default = self'.packages.remotemouse;
+          remotemouse = pkgs.callPackage ./remotemouse {
+            glib = pkgs.glib;
+            dbus = pkgs.dbus;
+            zlib = pkgs.zlib;
+            freetype = pkgs.freetype;
+            fontconfig = pkgs.fontconfig;
+            libxkbcommon = pkgs.libxkbcommon;
+            libGL = pkgs.libGL;
+            alsa-lib = pkgs.alsa-lib;
+            xorg = pkgs.xorg;
+            xdotool = pkgs.xdotool;
+          };
+          default = self'.packages.remotemouse;
         };
 
         devShells.default = pkgs.mkShell {
