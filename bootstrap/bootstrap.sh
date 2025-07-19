@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#~/.dotfiles/update-personal-tim.sh
+#/etc/nixos/bootstrap/bootstrap.sh
 (
 	set -euo pipefail
 
