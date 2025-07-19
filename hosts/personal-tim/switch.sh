@@ -10,16 +10,16 @@
    git reset --hard origin/main
 
 # --- Refresh hostname file every time -----------------------
-   SERIAL=$(sudo cat /sys/class/dmi/id/product_serial | tr -d ' ')
-   [[ -z "$SERIAL" || "$SERIAL" == "Unknown" ]] && \
-     SERIAL=$(cat /etc/machine-id | cut -c1-8)
-   HOSTNAME="dectech-${SERIAL: -6}"
-   
-   FILE=/etc/nixos/system-hostname.txt
-   if [[ ! -f $FILE || $(< "$FILE") != "$HOSTNAME" ]]; then
-     echo "Updating hostname file → $HOSTNAME"
-     echo "$HOSTNAME" | sudo tee "$FILE" >/dev/null
-   fi
+#   SERIAL=$(sudo cat /sys/class/dmi/id/product_serial | tr -d ' ')
+#  [[ -z "$SERIAL" || "$SERIAL" == "Unknown" ]] && \
+#     SERIAL=$(cat /etc/machine-id | cut -c1-8)
+#   HOSTNAME="dectech-${SERIAL: -6}"
+#   
+#  FILE=/etc/nixos/system-hostname.txt
+#   if [[ ! -f $FILE || $(< "$FILE") != "$HOSTNAME" ]]; then
+#     echo "Updating hostname file → $HOSTNAME"
+#     echo "$HOSTNAME" | sudo tee "$FILE" >/dev/null
+#   fi
 
 # --- flake-update throttle ----------------------------------
 
@@ -34,7 +34,8 @@
     echo "Skipping nix flake update (ran recently)."
    fi
 
-   sudo nixos-rebuild switch --upgrade --flake /etc/nixos/#personal-tim --show-trace
+   HOSTNAME="dectech-${SERIAL: -6}"
+   sudo nixos-rebuild switch --upgrade --flake /etc/nixos/#personal-tim --argstr host "$HOSTNAME" --show-trace
 
    echo "Done!"
    sleep 2  # short pause before closing
