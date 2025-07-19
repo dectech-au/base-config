@@ -1,23 +1,18 @@
 #!/usr/bin/env bash
-#/etc/nixos/bootstrap/bootstrap.sh
+#/etc/nixos/scripts/bootstrap.sh
 set -euo pipefail
-
-# --- Step 0: first-generation detection -------------------------------------------------
-
-if [[ $(nixos-rebuild list-generations | awk '/current/ {print $1}') -eq 1 ]]; then
-  echo "[+] First boot: staging temporary configuration"
-  sudo mkdir -p /mnt
-  sudo mount /dev/disk/by-partlabel/dectech /mnt
-  sudo cp /mnt/home/dectec/.dotfiles/bootstrap/bootstrap-configuration.nix /etc/nixos/configuration.nix
-  sudo nixos-rebuild switch
-fi
-
 cd /etc/nixos
+
+# --- Step 0: Restart this script with git -----------------------------------------------
+
+if ! command -v git &>/dev/null; then
+  exec nix-shell -p git --run "$0 $@"
+fi
 
 # --- Step 1: ensure host module exists --------------------------------------------------
 
-	sudo chmod +x /etc/nixos/bootstrap/update-hostname.sh
-	/etc/nixos/bootstrap/update-hostname.sh
+sudo chmod +x /etc/nixos/scripts/*
+/etc/nixos/bootstrap/update-hostname.sh
  
 # --- Step 2: create read-only deploy key on GitHub --------------------------------------
 
@@ -27,7 +22,7 @@ if [[ ! -f $SSH_KEY ]]; then
   echo "[+] Generating deploy key"
   ssh-keygen -t ed25519 -f "$SSH_KEY" -N "" -C "nixos-readonly"
 
-  GITHUB_TOKEN=$(tr -d '\n' < /mnt/home/dectec/.dotfiles/bootstrap/github-token.txt)
+  GITHUB_TOKEN=$(tr -d '\n' < /etc/nixos/nt/home/dectec/.dotfiles/bootstrap/github-token.txt)
   GITHUB_USER="dectech-au"
   GITHUB_REPO="base-config"
 
@@ -38,7 +33,7 @@ if [[ ! -f $SSH_KEY ]]; then
        -d @- \
        "https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/keys" <<EOF
 {
-  "title": "$(cat hosts/local/host.nix | grep hostName | cut -d'"' -f2)-$(date +%s)",
+  "title": "$(cat hosts/hostname.nix | grep hostName | cut -d'"' -f2)-$(date +%s)",
   "key": "$(cat "${SSH_KEY}.pub")",
   "read_only": true
 }
