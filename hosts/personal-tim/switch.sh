@@ -35,12 +35,12 @@
    fi
 
    HOSTNAME="dectech-${SERIAL: -6}"
-   sudo nixos-rebuild switch \
+   
+sudo nixos-rebuild switch \
       --upgrade \
       --flake /etc/nixos/#personal-tim \
-       --show-trace \
-       -- \
       --argstr host "$HOSTNAME"
+      --show-trace
 
    echo "Done!"
    sleep 2  # short pause before closing
