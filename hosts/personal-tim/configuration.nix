@@ -1,9 +1,9 @@
 #/etc/nixos/hosts/personal-tim/configuration.nix
 { config, lib, pkgs, ... }:
 let
-  host = builtins.getEnv "SYSTEM_HOSTNAME";
-in
-{
+	host = lib.strings.removeSuffix "\n"
+		(builtins.readFile /etc/nixos/system-hostname.txt);
+in {
   imports = [ 
     ../../hardware-configuration.nix
     ../../sys-modules/baobab.nix
