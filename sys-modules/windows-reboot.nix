@@ -3,7 +3,7 @@
 {
   security.sudo.extraRules = [
     {
-      users = [ "ALL" ];
+      users = [ "dectec" ];
       commands = [
         {
           command = "${pkgs.systemd}/bin/systemctl reboot --boot-loader-entry=auto-windows";
