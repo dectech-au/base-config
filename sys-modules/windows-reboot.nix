@@ -6,7 +6,7 @@
       users = [ "ALL" ];
       commands = [
         {
-          command = "${pkgs.systemd}/bin/systemctl reboot --boot-loader-entry=auto-windows";
+          command = "sudo ${pkgs.systemd}/bin/systemctl reboot --boot-loader-entry=auto-windows";
           options = [ "NOPASSWD" ];
         }
       ];
