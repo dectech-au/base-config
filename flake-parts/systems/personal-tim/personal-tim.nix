@@ -3,7 +3,7 @@
 {
   flake.nixosConfigurations.personal-tim = inputs.nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
-    specialArgs = { inherit inputs; };
+    specialArgs = { inherit (inputs) host; };
 
     modules = [
       { nixpkgs.config.allowUnfree = true; }
