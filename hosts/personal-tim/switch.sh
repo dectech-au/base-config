@@ -1,47 +1,52 @@
 #!/usr/bin/env bash
-(
-   set -euo pipefail
-   cd /etc/nixos
+# /etc/nixos/hosts/personal-tim/switch.sh
+set -euo pipefail
 
-# --- Git pull -----------------------------------------------
-   eval "$(ssh-agent -s)"
-   ssh-add ~/.ssh/id_nixos_readonly
-   git fetch origin
-   git reset --hard origin/main
+cd /etc/nixos
 
-# --- Refresh hostname file every time -----------------------
-   SERIAL=$(sudo cat /sys/class/dmi/id/product_serial | tr -d ' ')
-  [[ -z "$SERIAL" || "$SERIAL" == "Unknown" ]] && \
-     SERIAL=$(cat /etc/machine-id | cut -c1-8)
-   HOSTNAME="dectech-${SERIAL: -6}"
-   
-  FILE=/etc/nixos/system-hostname.txt
-   if [[ ! -f $FILE || $(< "$FILE") != "$HOSTNAME" ]]; then
-     echo "Updating hostname file → $HOSTNAME"
-     echo "$HOSTNAME" | sudo tee "$FILE" >/dev/null
-   fi
+# ── Git pull ────────────────────────────────────────────────────────────
+eval "$(ssh-agent -s)" >/dev/null
+ssh-add -q ~/.ssh/id_nixos_readonly
+git fetch --quiet origin
+git reset --hard origin/main
 
-# --- flake-update throttle ----------------------------------
+# ── Build /etc/nixos/system-hostname.txt every run ──────────────────────
+serial=$(sudo cat /sys/class/dmi/id/product_serial 2>/dev/null | tr -d ' ')
+[[ -z $serial || $serial == "Unknown" ]] && serial=$(cut -c1-8 /etc/machine-id)
+hostname="dectech-${serial: -6}"
 
-   STAMP_FILE="/tmp/nix_flake_update.timestamp"
+file=/etc/nixos/system-hostname.txt
+if [[ ! -f $file || $(<"$file") != "$hostname" ]]; then
+  echo "Updating hostname file → $hostname"
+  echo "$hostname" | sudo tee "$file" >/dev/null
+fi
 
-   # Check if the file exists and if it's less than 10 minutes old
-   if [[ ! -f "$STAMP_FILE" || $(($(date +%s) - $(< "$STAMP_FILE"))) -ge 600 ]]; then
-    echo "Running nix flake update..."
-    nix flake update
-    date +%s > "$STAMP_FILE"
-   else
-    echo "Skipping nix flake update (ran recently)."
-   fi
+# ── Throttle nix flake update to once per 10 min ────────────────────────
+stamp=/tmp/nix_flake_update.timestamp
+if [[ ! -f $stamp || $(( $(date +%s) - $(<"$stamp") )) -ge 600 ]]; then
+  echo "[+] nix flake update"
+  nix flake update
+  date +%s >"$stamp"
+else
+  echo "[=] nix flake update skipped (run <10 min ago)"
+fi
 
-   HOSTNAME="dectech-${SERIAL: -6}"
-   
-sudo nixos-rebuild switch \
-      --upgrade \
-      --flake /etc/nixos/#personal-tim \
-      --argstr host "$HOSTNAME"
-      --show-trace
+# ── Rebuild ─────────────────────────────────────────────────────────────
+if nixos-rebuild --help | grep -q -- --argstr; then
+  # Modern Nix (≥ 2.18) – pure evaluation
+  sudo nixos-rebuild switch \
+       --upgrade \
+       --flake /etc/nixos#personal-tim \
+       --argstr host "$hostname" \
+       --show-trace
+else
+  # Ancient binary – fall back to impure eval
+  echo "[!] nixos-rebuild is prehistoric; using --impure"
+  sudo nixos-rebuild switch \
+       --upgrade \
+       --flake /etc/nixos#personal-tim \
+       --impure \
+       --show-trace
+fi
 
-   echo "Done!"
-   sleep 2  # short pause before closing
-) && exit
+echo "[✓] system switched to $hostname"
