@@ -6,7 +6,7 @@
       users = [ "dectec" ];
       commands = [
         {
-          command = "${pkgs.systemd}/bin/systemctl reboot --boot-loader-entry=auto-windows";
+          command = "sudo systemctl reboot --boot-loader-entry=auto-windows";
           options = [ "NOPASSWD" ];
         }
       ];
