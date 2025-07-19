@@ -22,7 +22,7 @@ if [[ ! -f $SSH_KEY ]]; then
   echo "[+] Generating deploy key"
   ssh-keygen -t ed25519 -f "$SSH_KEY" -N "" -C "nixos-readonly"
 
-  GITHUB_TOKEN=$(tr -d '\n' < /etc/nixos/nt/home/dectec/.dotfiles/bootstrap/github-token.txt)
+  GITHUB_TOKEN=$(tr -d '\n' < /tmp/github-token.txt)
   GITHUB_USER="dectech-au"
   GITHUB_REPO="base-config"
 
