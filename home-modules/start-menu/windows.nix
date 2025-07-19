@@ -4,9 +4,9 @@
   xdg.desktopEntries.Windows = {
     name = "Windows";
     comment = "Restart to Windows";
-    exec = "sudo systemctl reboot --boot-loader-entry=auto-windows";
+    exec = "kitty -e sudo systemctl reboot --boot-loader-entry=auto-windows";
     icon = "distributor-logo-windows";
-    terminal = false;
+    terminal = true;
     type = "Application";
     categories = [ "System" ];
   };
