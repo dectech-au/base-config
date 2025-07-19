@@ -4,7 +4,7 @@
   xdg.desktopEntries.Windows = {
     name = "Windows";
     comment = "Restart to Windows";
-    exec = "${pkgs.systemctl} reboot --boot-loader-entry=auto-windows";
+    exec = "sudo systemctl reboot --boot-loader-entry=auto-windows";
     icon = "distributor-logo-windows";
     terminal = false;
     type = "Application";
