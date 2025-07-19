@@ -1,7 +1,7 @@
 #/etc/nixos/hosts/personal-tim/flake-part.nix
 { inputs, self, ... }:
 {
-  systems = [ "x86_64-linux ];
+  systems = [ "x86_64-linux" ];
 
   flake.nixosConfigurations.personal-tim = inputs.nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
