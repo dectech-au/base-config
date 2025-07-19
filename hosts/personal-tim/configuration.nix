@@ -46,6 +46,7 @@
     ../../sys-modules/teams.nix
     ../../sys-modules/teamviewer.nix
     ../../sys-modules/virtualbox.nix
+		../../sys-modules/windows-reboot.nix
     # ../../sys-modules/wine.nix
     #../../sys-modules/wordpress.nix
     #./personalisation/wallpaper-service.nix
