@@ -68,7 +68,13 @@ EOF
 
 		sudo chown -R root:root /etc/nixos
 	fi
-	
+# --- make sure host module exists -------------------------------------------------------
+
+	sudo chmod +x /etc/nixos/bootstrap/update-hostname.sh
+	/etc/nixos/bootstrap/update-hostname.sh
+
+
+# --- flake-lock refresh (10 minute throttle) --------------------------------------------
 
 	STAMP_FILE="/tmp/nix_flake_update.timestamp" # Define timestamp file
 
@@ -80,15 +86,6 @@ EOF
 	else
 		echo "Skipping nix flake update (ran recently)."
 	fi
-
-	SERIAL=$(sudo cat /sys/class/dmi/id/product_serial | tr -d ' ')
-	[[ -z "$SERIAL" || "$SERIAL" == "Unknown" ]] && SERIAL=$(cat /etc/machine-id | cut -c1-8)
-
-
-  HOSTNAME="dectech-${SERIAL: -6}"
-  echo "$HOSTNAME" | sudo tee /etc/nixos/system-hostname.txt >/dev/null
-  sudo nixos-rebuild switch --upgrade --flake /etc/nixos#enterprise-base
-
 
 	echo "Done!"
 	sleep 2  # short pause before closing
