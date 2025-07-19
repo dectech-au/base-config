@@ -20,8 +20,8 @@
       systems = [ "x86_64-linux" ];
       imports = [
         ./flake-parts/overlays.nix
-        ./flake-parts/systems/enterprise-base/enterprise-base.nix
-        ./flake-parts/systems/personal-tim/personal-tim.nix
+        ./hosts/enterprise-base/flake-part.nix
+        ./hosts/personal-tim/flake-part.nix
       ];
 
       perSystem = { config, self', inputs', pkgs, system, ... }: {
