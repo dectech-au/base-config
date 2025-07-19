@@ -2,7 +2,7 @@
 { config, lib, pkgs, ... }:
 let
 	host = lib.strings.removeSuffix "\n"
-		(builtins.readFile ../../system-hostname.txt);
+		(builtins.readFile ../system-hostname.txt);
 in {
   imports = [ 
     ../../hardware-configuration.nix
