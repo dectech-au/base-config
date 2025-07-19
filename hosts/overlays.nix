@@ -1,4 +1,4 @@
-#~/.dotfiles/flake-parts/overlays.nix
+#/etc/nixos/hosts/overlays.nix
 { inputs, ... }:
 {
   perSystem = { system, ... }: {
