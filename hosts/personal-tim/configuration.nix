@@ -1,5 +1,6 @@
 #/etc/nixos/hosts/personal-tim/configuration.nix
 { config, lib, pkgs, ... }:
+{
   imports = [ 
     ../../hardware-configuration.nix
     ../../sys-modules/baobab.nix
