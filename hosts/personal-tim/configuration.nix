@@ -1,5 +1,5 @@
 #/etc/nixos/hosts/personal-tim/configuration.nix
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, host, ... }:
 let
 	host = lib.strings.removeSuffix "\n"
 		(builtins.readFile /etc/nixos/system-hostname.txt);
