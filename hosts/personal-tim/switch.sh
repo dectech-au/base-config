@@ -1,15 +1,28 @@
 #!/usr/bin/env bash
 (
    set -euo pipefail
-
    cd /etc/nixos
 
+# --- Git pull -----------------------------------------------
    eval "$(ssh-agent -s)"
    ssh-add ~/.ssh/id_nixos_readonly
    git fetch origin
    git reset --hard origin/main
 
-   # Define the timestamp file
+# --- Refresh hostname file every time -----------------------
+   SERIAL=$(sudo cat /sys/class/dmi/id/product_serial | tr -d ' ')
+   [[ -z "$SERIAL" || "$SERIAL" == "Unknown" ]] && \
+     SERIAL=$(cat /etc/machine-id | cut -c1-8)
+   HOSTNAME="dectech-${SERIAL: -6}"
+   
+   FILE=/etc/nixos/system-hostname.txt
+   if [[ ! -f $FILE || $(< "$FILE") != "$HOSTNAME" ]]; then
+     echo "Updating hostname file → $HOSTNAME"
+     echo "$HOSTNAME" | sudo tee "$FILE" >/dev/null
+   fi
+
+# --- flake-update throttle ----------------------------------
+
    STAMP_FILE="/tmp/nix_flake_update.timestamp"
 
    # Check if the file exists and if it's less than 10 minutes old
