@@ -19,7 +19,7 @@
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];
       imports = [
-        ./hosts/flake-overlays.nix
+        ./hosts/overlays.nix
         ./hosts/enterprise-base/flake-part.nix
         ./hosts/personal-tim/flake-part.nix
       ];
