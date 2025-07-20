@@ -2,55 +2,55 @@
 { config, lib, pkgs, ... }:
 {
   imports = [ 
-    ../../hardware-configuration.nix
-    ../../sys-modules/baobab.nix
-    ../../sys-modules/birdtray.nix
-    ../../sys-modules/bluetooth.nix
-    ../../sys-modules/btrfs.nix
-    ../../sys-modules/chrome.nix
-    ../../sys-modules/esphome.nix
-    ../../sys-modules/evolution.nix
-    ../../sys-modules/firefox.nix
-    ../../sys-modules/firewall.nix
-    ../../sys-modules/flatpak.nix
-    ../../sys-modules/fonts.nix
-    ../../sys-modules/github-desktop.nix
-    ../../sys-modules/gnome-disks.nix
-    ../../sys-modules/gparted.nix
-    ../../sys-modules/htop.nix
-    ../../sys-modules/jellyfin.nix
-    ../../sys-modules/kcalc.nix
-    ../../sys-modules/kdeconnect-firewall.nix
-    ../../sys-modules/killall.nix
-    ../../sys-modules/nixpkgs-fmt.nix
-    #../../sys-modules/nix-ld.nix
-    ../../sys-modules/papirus-theme.nix
-    ../../sys-modules/libreoffice.nix
-    ../../sys-modules/morph.nix
-    ../../sys-modules/nixvim.nix
-    #../../sys-modules/nextcloud.nix
-    ../../sys-modules/ntfs.nix
-    ../../sys-modules/nvidia.nix
-    ../../sys-modules/onlyoffice.nix
-    ../../sys-modules/openssl.nix
-    ../../sys-modules/papirus.nix
-    #../../sys-modules/pinegrow.nix
-    ../../sys-modules/plasma.nix
-    ../../sys-modules/protonmail-bridge.nix
-    #../../sys-modules/qt.nix
-    ../../sys-modules/remotemouse/remotemouse.nix
-    ../../sys-modules/signal-desktop.nix
-    ../../sys-modules/sshfs.nix
+		../../hardware-configuration.nix
+		../../sys-modules/baobab.nix
+		../../sys-modules/birdtray.nix
+		../../sys-modules/bluetooth.nix
+		../../sys-modules/btrfs.nix
+		../../sys-modules/chrome.nix
+		../../sys-modules/esphome.nix
+		../../sys-modules/evolution.nix
+		../../sys-modules/firefox.nix
+		../../sys-modules/firewall.nix
+		../../sys-modules/flatpak.nix
+		../../sys-modules/fonts.nix
+		../../sys-modules/github-desktop.nix
+		../../sys-modules/gnome-disks.nix
+		../../sys-modules/gparted.nix
+		../../sys-modules/htop.nix
+		../../sys-modules/jellyfin.nix
+		../../sys-modules/kcalc.nix
+		../../sys-modules/kdeconnect-firewall.nix
+		../../sys-modules/killall.nix
+		../../sys-modules/nixpkgs-fmt.nix
+		#../../sys-modules/nix-ld.nix
+		../../sys-modules/papirus-theme.nix
+		../../sys-modules/libreoffice.nix
+		../../sys-modules/morph.nix
+		../../sys-modules/nixvim.nix
+		#../../sys-modules/nextcloud.nix
+		../../sys-modules/ntfs.nix
+		../../sys-modules/nvidia.nix
+		../../sys-modules/onlyoffice.nix
+		../../sys-modules/openssl.nix
+		../../sys-modules/papirus.nix
+		#../../sys-modules/pinegrow.nix
+		../../sys-modules/plasma.nix
+		../../sys-modules/protonmail-bridge.nix
+		#../../sys-modules/qt.nix
+		../../sys-modules/remotemouse/remotemouse.nix
+		../../sys-modules/signal-desktop.nix
+		../../sys-modules/sshfs.nix
 		../../sys-modules/star-rail-macro.nix
-    ../../sys-modules/steam.nix
-    ../../sys-modules/tailscale.nix
-    ../../sys-modules/teams.nix
-    ../../sys-modules/teamviewer.nix
-    ../../sys-modules/virtualbox.nix
+		../../sys-modules/steam.nix
+		../../sys-modules/tailscale.nix
+		../../sys-modules/teams.nix
+		../../sys-modules/teamviewer.nix
+		../../sys-modules/virtualbox.nix
 		../../sys-modules/windows-reboot.nix
-    # ../../sys-modules/wine.nix
-    #../../sys-modules/wordpress.nix
-    #./personalisation/wallpaper-service.nix
+		# ../../sys-modules/wine.nix
+		#../../sys-modules/wordpress.nix
+		#./personalisation/wallpaper-service.nix
 	];
   
   # Bootloader.
