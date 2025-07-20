@@ -1,4 +1,4 @@
-#/etc/nixos/modules/kitty.nix
+#/etc/nixos/home-modules/kitty.nix
 { config, lib, pkgs, ... }:
 
 {
