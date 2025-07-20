@@ -1,9 +1,9 @@
 #/etc/nixos/hosts/personal-tim/home.nix
 { config, pkgs, HOME-MODULES, ... }:
-
 {
   imports = [
 		../../home-modules/dropbox.nix
+		../../home-modules/emacs.nix
 		../../home-modules/fastfetch.nix
 		#../../home-modules/firefox.nix # Moved to configuration.nix
 		../../home-modules/fish.nix
@@ -37,4 +37,3 @@
   #   test
   # '';
 }
-
