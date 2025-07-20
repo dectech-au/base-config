@@ -54,6 +54,3 @@
     ;; ==== Files end here ====
   '';
 };
-
-# Make emacs available in PATH for scripts
-home.packages = [ pkgs.emacsPgtk ];
