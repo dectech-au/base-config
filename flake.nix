@@ -28,7 +28,7 @@
         formatter = pkgs.nixpkgs-fmt;
 
         packages = {
-          remotemouse = pkgs.callPackage ./remotemouse {
+          remotemouse = pkgs.callPackage ./sys-modules/remotemouse {
             glib = pkgs.glib;
             dbus = pkgs.dbus;
             zlib = pkgs.zlib;
