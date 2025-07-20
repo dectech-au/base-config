@@ -50,8 +50,8 @@
           bashls.enable = true;
           pylsp.enable = true;
         };
-
       };
+
       lualine.enable = true;               # Statusline plugin
       treesitter.enable = true;            # Advanced syntax highlighting
       telescope.enable = true;             # Fuzzy finder for files and more
