@@ -2,7 +2,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  rmPkg = pkgs.callPackage ../remotemouse { xdotool = pkgs.xdotool; };
+  rmPkg = pkgs.callPackage ./remotemouse { xdotool = pkgs.xdotool; };
 in {
   environment.systemPackages = [
     rmPkg
