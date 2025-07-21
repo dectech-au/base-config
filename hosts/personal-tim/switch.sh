@@ -32,21 +32,11 @@ else
 fi
 
 # ── Rebuild ─────────────────────────────────────────────────────────────
-if nixos-rebuild --help | grep -q -- --argstr; then
-  # Modern Nix (≥ 2.18) – pure evaluation
-  sudo nixos-rebuild switch \
-       --upgrade \
-       --flake /etc/nixos#personal-tim \
-       --argstr host "$hostname" \
-       --show-trace
-else
-  # Ancient binary – fall back to impure eval
-  echo "[!] nixos-rebuild is prehistoric; using --impure"
+
   sudo nixos-rebuild switch \
        --upgrade \
        --flake /etc/nixos#personal-tim \
        --impure \
        --show-trace
-fi
 
 echo "[✓] system switched to $hostname"
