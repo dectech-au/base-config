@@ -5,3 +5,6 @@
     sshfs
   ];
 }
+
+# how to use:
+# sshfs remote_user@machine:/remote/directory ~/local/directory
