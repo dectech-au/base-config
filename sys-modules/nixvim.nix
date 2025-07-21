@@ -1,6 +1,5 @@
 { pkgs, self, ... }: 
 {
-  home.packages = [ pkgs.lazygit ];
 
   programs.nixvim = {
     enable = true;
