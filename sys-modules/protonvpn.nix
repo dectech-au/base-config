@@ -2,6 +2,6 @@
 { config, lib, pkgs, ... }:
 {
   environment.systemPackages = with pkgs; [
-    protonvpn-cli_2
+    protonvpn-gui
   ];
 }
