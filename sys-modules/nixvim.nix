@@ -59,8 +59,8 @@
         opts = { provider_selector = "lsp,indent" ; };
       };
 
-      treesitter.enable = {
-        true;            # Advanced syntax highlighting
+      treesitter = {
+        enable = true;            # Advanced syntax highlighting
         indent = true;
         incrementalSelection = true;
         textobjects.enable = true;
