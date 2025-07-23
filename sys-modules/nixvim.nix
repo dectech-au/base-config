@@ -40,6 +40,8 @@
       
       lsp = {
         enable = true;
+        tsserver.enable = true;
+        rust_analyzer.enable = true;
         servers = {
           lua_ls.enable = true;
           ts_ls.enable = true;
@@ -49,10 +51,22 @@
           bashls.enable = true;
           pylsp.enable = true;
         };
+        opts = { inlay_hints.enable = true; };
+      };
+
+      ufo = {
+        enable = true;
+        opts = { provider_selector = "lsp,indent" ; };
+      };
+
+      treesitter.enable = {
+        true;            # Advanced syntax highlighting
+        indent = true;
+        incrementalSelection = true;
+        textobjects.enable = true;
       };
 
       lualine.enable = true;               # Statusline plugin
-      treesitter.enable = true;            # Advanced syntax highlighting
       telescope.enable = true;             # Fuzzy finder for files and more
       web-devicons.enable = true;          # File icons for Neovim
       bufferline.enable = true;            # Buffer tabline for better navigation
@@ -75,6 +89,12 @@
       clipboard = "unnamedplus";
       ignorecase = true;
       smartcase = true;
+      signcolimn = "yes:1";
+      termguicolors = true;
+      scrolloff = 5;
+      splitright = true;
+      splitbelow = true;
+      guicursor = "n-v-c:blinkon0";
     };
   };
 }
