@@ -1,13 +1,16 @@
-#/etc/nixos/modules/onlyoffice.nix
+#/etc/nixos/sys-modules/onlyoffice.nix
 { config, lib, pkgs, ... }:
 
 {
-	# services.onlyoffice.enable = true;
 	environment.systemPackages = with pkgs; [
 		onlyoffice-bin
 	];
 
-  # programs.onlyoffice = {
-  #   enable = true;
-  # };
+	nixpkgs.config.allowUnfreePredicate = pkg:
+		builtins.elem (lib.getName pkg) [ "corefonts" ];
+
+	fonts.fonts = with pkgs; [
+		corefonts
+		cantarell-fonts
+	];
 }
