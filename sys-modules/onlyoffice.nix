@@ -9,7 +9,7 @@
 	nixpkgs.config.allowUnfreePredicate = pkg:
 		builtins.elem (lib.getName pkg) [ "corefonts" "cantarell-fonts" ];
 
-	fonts.fonts = with pkgs; [
+	fonts.packages = with pkgs; [
 		corefonts
 		cantarell-fonts
 	];
