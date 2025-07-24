@@ -12,7 +12,7 @@ fi
 # --- Step 1: ensure host module exists --------------------------------------------------
 
 sudo chmod +x /etc/nixos/scripts/*
-/etc/nixos/bootstrap/update-hostname.sh
+/etc/nixos/scripts/update-hostname.sh
  
 # --- Step 2: create read-only deploy key on GitHub --------------------------------------
 
