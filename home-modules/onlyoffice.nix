@@ -7,7 +7,6 @@ let
       onlyoffice-bin
       cantarell-fonts
     ];
-    multiPkgs = true;
     runScript  = "desktopeditors";
   };
 in
