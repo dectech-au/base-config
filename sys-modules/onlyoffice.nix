@@ -1,8 +1,20 @@
 #/etc/nixos/sys-modules/onlyoffice.nix
 { config, lib, pkgs, ... }:
-{
+let
+  onlyofficeEnv = pkgs.runFHSUserEnv {
+    name = "onlyoffice-with-fonts";
+    targetPkgs = pkgs: with pkgs; [
+      onlyoffice-bin
+      cantarell-fonts
+      # add any other font packages you need here
+    ];
+    multiPkgs = true;
+    runScript = "desktopeditors";  # or whatever the onlyoffice entrypoint is
+  };
+in {
 	environment.systemPackages = with pkgs; [
 		onlyoffice-bin
+ 		onlyofficeEnv
 	];
 
 	nixpkgs.config.allowUnfreePredicate = pkg:
@@ -28,8 +40,4 @@
 			jetbrains-mono
 		];
 	};
-
-	home.file.".local/share/fonts/Cantarell-Regular.otf".source =
-		pkgs.cantarell-fonts + "/share/fonts/truetype/cantarell/Cantarell-Regular.otf";
-
 }
