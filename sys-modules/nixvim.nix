@@ -62,7 +62,6 @@
       treesitter = {
         enable = true;            # Advanced syntax highlighting
         indent = true;
-        incrementalSelection = true;
         textobjects.enable = true;
       };
 
