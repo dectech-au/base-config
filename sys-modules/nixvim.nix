@@ -54,7 +54,7 @@
       treesitter = {
         enable = true;            # Advanced syntax highlighting
         settings = {
-          indent = true;
+          indent.enable = true;
         };
       };
 
