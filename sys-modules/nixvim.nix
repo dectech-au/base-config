@@ -94,7 +94,7 @@
       splitbelow = true;
       guicursor = "n-v-c:blinkon0";
       inlay_hints.enable = true;           # lsp opt
-      provider_selector = "lsp,indent"     # ufo opt
+      provider_selector = "lsp,indent";     # ufo opt
     };
   };
 }
