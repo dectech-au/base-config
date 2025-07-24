@@ -11,5 +11,5 @@ let
   };
 in
 {
-  home.packages = [ onlyofficeEnv ];
+  environment.systemPackages = [ onlyofficeEnv ];
 }
