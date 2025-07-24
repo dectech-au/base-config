@@ -58,7 +58,6 @@
       treesitter = {
         enable = true;            # Advanced syntax highlighting
         indent = true;
-        textobjects.enable = true;
       };
 
 
