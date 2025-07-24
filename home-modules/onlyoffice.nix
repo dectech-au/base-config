@@ -9,7 +9,7 @@ let
 in
 {
   programs.onlyoffice = {
-    enable = false;;
+    enable = false;
     package = pkgs.onlyoffice-bin;
     settings = {};
   };
