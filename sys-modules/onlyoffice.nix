@@ -15,7 +15,7 @@
 
 	fonts = {
 		
-		enableDefaultPacages = true;
+		enableDefaultPackages = true;
 		enableGhostscriptFonts = true;
 
 		packages = with pkgs; [
