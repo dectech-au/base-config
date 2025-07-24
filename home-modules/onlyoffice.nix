@@ -1,7 +1,7 @@
 #/etc/nixos/home-modules/onlyoffice.nix
 { config, lib, pkgs, ... }:
 let
-  onlyofficeEnv = pkgs.buildFHSUserEnv {
+  onlyofficeEnv = pkgs.buildFHSEnv {
     name       = "onlyoffice";
     targetPkgs = pkgs: with pkgs; [
       onlyoffice-bin
