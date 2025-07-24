@@ -41,7 +41,6 @@
       lsp = {
         enable = true;
         tsserver.enable = true;
-        rust_analyzer.enable = true;
         servers = {
           lua_ls.enable = true;
           ts_ls.enable = true;
