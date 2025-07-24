@@ -11,7 +11,7 @@
 		../../home-modules/kdeconnect.nix
 		../../home-modules/kitty.nix
 		../../home-modules/librewolf.nix
-		../../home-modules/onlyoffice.nix
+		#../../home-modules/onlyoffice.nix
 		#../../home-modules/papirus-theme.nix
 		#../../home-modules/remotemouse.nix
 		../../home-modules/thunderbird.nix
