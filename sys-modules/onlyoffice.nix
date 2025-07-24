@@ -7,10 +7,26 @@
 	];
 
 	nixpkgs.config.allowUnfreePredicate = pkg:
-		builtins.elem (lib.getName pkg) [ "corefonts" "cantarell-fonts" ];
+		builtins.elem (lib.getName pkg)
+		[
+			"corefonts"
+			"cantarell-fonts"
+		];
 
-	fonts.packages = with pkgs; [
-		corefonts
-		cantarell-fonts
-	];
+	fonts = {
+		
+		enableDefaultPacages = true;
+		enableGhostscriptFonts = true;
+
+		packages = with pkgs; [
+			corefonts
+			vista-fonts
+			liberation_ttf
+			cantarell-fonts
+			dejavu_fonts
+			noto-fonts
+			fira-code
+			jetbrains-mono
+		];
+	};
 }
