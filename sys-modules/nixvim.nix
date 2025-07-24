@@ -63,8 +63,7 @@
         textobjects.enable = true;
       };
 
-      inlay_hints.enable = true;           # lsp opt
-      provider_selector = "lsp,indent"     # ufo opt
+
       lualine.enable = true;               # Statusline plugin
       telescope.enable = true;             # Fuzzy finder for files and more
       web-devicons.enable = true;          # File icons for Neovim
@@ -94,6 +93,8 @@
       splitright = true;
       splitbelow = true;
       guicursor = "n-v-c:blinkon0";
+      inlay_hints.enable = true;           # lsp opt
+      provider_selector = "lsp,indent"     # ufo opt
     };
   };
 }
