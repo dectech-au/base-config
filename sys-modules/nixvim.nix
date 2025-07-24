@@ -51,10 +51,6 @@
         };
       };
 
-      ufo = {
-        enable = true;
-      };
-
       treesitter = {
         enable = true;            # Advanced syntax highlighting
         indent = true;
