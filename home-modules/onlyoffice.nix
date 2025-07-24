@@ -1,18 +1,16 @@
 #/etc/nixos/home-modules/onlyoffice.nix
 { config, lib, pkgs, ... }:
 let
-  onlyofficeEnv = pkgs.runFHSUserEnv {
+  onlyofficeEnv = pkgs.buildFHSUserEnv {
     name       = "onlyoffice";
-    targetPkgs = ps: with ps; [ onlyoffice-bin cantarell-fonts ];
+    targetPkgs = pkgs: with pkgs; [
+      onlyoffice-bin
+      cantarell-fonts
+    ];
+    multiPkgs = true;
     runScript  = "desktopeditors";
   };
 in
 {
-  programs.onlyoffice = {
-    enable = false;
-    package = pkgs.onlyoffice-bin;
-    settings = {};
-  };
-  
   home.packages = [ onlyofficeEnv ];
 }
