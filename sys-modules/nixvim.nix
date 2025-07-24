@@ -82,7 +82,7 @@
       clipboard = "unnamedplus";
       ignorecase = true;
       smartcase = true;
-      signcolimn = "yes:1";
+      signcolumn = "yes:1";
       termguicolors = true;
       scrolloff = 5;
       splitright = true;
