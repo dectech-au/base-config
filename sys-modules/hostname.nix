@@ -4,12 +4,14 @@
 let
   hostScript = ''
 #!/usr/bin/env bash
+
 serial="$(cat /sys/class/dmi/id/product_serial 2>/dev/null | tr -d ' ')"
 if [ -z "$serial" ] || [ "$serial" = "Unknown" ]; then
   serial="$(cut -c1-8 /etc/machine-id)"
 fi
 
-name="dectech-${serial: -6}"
+# \${…} keeps Nix from interpolating; Bash still expands it.
+name="dectech-\${serial: -6}"
 
 if [ "$(cat /proc/sys/kernel/hostname)" != "$name" ]; then
   echo "⚙️  setting hostname to $name"
@@ -17,11 +19,12 @@ if [ "$(cat /proc/sys/kernel/hostname)" != "$name" ]; then
   hostname "$name"
 fi
 '';
-in {
-  # placeholder so evaluation-time modules don’t break
+in
+{
+  # Placeholder so other modules have *some* hostname at eval time
   networking.hostName = lib.mkDefault "dectech-placeholder";
 
-  # runs inside the new system after each rebuild
+  # Runs inside the new system on every switch
   system.activationScripts.generateHostName = {
     text = hostScript;
   };
