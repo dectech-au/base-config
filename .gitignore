@@ -1,5 +1,1 @@
-system-hostname.txt
-hosts/hostname.txt
-hosts/hostname.nix
-hosts/system-hostname.txt
 flake.lock
