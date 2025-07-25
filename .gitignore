@@ -1,3 +1,4 @@
 system-hostname.txt
 hosts/hostname.txt
+hosts/system-hostname.txt
 flake.lock
