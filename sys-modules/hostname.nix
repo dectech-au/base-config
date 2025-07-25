@@ -5,13 +5,12 @@ let
   hostScript = ''
     #!/usr/bin/env bash
 
-    serial="$(cat /sys/class/dmi/id/product_serial 2>/dev/null | tr -d ' ')"
+    serial=$(cat /sys/class/dmi/id/product_serial 2>/dev/null | tr -d ' ')
     if [ -z "$serial" ] || [ "$serial" = "Unknown" ]; then
-      serial="$(cut -c1-8 /etc/machine-id)"
+      serial=$(cut -c1-8 /etc/machine-id)
     fi
 
-    # Bash expands the slice; Nix ignores it thanks to the back-slash
-    name="dectech-\${serial: -6}"
+    name="dectech-''${serial: -6}"
 
     if [ "$(cat /proc/sys/kernel/hostname)" != "$name" ]; then
       echo "setting hostname to $name"
@@ -21,9 +20,9 @@ let
   '';
 in
 {
-  # placeholder so evaluation has *some* hostname
+  # placeholder so eval-time modules have *some* value
   networking.hostName = lib.mkDefault "dectech-placeholder";
 
-  # run the script on every activation
+  # run the bash snippet every switch / boot
   system.activationScripts.generateHostName.text = hostScript;
 }
