@@ -2,7 +2,7 @@
 { config, lib, pkgs, ... }:
 let
   raw = builtins.readFile "/etc/nixos/hosts/system-hostname.txt";  # impure, but you passed --impure
-  hostname = lib.strings.trim raw;
+  hostName = lib.strings.trim raw;
 in {
   imports = [ 
 		../../hardware-configuration.nix
