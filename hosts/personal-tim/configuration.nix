@@ -2,7 +2,7 @@
 { config, lib, pkgs, ... }:
 let
 	hostFile = ../system-hostfile.txt;
-	hostName = builtins.trim (builtins.readFile hostFile);
+	hostName = lib.strings.trim (builtins.readFile hostFile);
 in {
   imports = [ 
 		../../hardware-configuration.nix
