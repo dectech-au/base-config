@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#/etc/nixos/bootstrap/update-hostname.sh
+#/etc/nixos/scripts/update-hostname.sh
 
 set -euo pipefail
 
