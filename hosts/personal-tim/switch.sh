@@ -21,6 +21,13 @@ if [[ ! -f $file || $(<"$file") != "$hostname" ]]; then
   echo "$hostname" | sudo tee "$file" >/dev/null
 fi
 
+cat <<EOF | sudo tee /etc/nixos/hosts/hostname.nix >/dev/null
+{ config, lib, pkgs, ... }:
+{
+  networking.hostName = "${hostname}";
+}
+EOF
+
 # ── Throttle nix flake update to once per 10 min ────────────────────────
 stamp=/tmp/nix_flake_update.timestamp
 if [[ ! -f $stamp || $(( $(date +%s) - $(<"$stamp") )) -ge 600 ]]; then
