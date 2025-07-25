@@ -1,9 +1,6 @@
 #/etc/nixos/hosts/personal-tim/configuration.nix
 { config, lib, pkgs, ... }:
-let
-	hostFile = ../system-hostname.txt;
-	hostName = lib.strings.trim (builtins.readFile hostFile);
-in {
+{
   imports = [ 
 		../../hardware-configuration.nix
 		../../sys-modules/baobab.nix
@@ -61,7 +58,7 @@ in {
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = hostName; # hostname is injected by hosts/local/host.nix - don't set
+  # networking.hostName = hostName; # hostname is injected by hosts/local/host.nix - don't set
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
