@@ -9,7 +9,7 @@
       DisableTelemetry = true;
       DisableFirefoxStudies = true;
       EnableTrackingProtection = {
-        Value = true;
+        Value = false;
         Locked = true;
         Cryptomining = true;
         Fingerprinting = true;
@@ -20,7 +20,7 @@
       OverridePostUpdatePage = "";
       DontCheckDefaultBrowser = true;
       DisplayBookmarksToolbar = "always";
-      DisplayMenuBar = "default-off";
+      DisplayMenuBar = "default-onff";
       SearchBar = "unified";
       ExtensionSettings = {
         
