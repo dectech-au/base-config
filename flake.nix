@@ -50,7 +50,7 @@
             neovim
           ];
           shellHook = ''
-            echo "Welcome to the mutha' fuckin' dev shell, you stupid bitch."
+            echo "Developer Mode: Engaged."
           '';
         };
       };
