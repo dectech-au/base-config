@@ -88,7 +88,6 @@
       splitright = true;
       splitbelow = true;
       guicursor = "n-v-c:blinkon0";
-      inlay_hints.enable = true;           # lsp opt
     };
   };
 }
