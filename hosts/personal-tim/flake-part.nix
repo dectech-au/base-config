@@ -10,6 +10,7 @@
     modules = [
       { nixpkgs.config.allowUnfree = true; }
       ./configuration.nix
+      ../hostname.nix
       inputs.nixvim.nixosModules.nixvim
       inputs.home-manager.nixosModules.home-manager
       {
