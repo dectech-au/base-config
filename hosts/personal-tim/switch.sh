@@ -15,7 +15,7 @@ serial=$(sudo cat /sys/class/dmi/id/product_serial 2>/dev/null | tr -d ' ')
 [[ -z $serial || $serial == "Unknown" ]] && serial=$(cut -c1-8 /etc/machine-id)
 hostname="dectech-${serial: -6}"
 
-file=/etc/nixos/hosts/hostname.txt
+file=/etc/nixos/hosts/system-hostname.txt
 if [[ ! -f $file || $(<"$file") != "$hostname" ]]; then
   echo "Updating hostname file → $hostname"
   echo "$hostname" | sudo tee "$file" >/dev/null
