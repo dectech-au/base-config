@@ -1,7 +1,7 @@
 #/etc/nixos/hosts/personal-tim/configuration.nix
 { config, lib, pkgs, ... }:
 let
-	hostFile = ../system-hostfile.txt;
+	hostFile = ../system-hostname.txt;
 	hostName = lib.strings.trim (builtins.readFile hostFile);
 in {
   imports = [ 
