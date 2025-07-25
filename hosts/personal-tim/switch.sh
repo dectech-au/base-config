@@ -44,5 +44,3 @@ fi
        --upgrade \
        --flake /etc/nixos#personal-tim \
        --show-trace
-
-echo "[✓] system switched to $hostname"
