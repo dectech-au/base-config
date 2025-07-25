@@ -11,22 +11,22 @@ git fetch --quiet origin
 git reset --hard origin/main
 
 # ── Build /etc/nixos/system-hostname.txt every run ──────────────────────
-serial=$(sudo cat /sys/class/dmi/id/product_serial 2>/dev/null | tr -d ' ')
-[[ -z $serial || $serial == "Unknown" ]] && serial=$(cut -c1-8 /etc/machine-id)
-hostname="dectech-${serial: -6}"
+#serial=$(sudo cat /sys/class/dmi/id/product_serial 2>/dev/null | tr -d ' ')
+#[[ -z $serial || $serial == "Unknown" ]] && serial=$(cut -c1-8 /etc/machine-id)
+#hostname="dectech-${serial: -6}"
 
-file=/etc/nixos/hosts/system-hostname.txt
-if [[ ! -f $file || $(<"$file") != "$hostname" ]]; then
-  echo "Updating hostname file → $hostname"
-  echo "$hostname" | sudo tee "$file" >/dev/null
-fi
+#file=/etc/nixos/hosts/system-hostname.txt
+#if [[ ! -f $file || $(<"$file") != "$hostname" ]]; then
+#  echo "Updating hostname file → $hostname"
+#  echo "$hostname" | sudo tee "$file" >/dev/null
+#fi
 
-cat <<EOF | sudo tee /etc/nixos/hosts/hostname.nix >/dev/null
-{ config, lib, pkgs, ... }:
-{
-  networking.hostName = "${hostname}";
-}
-EOF
+#cat <<EOF | sudo tee /etc/nixos/hosts/hostname.nix >/dev/null
+#{ config, lib, pkgs, ... }:
+#{
+#  networking.hostName = "${hostname}";
+#}
+#EOF
 
 # ── Throttle nix flake update to once per 10 min ────────────────────────
 stamp=/tmp/nix_flake_update.timestamp
@@ -42,10 +42,6 @@ fi
 
   sudo nixos-rebuild switch \
        --upgrade \
-       --flake /etc/nixos#personal-tim \
-       --impure \
-       --show-trace
-
-  sudo hostnamectl set-hostname "$(< /etc/nixos/hosts/system-hostname.txt)"
+       --flake /etc/nixos#personal-tim \       --show-trace
 
 echo "[✓] system switched to $hostname"
