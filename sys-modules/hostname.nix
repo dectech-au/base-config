@@ -1,5 +1,5 @@
 #/etc/nixos/sys-modules/hostname.nix
-{ config, lib, pkgs, … }:
+{ config, lib, pkgs, ... }:
 
 let
   hostScript = ''
