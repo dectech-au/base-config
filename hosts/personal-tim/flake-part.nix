@@ -11,7 +11,8 @@
       { nixpkgs.config.allowUnfree = true; }
       ./configuration.nix
       inputs.nixvim.nixosModules.nixvim
-      inputs.home-manager.nixosModules.home-manager {
+      inputs.home-manager.nixosModules.home-manager
+      {
         home-manager = {
           useGlobalPkgs = true;
           useUserPackages = true;
