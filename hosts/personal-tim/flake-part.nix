@@ -21,9 +21,6 @@
           users.dectec = import ./home.nix;
         };
       }
-    ] ++ (
-      if builtins.pathExists ../hosts/hostname.nix
-      then [ ../hosts/hostname.nix ]
-      else [ ] );
+    ];
   };
 }
