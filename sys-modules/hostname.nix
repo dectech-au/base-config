@@ -2,31 +2,30 @@
 { config, lib, pkgs, ... }:
 
 let
-  hostScript = ''
+  hostScript = ''  # ← two single‐quotes, not double
     #!/usr/bin/env bash
-    # read serial (or fallback)
+
     serial=$(cat /sys/class/dmi/id/product_serial 2>/dev/null | tr -d ' ')
     if [[ -z "$serial" || "$serial" == "Unknown" ]]; then
       serial=$(cut -c1-8 /etc/machine-id)
     fi
 
-    # build dectech-<last 6 chars>
+    # this ${serial: -6} runs in bash, not Nix
     name="dectech-${serial: -6}"
 
-    # only switch if it’s wrong
     if [[ "$(cat /proc/sys/kernel/hostname)" != "$name" ]]; then
       echo "⚙️  setting hostname to $name"
       echo "$name" > /etc/hostname
       hostname "$name"
     fi
-  '';
+  '';  # ← close the literal
+
 in {
-  # so eval‐time modules don’t break
+  # give Nix something at eval time
   networking.hostName = lib.mkDefault "dectech-placeholder";
 
-  # this runs *after* your new system is built
+  # run the above script after rebuild, inside the new system
   system.activationScripts.generateHostName = {
     text = hostScript;
-    # no `deps` needed — /usr/bin/env and coreutils are on $PATH
   };
 }
