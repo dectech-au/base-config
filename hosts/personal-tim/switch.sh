@@ -46,4 +46,6 @@ fi
        --impure \
        --show-trace
 
+  sudo hostnamectl set-hostname "$(< /etc/nixos/hosts/system-hostname.txt)"
+
 echo "[✓] system switched to $hostname"
