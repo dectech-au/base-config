@@ -29,3 +29,7 @@ fi
        --upgrade \
        --flake /etc/nixos#personal-tim \
        --show-trace
+
+# --- Set hostname permanently... hopefully...
+
+hostnamectl set-hostname "$name"
