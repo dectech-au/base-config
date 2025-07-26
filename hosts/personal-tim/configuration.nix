@@ -58,7 +58,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  #networking.hostName = hostName; # hostname is injected by hosts/hostname.nix - don't set manually
+  networking.hostName = builtins.getEnv "DECTECH_HOSTNAME"; # hostName; # hostname is injected by hosts/hostname.nix - don't set manually
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
