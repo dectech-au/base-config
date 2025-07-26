@@ -10,5 +10,5 @@ system.activationScripts.generateHostName.text = ''
     echo "setting hostname to $name"
     hostname "$name"        # kernel only – no file write
   fi
-''
+'';
 }
