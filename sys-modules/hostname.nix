@@ -2,12 +2,13 @@
 { config, lib, pkgs, ... }:
 
 {
-  systemd.services."systemd‑hostnamed".enable = false;  
+  services.dbus.enable = true;
+  systemd.services."systemd‑hostnamed".enable = false;
 
-  networking.networkmanager.extraConfig = ''
-    [main]
-    Hostname=mode=none
-  '';
+  networking.networkmanager = {
+    enable = true;
+    settings.main.hostname-mode = "none";
+  };
 
   system.activationScripts.generateHostName.text = ''
     serial=$(tr -d ' ' </sys/class/dmi/id/product_serial 2>/dev/null)
