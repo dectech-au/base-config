@@ -11,9 +11,7 @@ git fetch --quiet origin
 git reset --hard origin/main
 
 # ── Build /etc/nixos/system-hostname.txt every run ──────────────────────
-serial=$(tr -d ' ' </sys/class/dmi/id/product_serial 2>/dev/null)
-[[ -z "$serial" || "$serial" == "Unknown" ]] && serial=$(cut -c1-8 /etc/machine-id)
-export DECTECH_HOSTNAME="dectech-${serial: -6}"
+bash /etc/nixos/scripts/update-hostname.sh
 
 
 #serial=$(sudo cat /sys/class/dmi/id/product_serial 2>/dev/null | tr -d ' ')
