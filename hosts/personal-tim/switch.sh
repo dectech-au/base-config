@@ -11,7 +11,7 @@ git fetch --quiet origin
 git reset --hard origin/main
 
 # ── Build /etc/nixos/system-hostname.txt every run ──────────────────────
-sudo bash /etc/nixos/scripts/update-hostname.sh
+# sudo bash /etc/nixos/scripts/update-hostname.sh
 
 # ── Throttle nix flake update to once per 10 min ────────────────────────
 stamp=/tmp/nix_flake_update.timestamp
