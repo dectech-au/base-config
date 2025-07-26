@@ -11,7 +11,7 @@ git fetch --quiet origin
 git reset --hard origin/main
 
 # ── Build /etc/nixos/system-hostname.txt every run ──────────────────────
-bash /etc/nixos/scripts/update-hostname.sh
+sudo bash /etc/nixos/scripts/update-hostname.sh
 
 
 #serial=$(sudo cat /sys/class/dmi/id/product_serial 2>/dev/null | tr -d ' ')
