@@ -10,9 +10,6 @@ ssh-add -q ~/.ssh/id_nixos_readonly
 git fetch --quiet origin
 git reset --hard origin/main
 
-# ── Build /etc/nixos/system-hostname.txt every run ──────────────────────
-# sudo bash /etc/nixos/scripts/update-hostname.sh
-
 # ── Throttle nix flake update to once per 10 min ────────────────────────
 stamp=/tmp/nix_flake_update.timestamp
 if [[ ! -f $stamp || $(( $(date +%s) - $(<"$stamp") )) -ge 600 ]]; then
@@ -29,5 +26,3 @@ fi
        --upgrade \
        --flake /etc/nixos#personal-tim \
        --show-trace
-
-# --- Set hostname permanently... hopefully...
