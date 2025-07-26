@@ -2,6 +2,8 @@
 { config, lib, pkgs, ... }:
 
 {
+  services.systemd-hostnamed.enable = false;
+  
   system.activationScripts.generateHostName.text = ''
     serial=$(tr -d ' ' </sys/class/dmi/id/product_serial 2>/dev/null)
     if [ -z "$serial" ] || [ "$serial" = "Unknown" ]; then
