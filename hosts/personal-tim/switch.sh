@@ -31,5 +31,3 @@ fi
        --show-trace
 
 # --- Set hostname permanently... hopefully...
-
-hostnamectl set-hostname "$name"
