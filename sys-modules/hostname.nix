@@ -3,6 +3,7 @@
 
 {
   system.etc.overlay.enable = true;
+  boot.initrd.systemd.enable = true;
 
   system.activationScripts.generateHostName.text = ''
     serial=$(tr -d ' ' </sys/class/dmi/id/product_serial 2>/dev/null)
