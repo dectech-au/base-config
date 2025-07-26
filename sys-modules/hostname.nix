@@ -3,7 +3,12 @@
 
 {
   systemd.services."systemd‑hostnamed".enable = false;  
-  
+
+  networking.networkmanager.extraConfig = ''
+    [main]
+    Hostname=mode=none
+  '';
+
   system.activationScripts.generateHostName.text = ''
     serial=$(tr -d ' ' </sys/class/dmi/id/product_serial 2>/dev/null)
     if [ -z "$serial" ] || [ "$serial" = "Unknown" ]; then
