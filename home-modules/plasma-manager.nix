@@ -20,12 +20,12 @@
       command = "kitty";
     };
 
-    #fonts = {
-    #  general = {
-    #    family = "Cantarell";
-    #    pointSize = 12;
-    #  };
-    #};
+    fonts = {
+      general = {
+        family = "Hack";
+        pointSize = 10;
+      };
+    };
 
     panels = [{ 
       location = "bottom";
