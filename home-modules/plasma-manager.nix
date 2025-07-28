@@ -22,7 +22,9 @@
 
     fonts = {
       general = {
-        family = "Hack";
+        # family = "Hack";
+        family = "Cantarell";
+        style = "normal";
         pointSize = 10;
       };
     };
