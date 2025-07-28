@@ -27,8 +27,8 @@
       };
     };
 
-    panels = [
+    panels = [ {
       location = "bottom";
-    ];
+    } ];
   };
 }
