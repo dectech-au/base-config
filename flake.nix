@@ -8,6 +8,12 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     #flake-parts.inputs.nixpkgs.follows = "nixpkgs";
     
+    plasma-manager = {
+      url = "github:nix-community/plasma-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
+
     home-manager.url = "github:nix-community/home-manager/release-25.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     
