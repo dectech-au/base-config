@@ -19,7 +19,7 @@
           useUserPackages = true;
           backupFileExtension = "backup";
           users.dectec = import ./home.nix;
-          sharedModules = [ plasma-manager.homeManagerModules.plasma-manager ];
+          sharedModules = [ inputs.plasma-manager.homeManagerModules.plasma-manager ];
         };
       }
     ];
