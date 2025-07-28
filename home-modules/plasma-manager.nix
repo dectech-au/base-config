@@ -27,6 +27,9 @@
       };
     };
 
-    panels = [ { location = "bottom"; } ];
+    panels = [{ 
+      location = "bottom";
+      hiding = "off";
+    }];
   };
 }
