@@ -31,5 +31,16 @@
       location = "bottom";
       hiding = "none";
     }];
+
+    configFile = {
+      baloofilerc."Basic Settings"."Indexing-Enabled" = false;
+      kwinrc."org.kde.kdecoration2".ButtonsOnLeft = "SF";
+      kwinrc.Desktops.Number = {
+        value = 2;
+        # Forces kde to not change this value (even through the settings app).
+        immutable = false;
+      };
+    };
+
   };
 }
