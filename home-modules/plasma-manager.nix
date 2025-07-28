@@ -27,6 +27,8 @@
       };
     };
 
-    panels.location = "bottom";
+    panels = [
+      location = "bottom";
+    ];
   };
 }
