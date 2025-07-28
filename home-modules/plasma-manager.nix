@@ -8,12 +8,12 @@
     #
     workspace = {
       # clickItemTo = "open"; # If you liked the click-to-open default from plasma 5
-      lookAndFeel = "org.kde.breezedark.desktop";
-      cursor = {
-        theme = "Bibata-Modern-Ice";
-        size = 32;
-      };
-      iconTheme = "Papirus-Dark";
+      lookAndFeel = "org.kde.breeze.desktop";
+      # cursor = {
+        # theme = "Bibata-Modern-Ice";
+        # size = 32;
+      # };
+      iconTheme = "Papirus";
       wallpaper = "${pkgs.kdePackages.plasma-workspace-wallpapers}/share/wallpapers/Patak/contents/images/1080x1920.png";
     };
 
@@ -25,25 +25,25 @@
 
     fonts = {
       general = {
-        family = "JetBrains Mono";
+        family = "Cantarell";
         pointSize = 12;
       };
     };
 
-    desktop.widgets = [
-      {
-        plasmusicToolbar = {
-          position = {
-            horizontal = 51;
-            vertical = 100;
-          };
-          size = {
-            width = 250;
-            height = 250;
-          };
-        };
-      }
-    ];
+    # desktop.widgets = [
+    #  {
+    #    plasmusicToolbar = {
+    #      position = {
+    #        horizontal = 51;
+    #        vertical = 100;
+    #      };
+    #      size = {
+    #        width = 250;
+    #        height = 250;
+    #      };
+    #    };
+    #  }
+    # ];
 
     panels = [
       # Windows-like panel at the bottom
@@ -131,76 +131,76 @@
         hiding = "autohide";
       }
       # Application name, Global menu and Song information and playback controls at the top
-      {
-        location = "top";
-        height = 26;
-        widgets = [
-          {
-            applicationTitleBar = {
-              behavior = {
-                activeTaskSource = "activeTask";
-              };
-              layout = {
-                elements = [ "windowTitle" ];
-                horizontalAlignment = "left";
-                showDisabledElements = "deactivated";
-                verticalAlignment = "center";
-              };
-              overrideForMaximized.enable = false;
-              titleReplacements = [
-                {
-                  type = "regexp";
-                  originalTitle = "^Brave Web Browser$";
-                  newTitle = "Brave";
-                }
-                {
-                  type = "regexp";
-                  originalTitle = ''\\bDolphin\\b'';
-                  newTitle = "File manager";
-                }
-              ];
-              windowTitle = {
-                font = {
-                  bold = false;
-                  fit = "fixedSize";
-                  size = 12;
-                };
-                hideEmptyTitle = true;
-                margins = {
-                  bottom = 0;
-                  left = 10;
-                  right = 5;
-                  top = 0;
-                };
-                source = "appName";
-              };
-            };
-          }
-          "org.kde.plasma.appmenu"
-          "org.kde.plasma.panelspacer"
-          {
-            plasmusicToolbar = {
-              panelIcon = {
-                albumCover = {
-                  useAsIcon = false;
-                  radius = 8;
-                };
-                icon = "view-media-track";
-              };
-              playbackSource = "auto";
-              musicControls.showPlaybackControls = true;
-              songText = {
-                displayInSeparateLines = true;
-                maximumWidth = 640;
-                scrolling = {
-                  behavior = "alwaysScroll";
-                  speed = 3;
-                };
-              };
-            };
-          }
-        ];
-      }
+      # {
+      #  location = "top";
+      #  height = 26;
+      #  widgets = [
+      #    {
+      #      applicationTitleBar = {
+      #        behavior = {
+      #          activeTaskSource = "activeTask";
+      #        };
+      #        layout = {
+      #          elements = [ "windowTitle" ];
+      #          horizontalAlignment = "left";
+      #          showDisabledElements = "deactivated";
+      #          verticalAlignment = "center";
+      #        };
+      #        overrideForMaximized.enable = false;
+      #        titleReplacements = [
+      #          {
+      #            type = "regexp";
+      #            originalTitle = "^Brave Web Browser$";
+      #            newTitle = "Brave";
+      #          }
+      #          {
+      #            type = "regexp";
+      #            originalTitle = ''\\bDolphin\\b'';
+      #            newTitle = "File manager";
+      #          }
+      #        ];
+      #        windowTitle = {
+      #          font = {
+      #            bold = false;
+      #            fit = "fixedSize";
+      #            size = 12;
+      #          };
+      #          hideEmptyTitle = true;
+      #          margins = {
+      #            bottom = 0;
+      #            left = 10;
+      #            right = 5;
+      #            top = 0;
+      #          };
+      #          source = "appName";
+      #        };
+      #      };
+      #    }
+      #    "org.kde.plasma.appmenu"
+      #    "org.kde.plasma.panelspacer"
+      #    {
+      #      plasmusicToolbar = {
+      #        panelIcon = {
+      #          albumCover = {
+      #            useAsIcon = false;
+      #            radius = 8;
+      #          };
+      #          icon = "view-media-track";
+      #        };
+      #        playbackSource = "auto";
+      #        musicControls.showPlaybackControls = true;
+      #        songText = {
+      #          displayInSeparateLines = true;
+      #          maximumWidth = 640;
+      #          scrolling = {
+      #            behavior = "alwaysScroll";
+      #            speed = 3;
+      #          };
+      #        };
+      #      };
+      #    }
+      #  ];
+      #}
     ];
 
     window-rules = [
