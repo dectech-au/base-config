@@ -29,7 +29,7 @@
 
     panels = [{ 
       location = "bottom";
-      hiding = "off";
+      hiding = "none";
     }];
   };
 }
