@@ -11,7 +11,6 @@
       { nixpkgs.config.allowUnfree = true; }
       ../../sys-modules/hostname.nix
       ./configuration.nix
-      inputs.plasma-manager.homeManagerModules.plasma-manager
       inputs.nixvim.nixosModules.nixvim
       inputs.home-manager.nixosModules.home-manager
       {
@@ -20,6 +19,7 @@
           useUserPackages = true;
           backupFileExtension = "backup";
           users.dectec = import ./home.nix;
+          sharedModules = [ plasma-manager.homeManagerModules.plasma-manager ];
         };
       }
     ];
