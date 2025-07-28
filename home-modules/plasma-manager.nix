@@ -17,10 +17,10 @@
       wallpaper = "${pkgs.kdePackages.plasma-workspace-wallpapers}/share/wallpapers/Patak/contents/images/1080x1920.png";
     };
 
-    hotkeys.commands."launch-konsole" = {
-      name = "Launch Konsole";
-      key = "Meta+Alt+K";
-      command = "konsole";
+    hotkeys.commands."launch-kitty" = {
+      name = "Launch Kity";
+      key = "Ctrl+Alt+T";
+      command = "kitty";
     };
 
     fonts = {
