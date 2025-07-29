@@ -6,7 +6,7 @@
 		#../../home-modules/emacs.nix
 		../../home-modules/fastfetch.nix
 		#../../home-modules/firefox.nix # Moved to configuration.nix
-		../../home-modules/fish.nix
+		../../home-modules/fish-enterprise-base.nix
 		../../home-modules/git.nix
 		../../home-modules/kdeconnect.nix
 		../../home-modules/kitty.nix
