@@ -42,7 +42,7 @@
 		#../../sys-modules/signal-desktop.nix
 		../../sys-modules/sshfs.nix
 		#../../sys-modules/star-rail-macro.nix
-		#../../sys-modules/steam.nix
+		../../sys-modules/steam.nix
 		#../../sys-modules/tailscale.nix
 		../../sys-modules/teams.nix
 		#../../sys-modules/teamviewer.nix
