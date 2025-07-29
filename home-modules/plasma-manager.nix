@@ -1,57 +1,35 @@
 { config, lib, pkgs, ... }:
-{
-  
-myWallpaper = pkgs.runCommand "my-wallpaper" {} ''
-  install -Dm444 ${./Pictures/untitled.jpg} $out/share/wallpapers/untitled.jpg
-'';
 
-programs.plasma = {
+let
+  myWallpaper = pkgs.runCommand "my-wallpaper" { } ''
+    install -Dm444 ${./Pictures/untitled.jpg} $out/share/wallpapers/untitled.jpg
+  '';
+in
+{
+  programs.plasma = {
     enable = true;
-    
+
     workspace = {
-      # clickItemTo = "open"; # If you liked the click-to-open default from plasma 5
       lookAndFeel = "org.kde.breeze.desktop";
-      # cursor = {
-        # theme = "Bibata-Modern-Ice";
-        # size = 32;
-      # };
-      iconTheme = "Papirus";
-      wallpaper = "${myWallpaper}/share/wallpapers/untitled.jpg";
+      iconTheme   = "Papirus";
+      wallpaper   = "${myWallpaper}/share/wallpapers/untitled.jpg";
     };
 
     hotkeys.commands."launch-kitty" = {
-      name = "Launch Kity";
-      key = "Ctrl+Alt+T";
+      name    = "Launch Kitty";
+      key     = "Ctrl+Alt+T";
       command = "kitty";
     };
 
-    #fonts = {
-    #  general = {
-    #    # family = "Hack";
-    #    family = "Cantarell";
-    #    style = "normal";
-    #    pointSize = 10;
-    #  };
-    #};
-
-    panels = [{ 
+    panels = [{
       location = "bottom";
-      hiding = "none";
+      hiding   = "none";
     }];
 
     configFile = {
       baloofilerc."Basic Settings"."Indexing-Enabled" = false;
-      kwinrc."org.kde.kdecoration2".ButtonsOnLeft = "SF";
-
-      #"kactivitymanagerdrc".groups."Favorites".favorites =
-      #   "systemsettings.desktop,org.kde.dolphin.desktop,firefox.desktop";
-
-      kwinrc.Desktops.Number = {
-        value = 2;
-        # Forces kde to not change this value (even through the settings app).
-        immutable = false;
-      };
+      kwinrc."org.kde.kdecoration2".ButtonsOnLeft       = "SF";
+      kwinrc.Desktops.Number.value                      = 2;
     };
-
   };
 }
