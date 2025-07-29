@@ -1,7 +1,7 @@
 #~/.dotfiles/modules/start-menu/update.nix
 { config, lib, pkgs, ... }:
 {
-  xdg.desktopEntries.teams = {
+  xdg.desktopEntries.update = {
     name = "Update";
     #description = "";
     comment = "Update System";
