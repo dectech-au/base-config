@@ -4,7 +4,7 @@
 	environment.systemPackages = with pkgs; [
 		onlyoffice-bin
 	];
-
+}
 #	nixpkgs.config.allowUnfreePredicate = pkg:
 #		builtins.elem (lib.getName pkg)
 #		[
