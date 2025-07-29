@@ -1,66 +1,63 @@
 #!/usr/bin/env bash
-#/etc/nixos/scripts/bootstrap.sh
-
+# /etc/nixos/bootstrap.sh
 set -euo pipefail
-cd /etc/nixos
 
-# --- Step 0: Restart this script with git -----------------------------------------------
+###############################################################################
+# Config — tweak these if you really have to
+###############################################################################
+USB_DEV="${USB_DEV:-/dev/disk/by-label/BOOTSTRAP}" # where the thumb-drive lives
+MOUNT_POINT="/mnt/bootstrap"
+REPO="git@github.com:dectech-au/base-config.git"
+SSH_KEY="/root/.ssh/id_ed25519_nixos"
+###############################################################################
 
-if ! command -v git &>/dev/null; then
-  exec nix-shell -p git --run "$0 $@"
+# ── Ensure we have tools ──────────────────────────────────────────────────────
+if ! (command -v git >/dev/null && command -v curl >/dev/null && command -v ssh >/dev/null); then
+  echo "Missing git/curl/ssh; dropping into nix-shell..."
+  exec nix-shell -p git curl openssh --run "$0 $*"
 fi
 
-# --- Step 1: Mount boostrap partition for github-token.txt
+# ── Mount USB and read GitHub token ───────────────────────────────────────────
+sudo mkdir -p "$MOUNT_POINT"
+sudo mount "$USB_DEV" "$MOUNT_POINT"
+trap 'sudo umount "$MOUNT_POINT" || true' EXIT  # always clean up
 
-mkdir -p /mnt/bootstrap
-sudo mount /dev/disk/by-partlabel/bootstrap /mnt/bootstrap
+GITHUB_TOKEN="$(tr -d '\n' <"$MOUNT_POINT/github-token.txt")"
 
-# --- Step 2: create read-only deploy key on GitHub --------------------------------------
+# ── Generate (or reuse) deploy key ────────────────────────────────────────────
+if [[ ! -f "$SSH_KEY" ]]; then
+  ssh-keygen -t ed25519 -N '' -f "$SSH_KEY"
+fi
+SSH_PUB_KEY="$(cat "${SSH_KEY}.pub")"
 
-SSH_KEY="$HOME/.ssh/id_nixos_readonly"
-
-if [[ ! -f $SSH_KEY ]]; then
-  echo "[+] Generating deploy key"
-  ssh-keygen -t ed25519 -f "$SSH_KEY" -N "" -C "nixos-readonly"
-
-  GITHUB_TOKEN=$(tr -d '\n' < /mnt/boostrap/github-token.txt)
-  GITHUB_USER="dectech-au"
-  GITHUB_REPO="base-config"
-
-  echo "[+] Uploading deploy key to GitHub"
-  curl -s \
-       -H "Authorization: token $GITHUB_TOKEN" \
-       -H "Accept: application/vnd.github.v3+json" \
-       -d @- \
-       "https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/keys" <<EOF
-{
-  "title": "$(cat hosts/hostname.nix | grep hostName | cut -d'"' -f2)-$(date +%s)",
-  "key": "$(cat "${SSH_KEY}.pub")",
-  "read_only": true
+# ── Helper: replicate hostname logic from sys-module/hostname.nix ─────────────
+generate_hostname() {
+  serial="$(tr -d ' ' </sys/class/dmi/id/product_serial 2>/dev/null || true)"
+  if [[ -z "$serial" || "$serial" == "Unknown" ]]; then
+    serial="$(cut -c1-8 /etc/machine-id)"
+  fi
+  printf 'dectech-%s' "$(printf '%s' "$serial" | tail -c 7 | tr -d '\n')"
 }
-EOF
-  unset GITHUB_TOKEN
-  sudo umount /mnt/bootstrap
+
+TITLE="$(generate_hostname)-$(date +%s)"
+
+# ── Upload key to GitHub (idempotent) ─────────────────────────────────────────
+curl -sfL -H "Authorization: token $GITHUB_TOKEN" \
+     -d "{\"title\":\"$TITLE\",\"key\":\"$SSH_PUB_KEY\",\"read_only\":true}" \
+     https://api.github.com/repos/dectech-au/base-config/keys \
+     || echo "GitHub: key may already exist – continuing anyway."
+
+# ── Prepare /etc/nixos ────────────────────────────────────────────────────────
+cd /etc/nixos
+if [[ ! -d .git ]]; then
+  git init
+  git remote add origin "$REPO"
 fi
-
-# --- Step 3: pull/update the flake repo ------------------------------------------------
-
-eval "$(ssh-agent -s)" >/dev/null
-ssh-add -q "$SSH_KEY"
-
-git fetch --quiet origin || git clone git@github.com:dectech-au/base-config.git .
+git fetch --quiet origin
 git reset --hard origin/main
 
-# --- Step 4: flake-lock update (10 minutes) --------------------------------------------
+# ── Fire up ssh-agent for subsequent `nixos-rebuild` pulls ────────────────────
+eval "$(ssh-agent -s)"
+ssh-add "$SSH_KEY"
 
-stamp=/tmp/nix_flake_update.timestamp
-if [[ ! -f $stamp || $(( $(date +%s) - $(< $stamp) )) -ge 600 ]]; then
-  echo "[+] nix flake update"
-  nix flake update
-  date +%s > $stamp
-fi
-
-# --- Step 5: pure rebuild ---------------------------------------------------------------
-
-sudo nixos-rebuild switch --flake /etc/nixos#enterprise-base --show-trace
-echo "[✓] bootstrap finished"
+echo "✅ Bootstrap complete – system ready."
