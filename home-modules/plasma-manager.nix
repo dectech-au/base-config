@@ -38,8 +38,8 @@
       baloofilerc."Basic Settings"."Indexing-Enabled" = false;
       kwinrc."org.kde.kdecoration2".ButtonsOnLeft = "SF";
 
-      "kactivitymanagerdrc".groups."Favorites".favorites =
-        "systemsettings.desktop,org.kde.dolphin.desktop,firefox.desktop";
+      #"kactivitymanagerdrc".groups."Favorites".favorites =
+      #   "systemsettings.desktop,org.kde.dolphin.desktop,firefox.desktop";
 
       kwinrc.Desktops.Number = {
         value = 2;
