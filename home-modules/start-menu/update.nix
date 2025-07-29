@@ -5,7 +5,7 @@
     name = "Update";
     #description = "";
     comment = "Update System";
-    exec = "bash /etc/nixos/hosts/enterprise-base/switch.sh";
+    exec = "bash /etc/nixos/hosts/enterprise-base/switch.sh %u";
     icon = "update-notifier";
     terminal = true;
     type = "Application";
