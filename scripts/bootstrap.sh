@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 #/etc/nixos/scripts/bootstrap.sh
+
 set -euo pipefail
 cd /etc/nixos
 
@@ -9,10 +10,11 @@ if ! command -v git &>/dev/null; then
   exec nix-shell -p git --run "$0 $@"
 fi
 
-# --- Step 1: ensure host module exists --------------------------------------------------
+# --- Step 1: Mount boostrap partition for github-token.txt
 
-sudo chmod +x /etc/nixos/scripts/*
- 
+mkdir -p /mnt/bootstrap
+sudo mount /dev/disk/by-partlabel/bootstrap /mnt/bootstrap
+
 # --- Step 2: create read-only deploy key on GitHub --------------------------------------
 
 SSH_KEY="$HOME/.ssh/id_nixos_readonly"
@@ -21,7 +23,7 @@ if [[ ! -f $SSH_KEY ]]; then
   echo "[+] Generating deploy key"
   ssh-keygen -t ed25519 -f "$SSH_KEY" -N "" -C "nixos-readonly"
 
-  GITHUB_TOKEN=$(tr -d '\n' < /tmp/github-token.txt)
+  GITHUB_TOKEN=$(tr -d '\n' < /mnt/boostrap/github-token.txt)
   GITHUB_USER="dectech-au"
   GITHUB_REPO="base-config"
 
@@ -38,6 +40,7 @@ if [[ ! -f $SSH_KEY ]]; then
 }
 EOF
   unset GITHUB_TOKEN
+  sudo umount /mnt/bootstrap
 fi
 
 # --- Step 3: pull/update the flake repo ------------------------------------------------
