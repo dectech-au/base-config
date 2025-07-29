@@ -3,9 +3,23 @@
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "uas" "sd_mod" ];
+  boot.initrd.availableKernelModules = [ 
+    "xhci_pci"       # USB-3 host
+    "ahci"
+    "nvme"
+    "usb_storage"
+    "usbhid"
+    "uas"
+    "sd_mod"
+    "sr_mod"
+    "virtio_blk"
+    "virtio_scsi"
+    "virtio_pci"
+  ];
+
   boot.initrd.kernelModules = [ ];
-  # boot.kernelModules = [ "kvm-intel" "kvm-amd" ];
+  
+  boot.kernelModules = [ ]; # leave blank and let it autoload when present
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
@@ -34,5 +48,6 @@
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.cpu.amd.updateMicrocode   = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }
 
