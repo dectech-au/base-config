@@ -1,35 +1,64 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
+#/etc/nixos/hosts/enterprise-base/configuration.nix
 { config, lib, pkgs, ... }:
-let
-  host = builtins.getEnv "SYSTEM_HOSTNAME";
-in
 {
-  imports = [
-    ../../hardware-configuration.nix
-    ../../sys-modules/chrome.nix
-    ../../sys-modules/onlyoffice.nix
-    ../../sys-modules/bluetooth.nix
-    ../../sys-modules/btrfs.nix
-    ../../sys-modules/nixvim.nix
-    ../../sys-modules/firefox.nix
-    ../../sys-modules/gparted.nix
-    ../../sys-modules/evolution.nix
-    ../../sys-modules/papirus.nix
-    ../../sys-modules/plasma.nix
-    ../../sys-modules/ssh.nix
-    ../../sys-modules/teams.nix
-    ../../sys-modules/windows-reboot.nix
-    ../../sys-modules/wine.nix
+  imports = [ 
+		../../hardware-configuration.nix
+		../../sys-modules/baobab.nix
+		../../sys-modules/birdtray.nix
+		../../sys-modules/bluetooth.nix
+		../../sys-modules/btrfs.nix
+		../../sys-modules/chrome.nix
+		../../sys-modules/evolution.nix
+		../../sys-modules/firefox.nix
+		../../sys-modules/firewall.nix
+		../../sys-modules/flatpak.nix
+		../../sys-modules/fonts.nix
+		../../sys-modules/github-desktop.nix
+		../../sys-modules/gnome-disks.nix
+		../../sys-modules/gparted.nix
+		../../sys-modules/htop.nix
+		../../sys-modules/jellyfin.nix
+		../../sys-modules/kcalc.nix
+		../../sys-modules/kdeconnect-firewall.nix
+		../../sys-modules/killall.nix
+		../../sys-modules/nixpkgs-fmt.nix
+		#../../sys-modules/nix-ld.nix
+		../../sys-modules/papirus-theme.nix
+		../../sys-modules/libreoffice.nix
+		../../sys-modules/morph.nix
+		../../sys-modules/nixvim.nix
+		#../../sys-modules/nextcloud.nix
+		../../sys-modules/ntfs.nix
+		../../sys-modules/nvidia.nix
+		#../../sys-modules/onlyoffice.nix
+		../../sys-modules/openssl.nix
+		../../sys-modules/papirus.nix
+		#../../sys-modules/pinegrow.nix
+		../../sys-modules/plasma.nix
+		../../sys-modules/protonmail-bridge.nix
+		../../sys-modules/protonvpn.nix
+		#../../sys-modules/qt.nix
+		../../sys-modules/remotemouse.nix
+		../../sys-modules/signal-desktop.nix
+		../../sys-modules/sshfs.nix
+		../../sys-modules/star-rail-macro.nix
+		../../sys-modules/steam.nix
+		../../sys-modules/tailscale.nix
+		../../sys-modules/teams.nix
+		../../sys-modules/teamviewer.nix
+		../../sys-modules/virtualbox.nix
+		../../sys-modules/vlc.nix
+		../../sys-modules/windows-reboot.nix
+		# ../../sys-modules/wine.nix
+		#../../sys-modules/wordpress.nix
+		#./personalisation/wallpaper-service.nix
 	];
-
+  
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = host;
+  # networking.hostName = # hostname is injected by hosts/hostname.nix - don't set manually
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -56,6 +85,14 @@ in
     LC_TELEPHONE = "en_AU.UTF-8";
     LC_TIME = "en_AU.UTF-8";
   };
+
+  # Enable the X11 windowing system.
+  # You can disable this if you're only using the Wayland session.
+  # services.xserver.enable = true;
+
+  # Enable the KDE Plasma Desktop Environment.
+  # services.displayManager.sddm.enable = true;
+  # services.desktopManager.plasma6.enable = true;
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -89,18 +126,17 @@ in
   users.users.dectec = {
     isNormalUser = true;
     description = "dectec";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "vboxusers" ];
     packages = with pkgs; [
       kdePackages.kate
-    #  thunderbird
     ];
   };
 
   # Enable automatic login for the user.
-  services.displayManager.autoLogin = {
-	enable = false;
-  	# user = "dectec";
-  };
+ #  services.displayManager.autoLogin = {
+	# enable = false;
+ #  	user = "dectec";
+ #  };
   
   # Allow unfree packages
   # nixpkgs.config.allowUnfree = true;
