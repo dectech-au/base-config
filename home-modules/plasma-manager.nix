@@ -1,6 +1,11 @@
 { config, lib, pkgs, ... }:
 {
-  programs.plasma = {
+  
+myWallpaper = pkgs.runCommand "my-wallpaper" {} ''
+  install -Dm444 ${./Pictures/untitled.jpg} $out/share/wallpapers/untitled.jpg
+'';
+
+programs.plasma = {
     enable = true;
     
     workspace = {
@@ -11,7 +16,7 @@
         # size = 32;
       # };
       iconTheme = "Papirus";
-      # wallpaper = "${pkgs.kdePackages.plasma-workspace-wallpapers}/share/wallpapers/Patak/contents/images/1080x1920.png";
+      wallpaper = "${myWallpaper}/share/wallpapers/untitled.jpg";
     };
 
     hotkeys.commands."launch-kitty" = {
