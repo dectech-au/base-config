@@ -15,8 +15,8 @@
 		#../../home-modules/papirus-theme.nix
 		../../home-modules/plasma-manager.nix
 		#../../home-modules/remotemouse.nix
-		../../home-modules/thunderbird.nix
-		../../home-modules/thunderbird-theme.nix
+		#../../home-modules/thunderbird.nix
+		#../../home-modules/thunderbird-theme.nix
 		../../home-modules/vscode.nix
 		../../home-modules/yt-dlp.nix
 		#../../home-modules/start-menu/onlyoffice.nix
