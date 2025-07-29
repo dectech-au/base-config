@@ -1,4 +1,4 @@
-#/etc/nixos/home-modules/fish.nix
+#/etc/nixos/home-modules/fish-enterprise-base.nix
 { config, lib, pkgs, ... }:
 {
   programs.fish = {
