@@ -8,19 +8,19 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-partlabel/dectech-enterprise";
+    { device = "/dev/disk/by-partlabel/dectech-enterprise-ssd";
       fsType = "btrfs";
       options = [ "subvol=@" ];
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-partlabel/boot";
+    { device = "/dev/disk/by-partlabel/boot-ssd";
       fsType = "vfat";
       options = [ "fmask=0077" "dmask=0077" ];
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-label/swap"; }
+    [ { device = "/dev/disk/by-label/swap-ssd"; }
     ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
