@@ -21,6 +21,7 @@
 		../../home-modules/yt-dlp.nix
 		#../../home-modules/start-menu/onlyoffice.nix
 		../../home-modules/start-menu/teams.nix
+		../../home-modules/start-menu/update.nix
 		../../home-modules/start-menu/windows.nix
 		#./personalisation/wallpaper.nix
   ];
