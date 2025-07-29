@@ -5,7 +5,7 @@
     name = "Update";
     #description = "";
     comment = "Update System";
-    exec = "/run/current-system/sw/bin/nixos-rebuild";
+    exec = "bash /etc/nixos/hosts/enterprise-base/switch.sh";
     icon = "update-notifier";
     terminal = true;
     type = "Application";
