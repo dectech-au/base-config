@@ -29,24 +29,24 @@
 		../../sys-modules/nixvim.nix
 		#../../sys-modules/nextcloud.nix
 		../../sys-modules/ntfs.nix
-		../../sys-modules/nvidia.nix
+		#../../sys-modules/nvidia.nix
 		#../../sys-modules/onlyoffice.nix
 		../../sys-modules/openssl.nix
 		../../sys-modules/papirus.nix
 		#../../sys-modules/pinegrow.nix
 		../../sys-modules/plasma.nix
-		../../sys-modules/protonmail-bridge.nix
-		../../sys-modules/protonvpn.nix
+		#../../sys-modules/protonmail-bridge.nix
+		#../../sys-modules/protonvpn.nix
 		#../../sys-modules/qt.nix
-		../../sys-modules/remotemouse.nix
-		../../sys-modules/signal-desktop.nix
+		#../../sys-modules/remotemouse.nix
+		#../../sys-modules/signal-desktop.nix
 		../../sys-modules/sshfs.nix
-		../../sys-modules/star-rail-macro.nix
-		../../sys-modules/steam.nix
-		../../sys-modules/tailscale.nix
+		#../../sys-modules/star-rail-macro.nix
+		#../../sys-modules/steam.nix
+		#../../sys-modules/tailscale.nix
 		../../sys-modules/teams.nix
-		../../sys-modules/teamviewer.nix
-		../../sys-modules/virtualbox.nix
+		#../../sys-modules/teamviewer.nix
+		#../../sys-modules/virtualbox.nix
 		../../sys-modules/vlc.nix
 		../../sys-modules/windows-reboot.nix
 		# ../../sys-modules/wine.nix
