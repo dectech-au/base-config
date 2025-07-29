@@ -17,7 +17,7 @@
         home-manager = {
           useGlobalPkgs = true;
           useUserPackages = true;
-          backupFileExtension = "backup";
+          backupFileExtension = "bak";
           users.dectec = import ./home.nix;
           sharedModules = [ inputs.plasma-manager.homeManagerModules.plasma-manager ];
         };
