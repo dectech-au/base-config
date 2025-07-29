@@ -1,17 +1,28 @@
-{ config, pkgs, ... }:
-
+#/etc/nixos/hosts/enterprise-base/home.nix
+{ config, pkgs, HOME-MODULES, ... }:
 {
   imports = [
-  ../../home-modules/dropbox.nix
-  ../../home-modules/fastfetch.nix
-  #../../home-modules/firefox.nix # Moved to configuration.nix
-  ../../home-modules/fish.nix
-  ../../home-modules/kitty.nix
-  ../../home-modules/librewolf.nix
-  ../../home-modules/git.nix
-  ../../home-modules/start-menu/onlyoffice.nix
-  ../../home-modules/start-menu/teams.nix
-  ../../home-modules/start-menu/windows.nix
+		../../home-modules/dropbox.nix
+		../../home-modules/emacs.nix
+		../../home-modules/fastfetch.nix
+		#../../home-modules/firefox.nix # Moved to configuration.nix
+		../../home-modules/fish.nix
+		../../home-modules/git.nix
+		../../home-modules/kdeconnect.nix
+		../../home-modules/kitty.nix
+		../../home-modules/librewolf.nix
+		#../../home-modules/onlyoffice.nix
+		#../../home-modules/papirus-theme.nix
+		../../home-modules/plasma-manager.nix
+		#../../home-modules/remotemouse.nix
+		../../home-modules/thunderbird.nix
+		../../home-modules/thunderbird-theme.nix
+		../../home-modules/vscode.nix
+		../../home-modules/yt-dlp.nix
+		../../home-modules/start-menu/onlyoffice.nix
+		../../home-modules/start-menu/teams.nix
+		../../home-modules/start-menu/windows.nix
+		./personalisation/wallpaper.nix
   ];
 
   home.username = "dectec";
@@ -28,4 +39,3 @@
   #   test
   # '';
 }
-
