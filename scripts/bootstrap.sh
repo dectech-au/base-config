@@ -90,4 +90,12 @@ git reset --hard origin/main
 echo "[+] Final rebuild with enterprise-base flake"
 nixos-rebuild switch --upgrade --flake "$FLAKE_TARGET" --show-trace
 
+# 1. rebuild sycoca so Qt/KDE see the new icons
+kbuildsycoca5 --noincremental
+
+# 2. ask plasmashell to reload everything
+kquitapp5 plasmashell     # cleanly stop
+kstart5 plasmashell &     # start again
+
+
 echo "✅ Bootstrap complete."
