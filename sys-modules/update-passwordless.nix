@@ -3,7 +3,7 @@
   security.sudo.extraRules = [{
     users = [ "dectec" ];
     commands = [{
-      command = "/etc/nixos/hosts/enterprise-base/switch.sh";
+      command = "/run/current-system/sw/bin/nixos-rebuild";
       options = [ "NOPASSWD" ];
     }];
   }];
