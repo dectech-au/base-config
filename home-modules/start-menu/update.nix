@@ -6,7 +6,7 @@
     #description = "";
     comment = "Update System";
     exec = "sudo bash /etc/nixos/hosts/enterprise-base/switch.sh";
-    icon = "teams-for-linux";
+    icon = "update-notifier";
     terminal = true;
     type = "Application";
     categories = [ "System" ];
