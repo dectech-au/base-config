@@ -29,7 +29,6 @@
   home.username = "dectec";
   home.homeDirectory = "/home/dectec";
   home.stateVersion = "25.05"; # Do not change this after initial setup
-  home.backupFileExtension = "bak";
 
 
   programs.git = {
