@@ -1,18 +1,25 @@
 #!/usr/bin/env bash
 # /etc/nixos/bootstrap.sh
-# 1. Mount BOOTSTRAP USB and read GitHub token
-# 2. Create / upload ED25519 deploy key (idempotent)
-# 3. Clone /etc/nixos from repo
-# 4. nixos-rebuild switch
+#
+# Steps
+# ──────────────────────────────────────────────────────────────────────────
+# 1. Mount BOOTSTRAP USB, copy configuration-bootstrap.nix → /etc/nixos/configuration.nix
+# 2. nixos-rebuild switch   (installs git / curl / ssh, enables flakes)
+# 3. Create + upload ED25519 deploy key (idempotent)
+# 4. Clone /etc/nixos from Git repo and hard-reset to main
+# 5. nixos-rebuild switch   (final build with enterprise-base flake)
 
 set -euo pipefail
 
 ###############################################################################
 USB_DEV="${USB_DEV:-/dev/disk/by-label/BOOTSTRAP}"
 MOUNT_POINT="/mnt/bootstrap"
+BOOTSTRAP_CFG="configuration-bootstrap.nix"       # lives on the USB
 REPO="git@github.com:dectech-au/base-config.git"
 SSH_KEY="/root/.ssh/id_ed25519_nixos"
 FLAKE_TARGET="${FLAKE_TARGET:-/etc/nixos#enterprise-base}"
+SSH_OPTS="-i ${SSH_KEY} -o IdentitiesOnly=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+export GIT_SSH_COMMAND="ssh ${SSH_OPTS}"
 ###############################################################################
 
 [[ $EUID -eq 0 ]] || { echo "Run me as root."; exit 1; }
@@ -23,34 +30,32 @@ if [[ ! -b $USB_DEV ]]; then
 fi
 [[ -b $USB_DEV ]] || { echo "BOOTSTRAP USB not found."; exit 1; }
 
-# ── Ensure git/curl/ssh exist; fall into nix-shell once if missing ───────────
-need_pkg() { ! command -v "$1" &>/dev/null; }
-if { need_pkg git || need_pkg curl || need_pkg ssh; } && [[ -z ${NIX_SHELL_REEXEC:-} ]]; then
-  command -v nix-shell &>/dev/null || { echo "Missing git/curl/ssh and nix-shell unavailable"; exit 1; }
-  exec env NIX_SHELL_REEXEC=1 nix-shell -p git curl openssh \
-       --run "bash \"$(readlink -f "$0")\""
-fi
-
-# ── Mount USB & read token ───────────────────────────────────────────────────
+# ── Mount USB & copy bootstrap configuration ────────────────────────────────
 mkdir -p "$MOUNT_POINT"
 mount "$USB_DEV" "$MOUNT_POINT"
 trap 'umount "$MOUNT_POINT" || true' EXIT
 
+[[ -f "$MOUNT_POINT/$BOOTSTRAP_CFG" ]] \
+  || { echo "$BOOTSTRAP_CFG not found on USB."; exit 1; }
+
+echo "[+] Installing bootstrap configuration"
+mkdir -p /etc/nixos
+cp -f "$MOUNT_POINT/$BOOTSTRAP_CFG" /etc/nixos/configuration.nix
+
+echo "[+] Initial rebuild to get git/ssh/curl"
+nixos-rebuild switch --show-trace
+
+# ── Read GitHub token ────────────────────────────────────────────────────────
 GITHUB_TOKEN="$(tr -d '\r\n' <"$MOUNT_POINT/github-token.txt")"
 [[ -n $GITHUB_TOKEN ]] || { echo "Empty GitHub token."; exit 1; }
 
 # ── Deploy key management ────────────────────────────────────────────────────
 [[ -f $SSH_KEY ]] || ssh-keygen -t ed25519 -N '' -f "$SSH_KEY"
+ssh-add -l &>/dev/null || eval "$(ssh-agent -s)" >/dev/null
+ssh-add -q "$SSH_KEY" || true
 SSH_PUB_KEY="$(cat "${SSH_KEY}.pub")"
 
-# Healthy ssh-agent? 0 = keys present, 1 = agent alive & empty, 2 = no agent.
-ssh-add -l &>/dev/null || status=$?
-if [[ ${status:-0} -eq 2 ]]; then
-  eval "$(ssh-agent -s)" >/dev/null
-fi
-ssh-add -q "$SSH_KEY" || true   # idempotent
-
-# ── Hostname helper (matches hostname.nix logic) ─────────────────────────────
+# ── Hostname helper (mirrors hostname.nix) ───────────────────────────────────
 generate_hostname() {
   local serial
   serial="$(tr -d '[:space:]' </sys/class/dmi/id/product_serial 2>/dev/null || true)"
@@ -65,36 +70,37 @@ curl -sf -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/user >/d
   || { echo "Invalid GitHub token."; exit 1; }
 
 # ── Upload deploy key (idempotent) ───────────────────────────────────────────
-resp=$(
+case $(
   curl -s -o /dev/null -w "%{http_code}" -X POST \
        -H "Authorization: token $GITHUB_TOKEN" \
        -d "{\"title\":\"$TITLE\",\"key\":\"$SSH_PUB_KEY\",\"read_only\":true}" \
        "https://api.github.com/repos/dectech-au/base-config/keys"
-)
-case $resp in
+) in
   201) echo "Deploy key added.";;
   422) echo "Deploy key already exists – continuing.";;
-  *)   echo "GitHub API error $resp."; exit 1;;
+  *)   echo "GitHub API error."; exit 1;;
 esac
 
-# ── Accept GitHub host key so git won't hang ─────────────────────────────────
+# ── Pre-seed known_hosts so first git doesn’t prompt ─────────────────────────
 mkdir -p /root/.ssh
 ssh-keyscan -H github.com >> /root/.ssh/known_hosts 2>/dev/null
 
-# Wait up to ~30 s for GitHub edge to honour the key
+# ── Wait (≤30 s) for edge to honour the key ──────────────────────────────────
 for i in {1..15}; do
-  ssh -T git@github.com -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null &>/dev/null && break
+  git ls-remote --heads "$REPO" &>/dev/null && break
   sleep 2
   [[ $i -eq 15 ]] && { echo "GitHub still ignoring the key."; exit 1; }
 done
 
-# ── Sync /etc/nixos ──────────────────────────────────────────────────────────
+# ── Clone / sync /etc/nixos ──────────────────────────────────────────────────
+echo "[+] Pulling configuration repository"
 cd /etc/nixos
 git init -q 2>/dev/null || true
 git remote add origin "$REPO" 2>/dev/null || git remote set-url origin "$REPO"
 git fetch --quiet origin
 git reset --hard origin/main
 
-echo "Bootstrap: repo synced – rebuilding..."
-
+echo "[+] Final rebuild with enterprise-base flake"
 nixos-rebuild switch --upgrade --flake "$FLAKE_TARGET" --show-trace
+
+echo "✅ Bootstrap complete."
