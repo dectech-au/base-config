@@ -1,32 +1,53 @@
 #!/usr/bin/env bash
 # /etc/nixos/hosts/enterprise-base/switch.sh
+# Pull → optional flake update → nixos-rebuild
+
 set -euo pipefail
 
-cd /etc/nixos
+###############################################################################
+# Become root if needed, preserving args
+###############################################################################
+SCRIPT="$(readlink -f "${BASH_SOURCE[0]}")"
+if [[ $EUID -ne 0 ]]; then
+  echo "[+] Re-execing as root"
+  exec sudo -E bash "$SCRIPT" "$@"
+fi
+###############################################################################
 
-# ── Git pull ────────────────────────────────────────────────────────────
+KEY="/root/.ssh/id_ed25519_nixos"
+REPO_DIR="/etc/nixos"
+FLAKE="/etc/nixos#enterprise-base"
+STAMP="/tmp/nix_flake_update.timestamp"
+
+###############################################################################
+# 1. Git pull with deploy key
+###############################################################################
+cd "$REPO_DIR"
+
 eval "$(ssh-agent -s)" >/dev/null
 
-SSH_OPTS="-i /root/.ssh/id_ed25519_nixos -o IdentitiesOnly=yes"
+SSH_OPTS="-i $KEY -o IdentitiesOnly=yes"
 export GIT_SSH_COMMAND="ssh $SSH_OPTS"
 
-ssh-add -q /root/.ssh/id_ed25519_nixos
+ssh-add -l 2>/dev/null | grep -q "$KEY" || ssh-add -q "$KEY"
+
 git fetch --quiet origin
 git reset --hard origin/main
 
-# ── Throttle nix flake update to once per 10 min ────────────────────────
-stamp=/tmp/nix_flake_update.timestamp
-if [[ ! -f $stamp || $(( $(date +%s) - $(<"$stamp") )) -ge 600 ]]; then
+###############################################################################
+# 2. nix flake update (max once every 10 min)
+###############################################################################
+now=$(date +%s)
+if [[ ! -f $STAMP || $(( now - $(<"$STAMP") )) -ge 600 ]]; then
   echo "[+] nix flake update"
   nix flake update
-  date +%s >"$stamp"
+  echo "$now" > "$STAMP"
 else
-  echo "[=] nix flake update skipped (run <10 min ago)"
+  echo "[=] nix flake update skipped (run <10 min ago)"
 fi
 
-# ── Rebuild ─────────────────────────────────────────────────────────────
-
-  sudo nixos-rebuild switch \
-       --upgrade \
-       --flake /etc/nixos#enterprise-base \
-       --show-trace
+###############################################################################
+# 3. Rebuild system
+###############################################################################
+echo "[+] nixos-rebuild switch"
+nixos-rebuild switch --upgrade --flake "$FLAKE" --show-trace
