@@ -20,12 +20,6 @@
       command = "kitty";
     };
 
-    kickoff = {
-      favoriteApps = [
-        "applications:onlyoffice-desktopeditors.desktop"
-      ];
-    };
-
     #fonts = {
     #  general = {
     #    # family = "Hack";
