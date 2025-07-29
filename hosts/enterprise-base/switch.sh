@@ -10,7 +10,7 @@ eval "$(ssh-agent -s)" >/dev/null
 SSH_OPTS="-i /root/.ssh/id_ed25519_nixos -o IdentitiesOnly=yes"
 export GIT_SSH_COMMAND="ssh $SSH_OPTS"
 
-ssh-add -q ~/.ssh/id_ed25519_nixos
+ssh-add -q /root/.ssh/id_ed25519_nixos
 git fetch --quiet origin
 git reset --hard origin/main
 
