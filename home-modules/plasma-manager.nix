@@ -37,6 +37,15 @@
     configFile = {
       baloofilerc."Basic Settings"."Indexing-Enabled" = false;
       kwinrc."org.kde.kdecoration2".ButtonsOnLeft = "SF";
+
+      "kactivitymanagerdrc".groups."Favorites".values = {
+        favorites = lib.concatStringsSep "," [
+          "systemsettings.desktop"
+          "org.kde.dolphin.desktop"
+          "firefox.desktop"
+        ];
+      };
+
       kwinrc.Desktops.Number = {
         value = 2;
         # Forces kde to not change this value (even through the settings app).
