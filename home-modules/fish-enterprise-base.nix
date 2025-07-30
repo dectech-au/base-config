@@ -9,7 +9,7 @@
       "update" = "sudo bash /etc/nixos/hosts/enterprise-base/switch.sh";
     };
     initExtra = ''
-      set -U fish_greeting ''
+      set -U fish_greeting ""
     '';
   };
 }
