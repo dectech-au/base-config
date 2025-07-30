@@ -8,8 +8,9 @@
     shellAbbrs = {
       "update" = "sudo bash /etc/nixos/hosts/enterprise-base/switch.sh";
     };
-    initExtra = ''
-      set -U fish_greeting ""
-    '';
   };
+
+  home.file.".config/fish/conf.d/disable-greeting.fish".txt = ''
+    set -U fish_greeting ""
+  '';
 }
