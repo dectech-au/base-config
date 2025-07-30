@@ -10,7 +10,7 @@
     };
   };
 
-  home.file.".config/fish/conf.d/disable-greeting.fish".txt = ''
+  home.file.".config/fish/conf.d/disable-greeting.fish".text = ''
     set -U fish_greeting ""
   '';
 }
