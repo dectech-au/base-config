@@ -46,7 +46,7 @@
 		#../../sys-modules/tailscale.nix
 		../../sys-modules/teams.nix
 		#../../sys-modules/teamviewer.nix
-		../../sys-modules/thunderbird.nix
+		#../../sys-modules/thunderbird.nix #should be a home-module so Birdtray works
 		../../sys-modules/update-passwordless.nix
 		#../../sys-modules/virtualbox.nix
 		../../sys-modules/vlc.nix
