@@ -39,7 +39,7 @@
 		#../../sys-modules/protonvpn.nix
 		#../../sys-modules/qt.nix
 		#../../sys-modules/remotemouse.nix
-		#../../sys-modules/signal-desktop.nix
+		../../sys-modules/signal-desktop.nix
 		../../sys-modules/sshfs.nix
 		#../../sys-modules/star-rail-macro.nix
 		../../sys-modules/steam.nix
