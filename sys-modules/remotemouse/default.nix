@@ -1,4 +1,4 @@
-#/etc/nixos/remotemouse/default.nix
+#/etc/nixos/sys-modules/remotemouse/default.nix
 #i-love-you-wingnut
 { lib, stdenv, fetchzip, makeWrapper, patchelf, glib, dbus, zlib, freetype, fontconfig, libxkbcommon, libGL, alsa-lib, xorg, xdotool ? null }:
 
