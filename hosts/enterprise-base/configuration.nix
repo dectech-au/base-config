@@ -11,7 +11,7 @@
 		../../sys-modules/evolution.nix
 		../../sys-modules/firefox.nix
 		../../sys-modules/firewall.nix
-		#../../sys-modules/flatpak.nix
+		../../sys-modules/flatpak.nix
 		../../sys-modules/fonts.nix
 		../../sys-modules/github-desktop.nix
 		../../sys-modules/gnome-disks.nix
@@ -34,7 +34,7 @@
 		../../sys-modules/openssl.nix
 		../../sys-modules/papirus.nix
 		#../../sys-modules/pinegrow.nix
-		#../../sys-modules/plasma.nix
+		../../sys-modules/plasma.nix
 		#../../sys-modules/protonmail-bridge.nix
 		#../../sys-modules/protonvpn.nix
 		#../../sys-modules/qt.nix
