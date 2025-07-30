@@ -8,6 +8,6 @@
     shellAbbrs = {
       "update" = "sudo bash /etc/nixos/hosts/enterprise-base/switch.sh";
     };
-    greetings = "";
+    greeting = "";
   };
 }
