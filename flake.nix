@@ -15,7 +15,7 @@
     };
 
     remotemouse = {
-      url = "github:dectech.au/remotemouse";
+      url = "github:dectech-au/remotemouse";
       inputs.nixpgs.follows = "nixpkgs";
     };
 
@@ -61,6 +61,9 @@
             nixpkgs-fmt
             neovim
           ];
+          shellHook = ''
+            echo "Developer Mode: Engaged."
+          '';
         };
       };
     };
