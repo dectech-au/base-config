@@ -16,7 +16,7 @@
 
     remotemouse = {
       url = "github:dectech-au/remotemouse";
-      inputs.nixpgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     home-manager.url = "github:nix-community/home-manager/release-25.05";
