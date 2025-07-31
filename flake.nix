@@ -62,9 +62,6 @@
             neovim
           ];
         };
-          # shellHook = ''
-          #  echo "Developer Mode Engaged."
-          # '';
       };
     };
 }
