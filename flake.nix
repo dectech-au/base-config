@@ -15,7 +15,7 @@
     };
 
     remotemouse = {
-      url = "github:dectech.au/remotemouse
+      url = "github:dectech.au/remotemouse";
       inputs.nixpgs.follows = "nixpkgs";
     };
 
