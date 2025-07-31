@@ -28,6 +28,7 @@
         ./hosts/overlays.nix
         ./hosts/enterprise-base/flake-part.nix
         ./hosts/personal-tim/flake-part.nix
+        #./sys-modules/remotemouse-flakepart.nix
       ];
 
       perSystem = { config, self', inputs', pkgs, system, ... }: {
