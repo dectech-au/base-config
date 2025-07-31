@@ -14,6 +14,11 @@
       inputs.home-manager.follows = "home-manager";
     };
 
+    remotemouse = {
+      url = "github:dectech.au/remotemouse
+      inputs.nixpgs.follows = "nixpkgs";
+    };
+
     home-manager.url = "github:nix-community/home-manager/release-25.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     
@@ -34,21 +39,21 @@
       perSystem = { config, self', inputs', pkgs, system, ... }: {
         formatter = pkgs.nixpkgs-fmt;
 
-        packages = {
-          remotemouse = pkgs.callPackage ./sys-modules/remotemouse {
-            glib = pkgs.glib;
-            dbus = pkgs.dbus;
-            zlib = pkgs.zlib;
-            freetype = pkgs.freetype;
-            fontconfig = pkgs.fontconfig;
-            libxkbcommon = pkgs.libxkbcommon;
-            libGL = pkgs.libGL;
-            alsa-lib = pkgs.alsa-lib;
-            xorg = pkgs.xorg;
-            xdotool = pkgs.xdotool;
-          };
-          default = self'.packages.remotemouse;
-        };
+        # packages = {
+        #  remotemouse = pkgs.callPackage ./sys-modules/remotemouse {
+        #    glib = pkgs.glib;
+        #    dbus = pkgs.dbus;
+        #    zlib = pkgs.zlib;
+        #    freetype = pkgs.freetype;
+        #    fontconfig = pkgs.fontconfig;
+        #    libxkbcommon = pkgs.libxkbcommon;
+        #    libGL = pkgs.libGL;
+        #    alsa-lib = pkgs.alsa-lib;
+        #    xorg = pkgs.xorg;
+        #    xdotool = pkgs.xdotool;
+        #  };
+        #  default = self'.packages.remotemouse;
+        # };
 
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
