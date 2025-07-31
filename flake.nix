@@ -61,9 +61,9 @@
             nixpkgs-fmt
             neovim
           ];
-          shellHook = ''
-            echo "Developer Mode Engaged."
-          '';
+          # shellHook = ''
+          #  echo "Developer Mode Engaged."
+          # '';
         };
       };
     };
