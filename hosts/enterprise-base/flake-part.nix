@@ -12,6 +12,7 @@
       ../../sys-modules/hostname.nix
       ./configuration.nix
       inputs.nixvim.nixosModules.nixvim
+      inputs.remotemouse.nixosModules.remotemouse
       inputs.home-manager.nixosModules.home-manager
       {
         home-manager = {
