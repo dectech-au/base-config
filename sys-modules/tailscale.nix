@@ -6,7 +6,7 @@ let
 in
 {
   # copy the file from your home dir into /etc/tailscale/hskey.txt
-  environment.etc."tailscale/hskey.txt".source = "/home/z-home/.secrets/hskey.txt";
+  environment.etc."tailscale/hskey.txt".source = "/home/dectech/.secrets/hskey.txt";
 
   services.tailscale = {
     enable         = true;
