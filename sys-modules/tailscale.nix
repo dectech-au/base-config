@@ -7,7 +7,7 @@ let
 in
 {
   # Drop your key into /etc via Nix (or copy it there by hand)
-  environment.etc."tailscale/hskey.txt".source = ./secrets/hskey.txt;
+  environment.etc."tailscale/hskey.txt".source = ../.secrets/hskey.txt;
 
   services.tailscale = {
     enable              = true;
