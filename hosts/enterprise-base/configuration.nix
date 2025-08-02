@@ -43,7 +43,7 @@
 		../../sys-modules/sshfs.nix
 		#../../sys-modules/star-rail-macro.nix
 		../../sys-modules/steam.nix
-		#../../sys-modules/tailscale.nix
+		../../sys-modules/tailscale.nix
 		../../sys-modules/teams.nix
 		#../../sys-modules/teamviewer.nix
 		#../../sys-modules/thunderbird.nix #should be a home-module so Birdtray works
