@@ -1,4 +1,4 @@
-#~/.dotfiles/sys-modules/tailscale.nix
+#/etc/nixos/sys-modules/tailscale.nix
 { config, lib, pkgs, ... }:
 {
   services.tailscale = {
