@@ -27,25 +27,20 @@ in
     kdePackages.xdg-desktop-portal-kde
   ];
 
-  # 3. User‐level systemd service that starts on login
   systemd.user.services.krdpserver = {
-    Unit = {
-      Description = "KRDP headless RDP server";
-      After       = [ "graphical-session.target" ];
-      Wants       = [ "graphical-session.target" ];
+    enable      = true;
+    description = "KRDP headless RDP server";
+    wants       = [ "graphical-session.target" ];
+    after       = [ "graphical-session.target" ];
+    wantedBy    = [ "default.target" ];
+
+    serviceConfig = {
+      ExecStart   = "${pkgs.kdePackages.krdp}/bin/krdpserver -u ${host} -p '${rootPubKey}' --port 3389";
+      Restart     = "on-failure";
+      Environment = [ "KRDP_NO_GUI=1" ];
     };
-    Service = {
-      ExecStart = ''
-        ${pkgs.kdePackages.krdp}/bin/krdpserver \
-          -u ${host} \
-          -p '${rootPubKey}' \
-          --port 3389
-      '';
-      Restart   = "on-failure";
-      Environment = "KRDP_NO_GUI=1";
-    };
-    Install = { WantedBy = [ "default.target" ]; };
   };
+
   # 4. Open RDP port
   networking.firewall.allowedTCPPorts = [ 3389 ];
 }
