@@ -20,6 +20,7 @@ in
     extraUpFlags   = [
       "--login-server=https://headscale.dectech.au"
       "--accept-dns=true"
+      "--tun=userspace-networking"
     ];
     openFirewall   = true;
   };
