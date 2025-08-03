@@ -2,7 +2,7 @@
 { config, lib, pkgs, ... }:
 {
   imports = [ 
-		../../hardware-configuration.nix
+		./hardware-configuration.nix
 		../../sys-modules/baobab.nix
 		../../sys-modules/birdtray.nix
 		../../sys-modules/bluetooth.nix
