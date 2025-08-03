@@ -7,7 +7,7 @@ let
 in
 {
   services.xserver.enable = true;
-  services.xserver.displayManager.sddm.enable = true;
+  services.displayManager.sddm.enable = true;
   services.desktopManager.plasma6.enable = true;
 
   # 1. PipeWire + KDE portal bits for KRDP
