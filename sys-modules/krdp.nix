@@ -44,7 +44,6 @@ in
     };
     Install = { WantedBy = [ "default.target" ]; };
   };
-
   # 4. Open RDP port
   networking.firewall.allowedTCPPorts = [ 3389 ];
 }
