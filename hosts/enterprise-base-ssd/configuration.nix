@@ -1,4 +1,4 @@
-#/etc/nixos/hosts/enterprise-base/configuration.nix
+#/etc/nixos/hosts/enterprise-base-ssd/configuration.nix
 { config, lib, pkgs, ... }:
 {
   imports = [ 
