@@ -25,4 +25,5 @@
       hostname "$name"
     fi
   '';
+  hostnamectl set-hostname
 }
