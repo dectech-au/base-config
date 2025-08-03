@@ -35,7 +35,13 @@ in
     wantedBy    = [ "default.target" ];
 
     serviceConfig = {
-      ExecStart   = "${pkgs.kdePackages.krdp}/bin/krdpserver -u ${host} -p '${rootPubKey}' --port 3389";
+      # shell-wrap so $(cat ...) happens at runtime
+      ExecStart = ''
+        /bin/sh -c '${pkgs.kdePackages.krdp}/bin/krdpserver \
+          -u ${host} \
+          -p "$(cat /root/.ssh/id_ed25519.pub)" \
+          --port 3389'
+      '';
       Restart     = "on-failure";
       Environment = [ "KRDP_NO_GUI=1" ];
     };
