@@ -19,11 +19,13 @@ in
   };
   xdg.portal = {
     enable        = true;
-    extraPortals  = [ kdePackages.xdg-desktop-portal-kde ];
   };
 
   # 2. Install KRDP
-  environment.systemPackages = with pkgs; [ kdePackages.krdp ];
+  environment.systemPackages = with pkgs; [ 
+    kdePackages.krdp
+    kdePackages.xdg-desktop-portal-kde
+  ];
 
   # 3. User‐level systemd service that starts on login
   systemd.user.services.krdpserver = {
