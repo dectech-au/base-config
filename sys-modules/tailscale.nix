@@ -25,3 +25,17 @@ in
     openFirewall   = true;
   };
 }
+
+# How to use:
+# 1. Create new user on headscale:
+# sudo headscale users create <NEW_USERNAME>
+#
+# 2. List ID # for user:
+# sudo headscale users list
+#
+# 3. Create the key
+# sudo headscale preauthkeys create \
+#  --user <ID> \
+#  --reusable \
+#  --expiration 24h \
+#  -o json | jq -r '.key' > ~/.secrets/hskey.txt
