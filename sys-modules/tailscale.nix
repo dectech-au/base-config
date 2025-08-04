@@ -38,7 +38,7 @@ in
 #  --user <ID> \
 #  --reusable \
 #  --expiration 24h \
-#  -o json | jq -r '.key' > /etc/tailscale/hskey.txt
+#  -o json | jq -r '.key' > /root/.secrets/hskey.txt
 #
 # 4. copy contents of this hskey, to the clients ssh module's authorizedkeys.keys = [ "<string>" ];
 # 5. add the target url to the server's prometheus.nix module
