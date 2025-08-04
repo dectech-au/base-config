@@ -1,3 +1,4 @@
+#/etc/nixos/sys-modules/krdp.nix
 { config, pkgs, lib, ... }:
 
 let
