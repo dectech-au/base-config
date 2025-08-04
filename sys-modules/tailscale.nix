@@ -43,3 +43,5 @@ in
 #  --reusable \
 #  --expiration 24h \
 #  -o json | jq -r '.key' > ~/.secrets/hskey.txt
+#
+# 4. copy contents of the admin's public ssh key to ssh's authorizedkeys.keys = [ "<string>" ];
