@@ -10,6 +10,10 @@ in
   #  "headscale.dectech.au" = [ "192.168.1.157" ];
   # };
 
+  environment.systemPackages = with pkgs; [
+    jq
+  ];
+
   # copy the file from your home dir into /etc/tailscale/hskey.txt
   environment.etc."tailscale/hskey.txt".source = "/home/dectec/.secrets/hskey.txt";
 
