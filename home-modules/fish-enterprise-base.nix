@@ -5,9 +5,13 @@
     enable = true;
     shellInit = "cd ~";
     shellInitLast = "fastfetch";
+    
+    shellAliases = {
+      server = "ssh -t z-home@192.168.1.157 'tmux attach -t main || tmux new -s main fish'";
+    };
+
     shellAbbrs = {
       "update" = "sudo bash /etc/nixos/hosts/enterprise-base/switch.sh";
-      server = "ssh -t z-home@192.168.1.157 'tmux attach -t main || tmux new -s main fish'";
     };
   };
 
