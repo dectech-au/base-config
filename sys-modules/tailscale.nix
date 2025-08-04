@@ -1,9 +1,5 @@
 # /etc/nixos/sys-modules/tailscale.nix
 { config, pkgs, lib, ... }:
-
-let
-  hsKeyPath = "/etc/tailscale/hskey.txt";
-in
 {
   # Ensure headscale.dectech.au resolves to your SWAG/LAN IP
   # networking.hosts = lib.mkForce {
@@ -14,12 +10,9 @@ in
     jq
   ];
 
-  # copy the file from your home dir into /etc/tailscale/hskey.txt
-  environment.etc."tailscale/hskey.txt".source = "/home/dectec/.secrets/hskey.txt";
-
   services.tailscale = {
     enable         = true;
-    authKeyFile    = hsKeyPath;
+    authKeyFile    = /etc/tailscale/hskey.txt;
     useRoutingFeatures = "client";
     extraUpFlags   = [
       "--login-server=https://headscale.dectech.au"
@@ -40,10 +33,12 @@ in
 # sudo headscale users list
 #
 # 3. Create the key
+# sudo mkdir -p /var/lib/tailscale
 # sudo headscale preauthkeys create \
 #  --user <ID> \
 #  --reusable \
 #  --expiration 24h \
-#  -o json | jq -r '.key' > ~/.secrets/hskey.txt
+#  -o json | jq -r '.key' > /etc/tailscale/hskey.txt
 #
-# 4. copy contents of the admin's public ssh key to ssh's authorizedkeys.keys = [ "<string>" ];
+# 4. copy contents of this hskey, to the clients ssh module's authorizedkeys.keys = [ "<string>" ];
+# 5. add the target url to the server's prometheus.nix module
