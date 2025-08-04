@@ -1,28 +1,26 @@
 # /etc/nixos/sys-modules/tailscale.nix
 { config, pkgs, lib, ... }:
-{
-  # Ensure headscale.dectech.au resolves to your SWAG/LAN IP
-  # networking.hosts = lib.mkForce {
-  #  "headscale.dectech.au" = [ "192.168.1.157" ];
-  # };
 
-  environment.systemPackages = with pkgs; [
-    jq
-  ];
+let
+  # Path on the client where you will copy the pre-auth key
+  hsKeyPath = "/etc/tailscale/hskey.txt";
+in
+{
+  ## Copy the key into the immutable Nix store at build time.
+  ## Replace the source with wherever you actually stash the key.
+  environment.etc."tailscale/hskey.txt".source = "/root/.secrets/hskey.txt";
 
   services.tailscale = {
-    enable         = true;
-    authKeyFile    = /etc/tailscale/hskey.txt;
-    useRoutingFeatures = "client";
-    extraUpFlags   = [
+    enable               = true;
+    openFirewall         = true;        # punches UDP/41641 etc.
+    authKeyFile          = hsKeyPath;   # Headscale pre-auth key
+    useRoutingFeatures   = "client";    # you are not an exit node
+    extraUpFlags         = [
       "--login-server=https://headscale.dectech.au"
-      "--accept-dns=true"
-      "--tun=userspace-networking"
+      "--accept-dns=true"               # switch to false if you want local DNS
     ];
-    openFirewall   = true;
+    # tailscaled-autoconnect will pick up the flags on boot
   };
-  networking.firewall.trustedInterfaces = [ "tailscale0" ];
-
 }
 
 # How to use:
