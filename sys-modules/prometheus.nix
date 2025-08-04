@@ -8,3 +8,4 @@
     openFirewall  = true;
   };
 }
+# Don't forget to add target's tailscale address to prometheus on the admin pc
