@@ -28,6 +28,8 @@ in
     ];
     openFirewall   = true;
   };
+  networking.firewall.trustedInterfaces = [ "tailscale0" ];
+
 }
 
 # How to use:
