@@ -20,6 +20,8 @@ in
       "--accept-dns=true"               # switch to false if you want local DNS
     ];
     # tailscaled-autoconnect will pick up the flags on boot
+    networking.firewall.trustedInterfaces = [ "tailscale0" ];
+
   };
 }
 
