@@ -1,0 +1,28 @@
+#/etc/nixos/hosts/G531GT-AL017T/flake-part.nix
+{ inputs, self, ... }:
+{
+  systems = [ "x86_64-linux" ];
+
+  flake.nixosConfigurations.G531GT-AL017T = inputs.nixpkgs.lib.nixosSystem {
+    system = "x86_64-linux";
+    specialArgs = { inherit inputs; };
+
+    modules = [
+      { nixpkgs.config.allowUnfree = true; }
+      ../../sys-modules/hostname.nix
+      ./configuration.nix
+      inputs.nixvim.nixosModules.nixvim
+      inputs.remotemouse.nixosModules.remotemouse
+      inputs.home-manager.nixosModules.home-manager
+      {
+        home-manager = {
+          useGlobalPkgs = true;
+          useUserPackages = true;
+          backupFileExtension = "bak";
+          users.dectec = import ./home.nix;
+          sharedModules = [ inputs.plasma-manager.homeManagerModules.plasma-manager ];
+        };
+      }
+    ];
+  };
+}
