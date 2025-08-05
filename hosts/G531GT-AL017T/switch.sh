@@ -44,18 +44,10 @@ if [[ ! -f $STAMP || $(( now - $(<"$STAMP") )) -ge 600 ]]; then
 else
   echo "[=] nix flake update skipped (<10 min since last run)"
 fi
-###############################################################################
-# Build hostname from serial
-###############################################################################
-serial=$(tr -d ' \t\n' < /sys/class/dmi/id/product_serial 2>/dev/null || echo "")
-[ -z "$serial" ] && serial=$(cut -c1-8 /etc/machine-id)
-name="dectech-${serial: -6}"
 
-echo "[+] nixos-rebuild with hostName=$name"
+###############################################################################
+# 3. Rebuild
+###############################################################################
 
-nixos-rebuild switch \
-  --upgrade \
-  --flake "path:/etc/nixos#G531GT-AL017T" \
-  --show-trace \
-  -- \
-  --argstr hostName "${name}"
+echo "[+] nixos-rebuild switch"
+nixos-rebuild switch --upgrade --flake "$FLAKE" --show-trace
