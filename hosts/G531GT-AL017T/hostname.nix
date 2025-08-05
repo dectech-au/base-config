@@ -1,30 +1,14 @@
-# sys-modules/dynamic-hostname.nix
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 
 let
-  setHost = pkgs.writeShellScript "derive-hostname" ''
-    serial=$(tr -d ' ' </sys/class/dmi/id/product_serial 2>/dev/null || echo "")
-    [ -z "$serial" ] && serial=$(cut -c1-8 /etc/machine-id)
-    name="ASUS-G531GT-AL017T-${serial: -6}"
-    current=$(hostnamectl --static || true)
-
-    if [ "$current" != "$name" ]; then
-      echo "Setting hostname to $name"
-      hostnamectl set-hostname "$name"
-    fi
-  '';
+  # read the serial, fall back to machine-id
+  serial = lib.fileContents "/sys/class/dmi/id/product_serial" or (lib.fileContents "/etc/machine-id");
+  # strip whitespace
+  serial' = lib.removePrefix " " serial;          # crude but fine
+  # last six characters
+  len = builtins.stringLength serial';
+  serial6 = builtins.substring (len - 6) 6 serial';
+  name = "ASUS-G531GT-AL017T-${serial6}";
 in {
-  # Give a harmless default so NixOS boots even before the
-  # service runs. It gets overwritten seconds later.
-  networking.hostName = lib.mkDefault "placeholder";
-
-  systemd.services.dynamic-hostname = {
-    description = "Set hostname from serial/machine-id";
-    wantedBy    = [ "multi-user.target" ];
-    after       = [ "network.target" ];
-    serviceConfig = {
-      Type      = "oneshot";
-      ExecStart = "${setHost}";
-    };
-  };
+  networking.hostName = name;
 }
