@@ -1,23 +1,23 @@
 { config, lib, pkgs, ... }:
 let
-  setHost = pkgs.writeShellScript "derive-hostname" ''
-    #!/usr/bin/env bash
-    if [[ -r /sys/class/dmi/id/product_serial ]]; then
-      raw=$(tr -d ' \t\n' < /sys/class/dmi/id/product_serial)
-    else
-      raw=$(cut -c1-32 /etc/machine-id)
-    fi
+  hostnameScript = pkgs.writeTextFile {
+    name = "derive-hostname";
+    destination = "/bin/derive-hostname";
+    executable = true;
+    text = ''
+      #!/usr/bin/env bash
+      if [[ -r /sys/class/dmi/id/product_serial ]]; then
+        raw=$(tr -d ' \t\n' < /sys/class/dmi/id/product_serial)
+      else
+        raw=$(cut -c1-32 /etc/machine-id)
+      fi
+      serial6="${raw: -6}"
+      name="ASUS-G531GT-AL017T-${serial6}"
 
-    serial6="\${raw: -6}"
-    name="ASUS-G531GT-AL017T-\${serial6}"
-
-    current=$(hostnamectl --static 2>/dev/null || true)
-
-    if [[ "$current" != "$name" ]]; then
-      echo "Setting hostname to $name"
-      hostnamectl set-hostname "$name"
-    fi
-  '';
+      current=$(hostnamectl --static 2>/dev/null || true)
+      [[ "$current" != "$name" ]] && hostnamectl set-hostname "$name"
+    '';
+  };
 in {
   networking.hostName = lib.mkDefault "placeholder";
 
@@ -27,7 +27,7 @@ in {
     after        = [ "systemd-user-sessions.service" ];
     serviceConfig = {
       Type      = "oneshot";
-      ExecStart = "${setHost}";
+      ExecStart = "${hostnameScript}/bin/derive-hostname";
     };
   };
 }
