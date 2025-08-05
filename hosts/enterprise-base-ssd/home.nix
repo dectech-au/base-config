@@ -1,4 +1,4 @@
-#/etc/nixos/hosts/enterprise-base-ssd/home.nix
+#/etc/nixos/hosts/enterprise-base/home.nix
 { config, pkgs, HOME-MODULES, ... }:
 {
   imports = [
@@ -24,6 +24,7 @@
 		../../home-modules/start-menu/update.nix
 		../../home-modules/start-menu/windows.nix
 		#./personalisation/wallpaper.nix
+		../../custom-modules/hastings-preschool/home-weekly-schedule.nix
   ];
 
   home.username = "dectec";
