@@ -1,7 +1,10 @@
-#/etc/nixos/hosts/enterprise-base-ssd/configuration.nix
+#/etc/nixos/hosts/enterprise-base/configuration.nix
 { config, lib, pkgs, ... }:
 {
-  imports = [ 
+	nix.settings.max-jobs = 2;
+	nix.settings.cores = 1;
+
+	imports = [ 
 		./hardware-configuration.nix
 		../../sys-modules/baobab.nix
 		../../sys-modules/birdtray.nix
@@ -21,6 +24,7 @@
 		../../sys-modules/kcalc.nix
 		../../sys-modules/kdeconnect-firewall.nix
 		../../sys-modules/killall.nix
+		../../sys-modules/krdp.nix
 		../../sys-modules/nixpkgs-fmt.nix
 		#../../sys-modules/nix-ld.nix
 		../../sys-modules/papirus-theme.nix
@@ -35,6 +39,7 @@
 		../../sys-modules/papirus.nix
 		#../../sys-modules/pinegrow.nix
 		../../sys-modules/plasma.nix
+		../../sys-modules/prometheus.nix
 		#../../sys-modules/protonmail-bridge.nix
 		#../../sys-modules/protonvpn.nix
 		#../../sys-modules/qt.nix
@@ -45,7 +50,7 @@
 		../../sys-modules/steam.nix
 		../../sys-modules/tailscale.nix
 		../../sys-modules/teams.nix
-		#../../sys-modules/teamviewer.nix
+		../../sys-modules/teamviewer.nix
 		#../../sys-modules/thunderbird.nix #should be a home-module so Birdtray works
 		../../sys-modules/update-passwordless.nix
 		#../../sys-modules/virtualbox.nix
@@ -54,6 +59,7 @@
 		# ../../sys-modules/wine.nix
 		#../../sys-modules/wordpress.nix
 		#./personalisation/wallpaper-service.nix
+		../../custom-modules/hastings-preschool/sys-weekly-schedule.nix
 	];
   
   # Bootloader.
