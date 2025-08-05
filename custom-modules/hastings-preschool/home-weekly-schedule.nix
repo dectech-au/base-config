@@ -2,23 +2,28 @@
 { config, lib, pkgs, ... }:
 let
   bookingScript = ".scripts/weekly-booking.py";
+  serviceMenu = ".local/share/kservices5/ServiceMenus/convert-weekly-bookings.desktop";
 in
 {
   # enable management of XDG dirs and desktop entries
   xdg.enable = true;
 
   # define one or more .desktop files
-  xdg.desktopEntries.convert_weekly_bookings = {
-    name        = "Convert Weekly Bookings";
-    genericName = "convert-weekly-bookings";         # optional
-    comment     = "Turn Hastings Preschool’s PDF roster into a spreadsheet";
-    exec        = "${pkgs.bash}/bin/bash -c '${config.home.homeDirectory}/${bookingScript} %f'";
-    icon        = "accessories-text-editor";               # an icon name in your theme or full path
-    categories  = [ "Office" "Utility" ];          # menu categories
-    terminal    = false;                  # true if it needs a terminal
-    mineType    = [ "application/pdf" ];
-    #startupNotify = true;                 # optional
-  };
+ home.file."${serviceMenu}".text = ''
+    [Desktop Entry]
+    Type=Service
+    ServiceTypes=KonqPopupMenu/Plugin
+    MimeType=application/pdf
+    X-KDE-Priority=TopLevel
+
+    Actions=ConvertWeekly
+
+    [Desktop Action ConvertWeekly]
+    Name=Convert to Spreadsheet
+    Icon=application-vnd.ms-excel
+    Exec=${config.home.homeDirectory}/${bookingScript} %u
+  '';
+
 
   home.file."${bookingScript}" = {
     text = builtins.readFile ./weekly-booking.py;
