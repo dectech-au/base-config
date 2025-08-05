@@ -15,17 +15,18 @@ in
 
   # 2.2  Right-click “Convert to Spreadsheet” for any PDF
   home.file."${serviceMenuRelPath}".text = ''
-    [Desktop Entry]
-    Type=Service
-    ServiceTypes=KonqPopupMenu/Plugin
-    MimeType=application/pdf
-    X-KDE-Priority=TopLevel
+[Desktop Entry]
+Type=Service
+ServiceTypes=KonqPopupMenu/Plugin
+MimeType=application/pdf;          # ← semicolon matters
+X-KDE-Priority=TopLevel
 
-    Actions=ConvertWeekly
+Actions=ConvertWeekly
 
-    [Desktop Action ConvertWeekly]
-    Name=Convert to Spreadsheet
-    Icon=application-vnd.ms-excel
-    Exec=${config.home.homeDirectory}/${scriptRelPath} %u
+[Desktop Action ConvertWeekly]
+Name=Convert to Spreadsheet
+Icon=application-vnd.ms-excel
+Exec=/home/tim/.scripts/weekly-booking.py %u
+
   '';
 }
