@@ -39,22 +39,6 @@
       perSystem = { config, self', inputs', pkgs, system, ... }: {
         formatter = pkgs.nixpkgs-fmt;
 
-        # packages = {
-        #  remotemouse = pkgs.callPackage ./sys-modules/remotemouse {
-        #    glib = pkgs.glib;
-        #    dbus = pkgs.dbus;
-        #    zlib = pkgs.zlib;
-        #    freetype = pkgs.freetype;
-        #    fontconfig = pkgs.fontconfig;
-        #    libxkbcommon = pkgs.libxkbcommon;
-        #    libGL = pkgs.libGL;
-        #    alsa-lib = pkgs.alsa-lib;
-        #    xorg = pkgs.xorg;
-        #    xdotool = pkgs.xdotool;
-        #  };
-        #  default = self'.packages.remotemouse;
-        # };
-
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
             git
