@@ -5,7 +5,7 @@
 	nix.settings.cores = 1;
 
 	imports = [ 
-		./hostname.nix
+		#./hostname.nix
 		../../hardware-configuration.nix
 		../../sys-modules/baobab.nix
 		../../sys-modules/birdtray.nix
