@@ -4,20 +4,29 @@ let
     name        = "derive-hostname";
     destination = "/bin/derive-hostname";
     executable  = true;
-text = ''
-  #!/usr/bin/env bash
-  …
-  serial6="${raw: -6}"
-  name="ASUS-G531GT-AL017T-$serial6"   # <- no ${...}, so Nix ignores it
+    text = ''
+      #!/usr/bin/env bash
 
-  current=$(hostnamectl --static 2>/dev/null || true)
-  [[ "$current" != "$name" ]] && hostnamectl set-hostname "$name"
-'';
+      # 1. grab hardware serial, fall back to truncated machine-id
+      if [[ -r /sys/class/dmi/id/product_serial ]]; then
+        raw=$(tr -d ' \t\n' < /sys/class/dmi/id/product_serial)
+      else
+        raw=$(cut -c1-32 /etc/machine-id)
+      fi
 
+      # 2. last six chars
+      serial6="${raw: -6}"
+
+      # 3. compose new hostname
+      name="ASUS-G531GT-AL017T-$serial6"
+
+      # 4. apply if different
+      current=$(hostnamectl --static 2>/dev/null || true)
+      [[ "$current" != "$name" ]] && hostnamectl set-hostname "$name"
+    '';
   };
 in
 {
-  # harmless compile-time placeholder so the system evaluates
   networking.hostName = lib.mkDefault "placeholder";
 
   systemd.services.dynamic-hostname = {
