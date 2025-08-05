@@ -1,7 +1,10 @@
 #/etc/nixos/hosts/enterprise-base/configuration.nix
 { config, lib, pkgs, ... }:
 {
-  imports = [ 
+	nix.settings.max-jobs = 2;
+	nix.settings.cores = 1;
+
+	imports = [ 
 		../../hardware-configuration.nix
 		../../sys-modules/baobab.nix
 		../../sys-modules/birdtray.nix
@@ -56,7 +59,7 @@
 		# ../../sys-modules/wine.nix
 		#../../sys-modules/wordpress.nix
 		#./personalisation/wallpaper-service.nix
-		../../custom-modules/hastings-preschool/sys-weekly-schedule.nix
+		#../../custom-modules/hastings-preschool/sys-weekly-schedule.nix
 	];
   
   # Bootloader.
