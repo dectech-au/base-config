@@ -18,6 +18,9 @@ REPO_DIR="/etc/nixos"
 FLAKE="/etc/nixos#G531GT-AL017T"
 STAMP="/tmp/nix_flake_update.timestamp"
 
+
+
+
 ###############################################################################
 # 1. Git pull with deploy key
 ###############################################################################
@@ -28,18 +31,6 @@ export GIT_SSH_COMMAND="ssh $SSH_OPTS"
 ssh-add -l 2>/dev/null | grep -q "$KEY" || ssh-add -q "$KEY"
 git fetch --quiet origin
 git reset --hard origin/main
-
-###############################################################################
-# 2. nix flake update (max once every 10 min)
-###############################################################################
-now=$(date +%s)
-if [[ ! -f $STAMP || $(( now - $(<"$STAMP") )) -ge 600 ]]; then
-  echo "[+] nix flake update"
-  nix flake update
-  echo "$now" > "$STAMP"
-else
-  echo "[=] nix flake update skipped (<10 min since last run)"
-fi
 
 ###############################################################################
 # 3. Regenerate hostname module
@@ -61,6 +52,21 @@ cat > "$MODULE_DIR/hostname.nix" <<EOF
 }
 EOF
 echo "[+] wrote hostname module: $MODULE_DIR/hostname.nix → hostName=${name}"
+
+
+###############################################################################
+# 2. nix flake update (max once every 10 min)
+###############################################################################
+now=$(date +%s)
+if [[ ! -f $STAMP || $(( now - $(<"$STAMP") )) -ge 600 ]]; then
+  echo "[+] nix flake update"
+  nix flake update
+  echo "$now" > "$STAMP"
+else
+  echo "[=] nix flake update skipped (<10 min since last run)"
+fi
+
+
 
 ###############################################################################
 # 4. Rebuild system
