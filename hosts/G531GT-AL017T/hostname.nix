@@ -1,5 +1,4 @@
 { config, lib, pkgs, ... }:
-
 let
   setHost = pkgs.writeShellScript "derive-hostname" ''
     #!/usr/bin/env bash
