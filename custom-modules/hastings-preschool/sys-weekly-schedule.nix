@@ -5,4 +5,4 @@
     python311Packages.pdfplumber
     python311Packages.openpyxl
   ];
-};
+}
