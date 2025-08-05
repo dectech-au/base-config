@@ -5,10 +5,6 @@ let
   serviceMenu = ".local/share/kservices5/ServiceMenus/convert-weekly-bookings.desktop";
 in
 {
-  # enable management of XDG dirs and desktop entries
-  xdg.enable = true;
-
-  # define one or more .desktop files
  home.file."${serviceMenu}".text = ''
     [Desktop Entry]
     Type=Service
@@ -23,7 +19,6 @@ in
     Icon=application-vnd.ms-excel
     Exec=${config.home.homeDirectory}/${bookingScript} %u
   '';
-
 
   home.file."${bookingScript}" = {
     text = builtins.readFile ./weekly-booking.py;
