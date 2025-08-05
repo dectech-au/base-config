@@ -45,10 +45,18 @@ else
   echo "[=] nix flake update skipped (<10 min since last run)"
 fi
 
-
+###############################################################################
+# 3. Build the hostname string
+###############################################################################
+serial=$(tr -d ' ' </sys/class/dmi/id/product_serial 2>/dev/null || echo "")
+[ -z "$serial" ] && serial=$(cut -c1-8 /etc/machine-id)
+name="ASUS-G531GT-AL017T-${serial: -6}"
 
 ###############################################################################
-# 4. Rebuild system
+# 4. Rebuild system, injecting the hostname
 ###############################################################################
-echo "[+] nixos-rebuild switch"
-nixos-rebuild switch --upgrade --flake "$FLAKE" --show-trace
+echo "[+] nixos-rebuild with hostName=$name"
+nixos-rebuild switch --upgrade \
+  --flake "path:/etc/nixos#G531GT-AL017T" \
+  --show-trace \
+  --argstr hostName "$name"
