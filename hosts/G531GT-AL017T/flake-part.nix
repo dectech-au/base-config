@@ -1,46 +1,47 @@
 # /etc/nixos/hosts/G531GT-AL017T/flake-part.nix
 #
-# Accept an argument `hostName` (defaults to "placeholder").
-# Pass it through `specialArgs`, then set networking.hostName
-# in an inline module.  No generated file is needed.
+# ▸ You pass the real hostname from switch.sh:
+#       nixos-rebuild … --argstr hostName "$name"
+# ▸ We grab that arg from the flake-evaluation args set (`args`),
+#   fall back to "placeholder" if it isn’t supplied,
+#   and push it into `specialArgs` so every module can see it.
+# ▸ An inline module sets `networking.hostName = hostName`.
 
-{ inputs
-, self
-, hostName ? "placeholder"  # will be overridden from the CLI
-, ...
-}: {
+{ inputs, self, ... } @ args:            # note the trailing @args
+let
+  hostName =
+    if args ? hostName then args.hostName
+    else "placeholder";
+in
+{
   systems = [ "x86_64-linux" ];
 
   flake.nixosConfigurations.G531GT-AL017T =
     inputs.nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
 
-      # Make hostName available to every module
       specialArgs = {
         inherit inputs hostName;
       };
 
       modules = [
-        # Allow unfree packages
+        # allow unfree
         { nixpkgs.config.allowUnfree = true; }
 
-        # Inline module that sets the hostname
-        ({ config, hostName, ... }: {
-          networking.hostName = hostName;
-        })
+        # this sets the actual hostname
+        ({ hostName, ... }: { networking.hostName = hostName; })
 
-        # The rest of your configuration
         ./configuration.nix
         inputs.nixvim.nixosModules.nixvim
         inputs.remotemouse.nixosModules.remotemouse
         inputs.home-manager.nixosModules.home-manager
         {
           home-manager = {
-            useGlobalPkgs      = true;
-            useUserPackages    = true;
+            useGlobalPkgs       = true;
+            useUserPackages     = true;
             backupFileExtension = "bak";
-            users.dectec       = import ./home.nix;
-            sharedModules      = [
+            users.dectec        = import ./home.nix;
+            sharedModules       = [
               inputs.plasma-manager.homeManagerModules.plasma-manager
             ];
           };
