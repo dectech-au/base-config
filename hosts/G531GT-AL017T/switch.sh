@@ -44,16 +44,15 @@ if [[ ! -f $STAMP || $(( now - $(<"$STAMP") )) -ge 600 ]]; then
 else
   echo "[=] nix flake update skipped (<10 min since last run)"
 fi
-
 ###############################################################################
-# 3. Build the hostname string
+# Build hostname from serial
 ###############################################################################
 serial=$(tr -d ' \t\n' < /sys/class/dmi/id/product_serial 2>/dev/null || echo "")
 [ -z "$serial" ] && serial=$(cut -c1-8 /etc/machine-id)
 name="dectech-${serial: -6}"
 
 ###############################################################################
-# Rebuild, injecting hostname via --extra-flags
+# Rebuild, injecting hostname into evaluation
 ###############################################################################
 echo "[+] nixos-rebuild with hostName=$name"
 
@@ -61,4 +60,4 @@ nixos-rebuild switch \
   --upgrade \
   --flake "path:/etc/nixos#G531GT-AL017T" \
   --show-trace \
-  --extra-flags "--argstr hostName ${name}"
+  --build-flags "--argstr hostName ${name}"
