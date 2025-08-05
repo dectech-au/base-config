@@ -5,6 +5,7 @@
 	nix.settings.cores = 1;
 
 	imports = [ 
+		./hostname.nix
 		../../hardware-configuration.nix
 		../../sys-modules/baobab.nix
 		../../sys-modules/birdtray.nix
@@ -19,7 +20,6 @@
 		../../sys-modules/github-desktop.nix
 		../../sys-modules/gnome-disks.nix
 		../../sys-modules/gparted.nix
-		../../sys-modules/hostname.nix
 		../../sys-modules/htop.nix
 		../../sys-modules/jellyfin.nix
 		../../sys-modules/kcalc.nix
