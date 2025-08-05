@@ -1,7 +1,7 @@
 #/etc/nixos/custom-modules/hastings-preschool/home-weekly-schedule.nix
 { config, lib, pkgs, ... }:
 let
-  bookingScript = ".scripts/weekly-booking.sh";
+  bookingScript = ".scripts/weekly-booking.py";
 in
 {
   # enable management of XDG dirs and desktop entries
@@ -12,10 +12,11 @@ in
     name        = "Convert Weekly Bookings";
     genericName = "convert-weekly-bookings";         # optional
     comment     = "PDF to Spreadsheet";
-    exec        = "${config.home.homeDirectory}/#{bookingScript}";
+    exec        = "${config.home.homeDirectory}/#{bookingScript} %f %u";
     icon        = "firefox";               # an icon name in your theme or full path
-    categories  = [ "Office" ];          # menu categories
+    categories  = [ "Office" "Utility" ];          # menu categories
     terminal    = false;                  # true if it needs a terminal
+    MineType    = application/pdf;
     #startupNotify = true;                 # optional
   };
 
