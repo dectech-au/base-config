@@ -1,8 +1,12 @@
 #/etc/nixos/custom-modules/hastings-preschool/weekly-schedule.nix
-{ config, lib, pkgs, ... }:
+{ pkgs, ... }:
+
+let
+  weeklyScheduleEnv = pkgs.python311.withPackages (ps: [
+    ps.pdfplumber
+    ps.openpyxl
+  ]);
+in
 {
-  environment.systemPackages = with pkgs; [
-    python311Packages.pdfplumber
-    python311Packages.openpyxl
-  ];
+  environment.systemPackages = [ weeklyScheduleEnv ];
 }
