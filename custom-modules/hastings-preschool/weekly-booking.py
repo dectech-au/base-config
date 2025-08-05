@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+#/etc/nixos/custom-modules/hastings-preschool/weekly-booking.py
 """
 pdf2spreadsheet.py — Hastings Preschool weekly roster converter
 ===============================================================
