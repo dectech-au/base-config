@@ -50,7 +50,7 @@ if [[ -z "$serial" || "$serial" == "Unknown" ]]; then
 fi
 # take last 6 chars
 serial6="${serial: -6}"
-name="dectech-$serial6"
+name="G531GT-AL017T-$serial6"
 
 MODULE_DIR="$REPO_DIR/sys-modules"
 mkdir -p "$MODULE_DIR"
