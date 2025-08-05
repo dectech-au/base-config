@@ -32,6 +32,7 @@
       imports = [
         ./hosts/overlays.nix
         ./hosts/enterprise-base/flake-part.nix
+        ./hosts/enterprise-base-ssd/flake-part.nix
         ./hosts/personal-tim/flake-part.nix
         #./sys-modules/remotemouse-flakepart.nix
       ];
