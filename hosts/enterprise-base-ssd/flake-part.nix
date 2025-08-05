@@ -3,7 +3,7 @@
 {
   systems = [ "x86_64-linux" ];
 
-  flake.nixosConfigurations.enterprise-base = inputs.nixpkgs.lib.nixosSystem {
+  flake.nixosConfigurations.enterprise-base-ssd = inputs.nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
     specialArgs = { inherit inputs; };
 
