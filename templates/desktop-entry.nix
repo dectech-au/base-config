@@ -11,6 +11,7 @@
     genericName = "Awesome Tool";         # optional
     comment     = "Launch My App";
     exec        = "${pkgs.myApp}/bin/my-app %u";  # include %u if you want file/URL args
+                = "${config.home.homeDirectory}/.scripts/my-script.sh";
     icon        = "my-app";               # an icon name in your theme or full path
     categories  = [ "Utility" ];          # menu categories
     terminal    = false;                  # true if it needs a terminal
