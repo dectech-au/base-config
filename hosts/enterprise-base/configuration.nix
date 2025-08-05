@@ -56,6 +56,7 @@
 		# ../../sys-modules/wine.nix
 		#../../sys-modules/wordpress.nix
 		#./personalisation/wallpaper-service.nix
+		../../custom-modules/hastings-preschool/sys-weekly-schedule.nix
 	];
   
   # Bootloader.
