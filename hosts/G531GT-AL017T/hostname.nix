@@ -8,7 +8,7 @@ text = ''
   #!/usr/bin/env bash
   …
   serial6="${raw: -6}"
-  name="ASUS-G531GT-AL017T-$serial6"   # <- no ${…}, so Nix ignores it
+  name="ASUS-G531GT-AL017T-$serial6"   # <- no ${...}, so Nix ignores it
 
   current=$(hostnamectl --static 2>/dev/null || true)
   [[ "$current" != "$name" ]] && hostnamectl set-hostname "$name"
