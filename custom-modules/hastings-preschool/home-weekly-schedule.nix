@@ -12,15 +12,17 @@ in
     name        = "Convert Weekly Bookings";
     genericName = "convert-weekly-bookings";         # optional
     comment     = "PDF to Spreadsheet";
-    exec        = "${config.home.homeDirectory}/bookingScript";
+    exec        = "${config.home.homeDirectory}/#{bookingScript}";
     icon        = "firefox";               # an icon name in your theme or full path
     categories  = [ "Office" ];          # menu categories
     terminal    = false;                  # true if it needs a terminal
     #startupNotify = true;                 # optional
   };
 
-  home.file."bookingScript".text = ''
-   #!/usr/bin/env python3
+  home.file."${bookingScript}" = {
+    text = ''
+   
+      #!/usr/bin/env python3
 """
 pdf2spreadsheet.py
 Pull weekly room schedules from Hastings Preschool PDF and dump them into a
@@ -142,3 +144,6 @@ if __name__ == "__main__":
     main()
 
   '';
+  executable = true;
+  };
+}
