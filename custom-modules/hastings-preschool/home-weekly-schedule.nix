@@ -1,11 +1,20 @@
 #/etc/nixos/custom-modules/hastings-preschool/home-weekly-schedule.nix
-{ config, lib, pkgs, ... }:
+{ config, pkgs, ... }:
+
 let
-  bookingScript = ".scripts/weekly-booking.py";
-  serviceMenu = ".local/share/kservices5/ServiceMenus/convert-weekly-bookings.desktop";
+  scriptRelPath      = ".local/bin/weekly-booking.py";
+  serviceMenuRelPath = ".local/share/kservices5/ServiceMenus/convert-weekly-bookings.desktop";
+  scriptSource       = builtins.readFile ./weekly-booking.py;
 in
 {
- home.file."${serviceMenu}".text = ''
+  # 2.1  The converter script itself
+  home.file."${scriptRelPath}" = {
+    text       = scriptSource;
+    executable = true;
+  };
+
+  # 2.2  Right-click “Convert to Spreadsheet” for any PDF
+  home.file."${serviceMenuRelPath}".text = ''
     [Desktop Entry]
     Type=Service
     ServiceTypes=KonqPopupMenu/Plugin
@@ -17,11 +26,6 @@ in
     [Desktop Action ConvertWeekly]
     Name=Convert to Spreadsheet
     Icon=application-vnd.ms-excel
-    Exec=${config.home.homeDirectory}/${bookingScript} %u
+    Exec=${config.home.homeDirectory}/${scriptRelPath} %u
   '';
-
-  home.file."${bookingScript}" = {
-    text = builtins.readFile ./weekly-booking.py;
-    executable = true;
-  };
 }
