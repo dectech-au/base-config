@@ -35,9 +35,4 @@ in
     Icon=application-vnd.oasis.opendocument.spreadsheet
     Exec=${config.home.homeDirectory}/${scriptRel} %f
   '';
-
-  home.packages = [
-    pkgs.tabula-java
-    pkgs.libreoffice
-  ];
 }
