@@ -20,9 +20,10 @@
     Exec=python3 "%h/.local/bin/weekly-booking.py" "%f"
   '';
 
-  home.packages = with pkgs; [
-    python311
-    (python311Packages.pdfplumber.overridePythonAttrs (_: { doCheck = false; }))
-    (python311Packages.openpyxl  .overridePythonAttrs (_: { doCheck = false; }))
+  home.packages = [
+    pythonWithPkgs = pkgs.python311.withPackages (ps: [
+      (ps.pdfplumber.overridePythonAttrs (_: { doCheck = false; }))
+      (ps.openpyxl   .overridePythonAttrs (_: { doCheck = false; }))
+    ]);
   ];
 }
