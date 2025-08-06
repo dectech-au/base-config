@@ -1,22 +1,20 @@
 #!/usr/bin/env python3
 """
-pdf2xlsx – dumb one‑to‑one converter
-====================================
-Grab the *first* table on every page of a PDF and dump it into an Excel
-workbook—one sheet per page. No formatting, no data cleanup beyond stripping
-XML‑illegal control characters that would make openpyxl puke.
+pdf2xlsx – single‑sheet converter
+=================================
+Flatten the Hastings Preschool roster PDF into **one Excel sheet**.
 
-Usage
------
-```bash
-python3 pdf2xlsx.py schedule.pdf       # writes schedule.xlsx next to the PDF
-```
-(Your KDE service‑menu passes the PDF path in `%f`, quoted.)
+Behaviour changes
+-----------------
+* All PDF pages append into the *same* worksheet ("Roster"), so printing is
+  easy.
+* The first row of each subsequent page is skipped because it repeats the
+  column headers that page 1 already has.
+* Control characters that break XML are stripped as before.
 
-Dependencies (NixOS names)
---------------------------
-* `python311Packages.pdfplumber`
-* `python311Packages.openpyxl`  (tests disabled in your Nix expr → no torch)
+This is still a dumb lift‑and‑shift; we’re just concatenating tables instead
+of making a sheet per page. Once this runs end‑to‑end we can add smarter
+room‑detection.
 """
 from __future__ import annotations
 
@@ -28,43 +26,46 @@ from typing import Iterator, List
 import pdfplumber
 from openpyxl import Workbook
 
-# Regex that nukes control chars disallowed in XML 1.0
 _illegal = re.compile(r"[\x00-\x08\x0B\x0C\x0E-\x1F]")
 
 
-# ──────────────────────── CORE LOGIC ───────────────────────────
+# ──────────────────────── HELPERS ─────────────────────────────
 
 def extract_tables(pdf: pdfplumber.pdf.PDF) -> Iterator[List[List[str]]]:
-    """Yield the first table from each page of *pdf* (if present)."""
     for page in pdf.pages:
-        tbls = page.extract_tables()
-        if tbls:
-            yield tbls[0]
+        tables = page.extract_tables()
+        if tables:
+            yield tables[0]
 
 
-def dump_to_sheet(ws, table: List[List[str]]):
-    """Write *table* (a list of rows) to *ws*, sanitising cell content."""
-    for r_idx, row in enumerate(table, start=1):
-        for c_idx, cell in enumerate(row, start=1):
-            val = "" if cell is None else _illegal.sub("", str(cell))
-            ws.cell(r_idx, c_idx, val)
+def clean_cell(cell) -> str:
+    return _illegal.sub("", "" if cell is None else str(cell))
 
 
-def pdf_to_xlsx(pdf_path: Path) -> Path:
+# ──────────────────────── MAIN LOGIC ─────────────────────────
+
+def pdf_to_single_sheet(pdf_path: Path) -> Path:
     out_path = pdf_path.with_suffix(".xlsx")
+
     wb = Workbook()
-    wb.remove(wb.active)  # start fresh
+    ws = wb.active
+    ws.title = "Roster"
+
+    current_row = 1
+    first_table = True
 
     with pdfplumber.open(str(pdf_path)) as pdf:
-        for page_num, table in enumerate(extract_tables(pdf), start=1):
-            ws = wb.create_sheet(f"Page{page_num}")
-            dump_to_sheet(ws, table)
+        for table in extract_tables(pdf):
+            start_index = 0 if first_table else 1  # skip repeated header
+            for row in table[start_index:]:
+                for col_idx, cell in enumerate(row, start=1):
+                    ws.cell(current_row, col_idx, clean_cell(cell))
+                current_row += 1
+            first_table = False
 
     wb.save(out_path)
     return out_path
 
-
-# ─────────────────────────── CLI ───────────────────────────────
 
 def main():
     if len(sys.argv) != 2:
@@ -76,7 +77,7 @@ def main():
         print("Error: provide a valid .pdf file", file=sys.stderr)
         sys.exit(1)
 
-    out_file = pdf_to_xlsx(pdf_path)
+    out_file = pdf_to_single_sheet(pdf_path)
     print(f"✓ Wrote {out_file}")
 
 
