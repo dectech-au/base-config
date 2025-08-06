@@ -17,8 +17,8 @@ in
   home.file."${serviceMenuRelPath}".text = ''
 [Desktop Entry]
 Type=Service
-ServiceTypes=KFileItemAction/Plugin
-MimeType=application/pdf;          # ← semicolon matters
+X-KDE-ServiceTypes=KFileItemAction/Plugin
+MimeType=application/pdf;
 X-KDE-Priority=TopLevel
 
 Actions=ConvertWeekly
@@ -26,7 +26,7 @@ Actions=ConvertWeekly
 [Desktop Action ConvertWeekly]
 Name=Convert to Spreadsheet
 Icon=application-vnd.ms-excel
-Exec=/home/tim/.scripts/weekly-booking.py %u
+Exec=/home/dectec/.scripts/weekly-booking.py %u
 
   '';
 }
