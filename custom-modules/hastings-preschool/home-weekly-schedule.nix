@@ -23,7 +23,7 @@ in
     [Desktop Action ConvertWeekly]
     Name=Convert to Spreadsheet
     Icon=application-vnd.ms-excel
-    Exec=${pythonWithPkgs}/bin/python "%h/${scriptRel}" "%f"
+    Exec=python3 "%h/${scriptRel}" "%f"
   '';
 
 home.packages = with pkgs; [
