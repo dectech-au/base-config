@@ -52,34 +52,25 @@ def pdf_to_single_sheet(pdf_path: Path) -> Path:
     ws.title = "Roster"
 
     current_row = 1
-    first_table = True
+    header_written = False  # track if the column header has been written
 
     with pdfplumber.open(str(pdf_path)) as pdf:
         for table in extract_tables(pdf):
-            start_index = 0 if first_table else 1  # skip repeated header
-            for row in table[start_index:]:
+            for row in table:
+                # Identify the column‑header row by its second cell being "Name".
+                # Keep the very first one; drop repeats that appear on continuation pages.
+                second_cell = clean_cell(row[1]) if len(row) > 1 else ""
+                is_column_header = second_cell.lower() == "name"
+
+                if is_column_header:
+                    if header_written:
+                        continue  # skip duplicate header row
+                    header_written = True
+
+                # Write the row to the sheet
                 for col_idx, cell in enumerate(row, start=1):
                     ws.cell(current_row, col_idx, clean_cell(cell))
                 current_row += 1
-            first_table = False
 
     wb.save(out_path)
     return out_path
-
-
-def main():
-    if len(sys.argv) != 2:
-        print("Usage: pdf2xlsx.py <schedule.pdf>", file=sys.stderr)
-        sys.exit(1)
-
-    pdf_path = Path(sys.argv[1]).expanduser()
-    if not (pdf_path.exists() and pdf_path.suffix.lower() == ".pdf"):
-        print("Error: provide a valid .pdf file", file=sys.stderr)
-        sys.exit(1)
-
-    out_file = pdf_to_single_sheet(pdf_path)
-    print(f"✓ Wrote {out_file}")
-
-
-if __name__ == "__main__":
-    main()
