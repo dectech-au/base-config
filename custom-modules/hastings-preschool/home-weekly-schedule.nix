@@ -1,31 +1,32 @@
-#/etc/nixos/custom-modules/hastings-preschool/home-weekly-schedule.nix
 { config, pkgs, ... }:
 
 let
-  scriptRelPath      = ".local/bin/weekly-booking.py";
-  serviceMenuRelPath = ".local/share/kio/servicemenus/convert-weekly-bookings.desktop";
-  scriptSource       = builtins.readFile ./weekly-booking.py;
+  pythonWithPkgs = pkgs.python311.withPackages (ps: [
+    ps.pdfplumber
+    ps.openpyxl
+  ]);
+
+  scriptRel   = ".local/bin/weekly-booking.py";
+  menuRel     = ".local/share/kio/servicemenus/convert-weekly-bookings.desktop";
 in
 {
-  # 2.1  The converter script itself
-  home.file."${scriptRelPath}" = {
-    text       = scriptSource;
+  home.file."${scriptRel}" = {
+    text       = builtins.readFile ./weekly-booking.py;
     executable = true;
   };
 
-  # 2.2  Right-click “Convert to Spreadsheet” for any PDF
-  home.file."${serviceMenuRelPath}".text = ''
-[Desktop Entry]
-Type=Service
-X-KDE-ServiceTypes=KFileItemAction/Plugin
-MimeType=application/pdf;
-X-KDE-Priority=TopLevel
+  home.file."${menuRel}".text = ''
+    [Desktop Entry]
+    Type=Service
+    X-KDE-ServiceTypes=KFileItemAction/Plugin
+    MimeType=application/pdf;
+    X-KDE-Priority=TopLevel
 
-Actions=ConvertWeekly
+    Actions=ConvertWeekly
 
-[Desktop Action ConvertWeekly]
-Name=Convert to Spreadsheet
-Icon=application-vnd.ms-excel
-Exec=/home/dectec/.local/bin/weekly-booking.py %f
+    [Desktop Action ConvertWeekly]
+    Name=Convert to Spreadsheet
+    Icon=application-vnd.ms-excel
+    Exec=${pythonWithPkgs}/bin/python "%h/${scriptRel}" "%f"
   '';
 }
