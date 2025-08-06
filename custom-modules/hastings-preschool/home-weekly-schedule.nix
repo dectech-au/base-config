@@ -13,7 +13,7 @@ in
 {
   ## 1. Drop the script into $HOME (it’s the dumb one-to-one converter)
   home.file."${scriptRel}" = {
-    text       = builtins.readFile ./pdf2xlsx.py;
+    text       = builtins.readFile ./weekly-booking.py;
     executable = true;
   };
 
