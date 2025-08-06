@@ -10,8 +10,9 @@ in
   ## 1. Minimal runtime environment (no custom interpreter)
   home.packages = with pkgs.python311Packages; [
     pdfplumber
-    #openpyxl
-  ];
+  (pkgs.python311Packages.openpyxl.overridePythonAttrs (_: {
+    doCheck = false;        # skip tests → no torch build
+  }))  ];
 
   ## 2. Install the script
 home.file."${scriptRel}".text = ''
