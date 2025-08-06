@@ -10,7 +10,7 @@ in
   ## 1. Minimal runtime environment (no custom interpreter)
   home.packages = with pkgs.python311Packages; [
     pdfplumber
-    openpyxl
+    #openpyxl
   ];
 
   ## 2. Install the script
