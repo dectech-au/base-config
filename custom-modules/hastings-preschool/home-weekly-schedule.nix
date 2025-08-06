@@ -26,7 +26,7 @@ Actions=ConvertWeekly
 [Desktop Action ConvertWeekly]
 Name=Convert to Spreadsheet
 Icon=application-vnd.ms-excel
-Exec=/home/dectec/.local/bin/weekly-booking.py %u
+Exec=/home/dectec/.local/bin/weekly-booking.py %f
 
   '';
 }
