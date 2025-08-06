@@ -51,4 +51,5 @@ fi
 
 echo "[+] nixos-rebuild switch"
 nixos-rebuild switch --upgrade --flake "$FLAKE" --show-trace
+sleep 5
 kbuildsycoca6 --noincremental
