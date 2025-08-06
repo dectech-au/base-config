@@ -29,18 +29,12 @@ home.file."${scriptRel}".text = ''
 
 
   ## 3. KDE 6 context-menu entry
-  home.file."${menuRel}".text = ''
-    [Desktop Entry]
-    Type=Service
-    X-KDE-ServiceTypes=KFileItemAction/Plugin
-    MimeType=application/pdf;
-    X-KDE-Priority=TopLevel
-
-    Actions=ConvertWeekly
-
-    [Desktop Action ConvertWeekly]
-    Name=Convert to Spreadsheet
-    Icon=application-vnd.ms-excel
-    Exec=python3 "%h/${scriptRel}" "%f"
+    home.file."${serviceMenuRelPath}".text = ''
+      [Desktop Entry]
+      Type=Service
+      X-KDE-ServiceTypes=KFileItemAction/Plugin
+      MimeType=application/pdf;
+      X-KDE-Priority=TopLevel
+      Actions=ConvertWeekly
   '';
 }
