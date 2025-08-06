@@ -25,5 +25,4 @@
     (python311Packages.pdfplumber.overridePythonAttrs (_: { doCheck = false; }))
     (python311Packages.openpyxl  .overridePythonAttrs (_: { doCheck = false; }))
   ];
-
 }
