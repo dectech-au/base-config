@@ -1,4 +1,10 @@
 { config, pkgs, ... }:
+let
+  pythonWithPkgs = pkgs.python311.withPackages (ps: [
+    (ps.pdfplumber.overridePythonAttrs (_: { doCheck = false; }))
+    (ps.openpyxl   .overridePythonAttrs (_: { doCheck = false; }))
+  ]);
+in
 {
   home.file.".local/bin/weekly-booking.py" = {
     text       = builtins.readFile ./weekly-booking.py;
@@ -20,10 +26,5 @@
     Exec=python3 "%h/.local/bin/weekly-booking.py" "%f"
   '';
 
-  home.packages = [
-    pythonWithPkgs = pkgs.python311.withPackages (ps: [
-      (ps.pdfplumber.overridePythonAttrs (_: { doCheck = false; }))
-      (ps.openpyxl   .overridePythonAttrs (_: { doCheck = false; }))
-    ]);
-  ];
+  home.packages = [ pythonWithPkgs ];
 }
