@@ -4,6 +4,7 @@
 let
   # files under $HOME
   scriptRel = ".local/bin/pdf2xlsx.py";   # use the simple script now in canvas
+  serviceMenuRelPath = ".local/share/kio/servicemenus/convert-weekly-bookings.desktop";
   menuRel   = ".local/share/kio/servicemenus/convert-weekly-bookings.desktop";
 in
 {
