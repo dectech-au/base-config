@@ -17,7 +17,7 @@
     [Desktop Action ConvertWeekly]
     Name=Convert to Spreadsheet
     Icon=application-vnd.ms-excel
-    Exec=python3 "%h/${scriptRel}" "%f"
+    Exec=python3 "%h/.local/bin/weekly-booking.py" "%f"
   '';
 
 home.packages = with pkgs; [
