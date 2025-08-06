@@ -7,7 +7,7 @@ let
     (ps.openpyxl.overridePythonAttrs (_: { doCheck = false; }))  # no torch build
   ]);
 
-  scriptRel = ".local/bin/pdf2xlsx.py";   # name matches the simple script
+  scriptRel = ".local/bin/weekly-booking.py";   # name matches the simple script
   menuRel   = ".local/share/kio/servicemenus/convert-weekly-bookings.desktop";
 in
 {
