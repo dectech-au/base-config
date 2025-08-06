@@ -1,23 +1,23 @@
 { config, pkgs, ... }:
 
 let
-  # Minimal interpreter that already carries pdfplumber + openpyxl
+  # Interpreter with libs (tests disabled so no torch)
   pythonWithPkgs = pkgs.python311.withPackages (ps: [
     ps.pdfplumber
-    (ps.openpyxl.overridePythonAttrs (_: { doCheck = false; }))  # no torch build
+    (ps.openpyxl.overridePythonAttrs (_: { doCheck = false; }))
   ]);
 
-  scriptRel = ".local/bin/weekly-booking.py";   # name matches the simple script
+  scriptRel = ".local/bin/weekly-booking.py";
   menuRel   = ".local/share/kio/servicemenus/convert-weekly-bookings.desktop";
 in
 {
-  ## 1. Drop the script into $HOME (it’s the dumb one-to-one converter)
+  ## 1) Copy the Python script into $HOME
   home.file."${scriptRel}" = {
-    text       = builtins.readFile ./weekly-booking.py;
+    text       = builtins.readFile ./weekly-booking.py;  # <- this file must exist
     executable = true;
   };
 
-  ## 2. Service-menu entry (KF6, works on right-click)
+  ## 2) Create the KF6 context-menu entry
   home.file."${menuRel}".text = ''
     [Desktop Entry]
     Type=Service
