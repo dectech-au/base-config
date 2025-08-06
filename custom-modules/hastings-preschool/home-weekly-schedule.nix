@@ -17,7 +17,7 @@ in
   home.file."${serviceMenuRelPath}".text = ''
 [Desktop Entry]
 Type=Service
-ServiceTypes=KonqPopupMenu/Plugin
+ServiceTypes=KFileItemAction/Plugin
 MimeType=application/pdf;          # ← semicolon matters
 X-KDE-Priority=TopLevel
 
