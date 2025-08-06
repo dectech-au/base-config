@@ -14,10 +14,18 @@ in
   ];
 
   ## 2. Install the script
-  home.file."${scriptRel}" = {
-    text       = builtins.readFile ./pdf2xlsx.py;  # canvas file
-    executable = true;
-  };
+home.file."${scriptRel}".text = ''
+  #!/usr/bin/env python3
+  """
+  pdf2xlsx – dumb one-to-one converter
+  ====================================
+  [...]   # paste entire script here
+  """
+  from __future__ import annotations
+  import sys
+  ...
+'';
+
 
   ## 3. KDE 6 context-menu entry
   home.file."${menuRel}".text = ''
