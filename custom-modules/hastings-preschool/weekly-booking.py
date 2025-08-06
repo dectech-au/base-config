@@ -32,8 +32,16 @@ _illegal = re.compile(r"[\x00-\x08\x0B\x0C\x0E-\x1F]")
 # ──────────────────────── HELPERS ─────────────────────────────
 
 def extract_tables(pdf: pdfplumber.pdf.PDF) -> Iterator[List[List[str]]]:
+    """Yield the first table per page using lattice mode, fallback to stream."""
     for page in pdf.pages:
-        tables = page.extract_tables()
+        # Try lattice (line‑based) detection first – works with bordered grids
+        tables = page.extract_tables({
+            "vertical_strategy": "lines",
+            "horizontal_strategy": "lines",
+        })
+        if not tables:
+            # Fallback to default stream mode
+            tables = page.extract_tables()
         if tables:
             yield tables[0]
 
