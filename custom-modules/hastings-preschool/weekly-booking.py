@@ -28,45 +28,5 @@ from pathlib import Path
 
 import pdfplumber
 from openpyxl import Workbook
-from openpyxl.utils.cell import ILLEGAL_CHARACTERS_RE
-
-
-def pdf_to_xlsx(pdf_path: Path) -> Path:
-    """Extract the first table from each page and write to `*.xlsx`."""
-    out_path = pdf_path.with_suffix(".xlsx")
-    wb = Workbook()
-    wb.remove(wb.active)  # start with a clean workbook
-
-    with pdfplumber.open(str(pdf_path)) as pdf:
-        for page_num, page in enumerate(pdf.pages, start=1):
-            tables = page.extract_tables()
-            if not tables:
-                continue  # no table on this page
-            ws = wb.create_sheet(f"Page{page_num}")
-            for r_idx, row in enumerate(tables[0], start=1):
-                for c_idx, cell in enumerate(row, start=1):
-                    # Sanitise cell content so openpyxl doesn’t choke on PDF junk
-                    value = "" if cell is None else str(cell)
-                    value = ILLEGAL_CHARACTERS_RE.sub("", value)
-                    ws.cell(r_idx, c_idx, value)
-
-    wb.save(out_path)
-    return out_path
-
-
-def main() -> None:
-    if len(sys.argv) != 2:
-        print("Usage: pdf2xlsx.py schedule.pdf", file=sys.stderr)
-        sys.exit(1)
-
-    pdf_path = Path(sys.argv[1]).expanduser()
-    if not pdf_path.exists() or pdf_path.suffix.lower() != ".pdf":
-        print("Error: provide a valid .pdf file", file=sys.stderr)
-        sys.exit(1)
-
-    out = pdf_to_xlsx(pdf_path)
-    print(f"✓ Wrote {out}")
-
-
-if __name__ == "__main__":
-    main()
+import re
+_illegal = re.compile(r"[
