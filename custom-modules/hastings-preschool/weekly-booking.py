@@ -27,7 +27,7 @@ Usage patterns
 weekly-booking.py /path/to/Week8-Bookings.pdf          # writes Week8-Bookings.xlsx
 
 # 2. From your .desktop entry — right‑click a PDF → “Convert Weekly Bookings”
-Exec=/home/tim/.scripts/weekly-booking.py %f           # %f supplies the PDF
+Exec=/home/tim/.local/bin/weekly-booking.py %f           # %f supplies the PDF
 ```
 
 Code
