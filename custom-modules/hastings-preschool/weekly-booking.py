@@ -52,25 +52,31 @@ def pdf_to_single_sheet(pdf_path: Path) -> Path:
     ws.title = "Roster"
 
     current_row = 1
-    header_written = False  # track if the column header has been written
+    header_written = False  # we only want one column‑header row
 
     with pdfplumber.open(str(pdf_path)) as pdf:
         for table in extract_tables(pdf):
             for row in table:
-                # Identify the column‑header row by its second cell being "Name".
-                # Keep the very first one; drop repeats that appear on continuation pages.
-                second_cell = clean_cell(row[1]) if len(row) > 1 else ""
-                is_column_header = second_cell.lower() == "name"
+                # Skip empty or whitespace‑only rows (PDF junk lines)
+                if not any(cell and str(cell).strip() for cell in row):
+                    continue
 
-                if is_column_header:
-                    if header_written:
-                        continue  # skip duplicate header row
+                # Detect the real column header: second cell == "Name" (case‑insensitive)
+                second = clean_cell(row[1]) if len(row) >= 2 else ""
+                is_col_header = second.lower() == "name"
+                if is_col_header and header_written:
+                    continue  # duplicate header on continuation page
+                if is_col_header:
                     header_written = True
 
-                # Write the row to the sheet
+                # Write row data
                 for col_idx, cell in enumerate(row, start=1):
                     ws.cell(current_row, col_idx, clean_cell(cell))
                 current_row += 1
+
+    # If we somehow never wrote anything, raise an error for easier debugging
+    if current_row == 1:
+        raise RuntimeError("No tables found in PDF – check file format")
 
     wb.save(out_path)
     return out_path
