@@ -1,12 +1,5 @@
 { config, pkgs, ... }:
-
 let
-  # Interpreter with libs (tests disabled so no torch)
-  pythonWithPkgs = pkgs.python311.withPackages (ps: [
-    (ps.pdfplumber.overridePythonAttrs (_: { doCheck = false; }))
-    (ps.openpyxl.overridePythonAttrs (_: { doCheck = false; }))
-  ]);
-
   scriptRel = ".local/bin/weekly-booking.py";
   menuRel   = ".local/share/kio/servicemenus/convert-weekly-bookings.desktop";
 in
@@ -32,4 +25,11 @@ in
     Icon=application-vnd.ms-excel
     Exec=${pythonWithPkgs}/bin/python "%h/${scriptRel}" "%f"
   '';
+
+home.packages = with pkgs; [
+  python311                                # <—— the interpreter
+  (python311Packages.pdfplumber.overridePythonAttrs (_: { doCheck = false; }))
+  (python311Packages.openpyxl  .overridePythonAttrs (_: { doCheck = false; }))
+];
+
 }
