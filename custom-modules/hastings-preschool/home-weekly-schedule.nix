@@ -1,17 +1,38 @@
 { config, pkgs, ... }:
+
 let
-  pythonWithPkgs = pkgs.python311.withPackages (ps: [
-    (ps.pdfplumber.overridePythonAttrs (_: { doCheck = false; }))
-    (ps.openpyxl   .overridePythonAttrs (_: { doCheck = false; }))
-  ]);
+  # 1. Simple helper script – PDF ➜ CSV ➜ ODS
+  scriptRel = ".local/bin/pdf2ods";   # will live in $HOME/.local/bin
+  menuRel   = ".local/share/kio/servicemenus/convert-weekly-bookings.desktop";
 in
 {
-  home.file.".local/bin/weekly-booking.py" = {
-    text       = builtins.readFile ./weekly-booking.py;
+  ## 1. Install the helper script
+  home.file."${scriptRel}" = {
     executable = true;
+    text = ''
+      #!/usr/bin/env bash
+      set -euo pipefail
+
+      pdf="$1"
+      [[ -f "$pdf" ]] || { echo "No such file: $pdf" >&2; exit 1; }
+
+      base="${pdf%.*}"
+      csv="${base}.csv"
+      ods="${base}.ods"
+
+      # lattice = use cell borders; -p all = every page
+      tabula -lattice -p all -o "$csv" "$pdf"
+
+      # convert CSV ➜ ODS
+      soffice --headless --convert-to ods "$csv" >/dev/null
+
+      rm -f "$csv"
+      echo "✓ Wrote $ods"
+    '';
   };
 
-  home.file.".local/share/kio/servicemenus/convert-weekly-bookings.desktop".text = ''
+  ## 2. KDE service-menu entry (Plasma 6)
+  home.file."${menuRel}".text = ''
     [Desktop Entry]
     Type=Service
     X-KDE-ServiceTypes=KFileItemAction/Plugin
@@ -21,10 +42,14 @@ in
     Actions=ConvertWeekly
 
     [Desktop Action ConvertWeekly]
-    Name=Convert to Spreadsheet
-    Icon=application-vnd.ms-excel
-    Exec=python3 "%h/.local/bin/weekly-booking.py" "%f"
+    Name=Convert to ODS
+    Icon=application-vnd.oasis.opendocument.spreadsheet
+    Exec="%h/${scriptRel}" "%f"
   '';
 
-  home.packages = [ pythonWithPkgs ];
+  ## 3. Packages needed at runtime
+  home.packages = [
+    pkgs.tabula-java   # table extractor
+    pkgs.libreoffice   # soffice for CSV ➜ ODS
+  ];
 }
