@@ -3,7 +3,7 @@
 let
   # Interpreter with libs (tests disabled so no torch)
   pythonWithPkgs = pkgs.python311.withPackages (ps: [
-    ps.pdfplumber
+    (ps.pdfplumber.overridePythonAttrs (_: { doCheck = false; }))
     (ps.openpyxl.overridePythonAttrs (_: { doCheck = false; }))
   ]);
 
