@@ -3,7 +3,7 @@
 
 let
   scriptRelPath      = ".local/bin/weekly-booking.py";
-  serviceMenuRelPath = ".local/share/kservices5/ServiceMenus/convert-weekly-bookings.desktop";
+  serviceMenuRelPath = ".local/share/kio/servicemenus/convert-weekly-bookings.desktop";
   scriptSource       = builtins.readFile ./weekly-booking.py;
 in
 {
