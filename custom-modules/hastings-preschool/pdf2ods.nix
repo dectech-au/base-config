@@ -25,4 +25,9 @@
       echo "✓ Wrote $ods"
     '';
   };
+
+  home.packages = with pkgs; [
+    tubula-java
+    jdk17_headless
+  ];
 }
