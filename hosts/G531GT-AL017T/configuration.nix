@@ -60,7 +60,6 @@
 		# ../../sys-modules/wine.nix
 		#../../sys-modules/wordpress.nix
 		#./personalisation/wallpaper-service.nix
-		../../custom-modules/hastings-preschool/0-imports.nix
 	];
   
   # Bootloader.
