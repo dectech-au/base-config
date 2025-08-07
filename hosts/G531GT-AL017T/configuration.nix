@@ -40,6 +40,7 @@
 		../../sys-modules/papirus.nix
 		#../../sys-modules/pinegrow.nix
 		../../sys-modules/plasma.nix
+		../../sys-modules/poppler.nix
 		../../sys-modules/prometheus.nix
 		#../../sys-modules/protonmail-bridge.nix
 		#../../sys-modules/protonvpn.nix
