@@ -1,3 +1,4 @@
+#/etc/nixos/custom-modules/hastings-preschool/pdf2ods.nix
 { config, pkgs, ... }:
 {
   home.file.".local/bin/pdf2ods" = {
