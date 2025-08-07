@@ -5,23 +5,33 @@ let
   menuRel   = ".local/share/kio/servicemenus/convert-weekly-bookings.desktop";
 in
 {
-  home.file."${scriptRel}" = {
-    executable = true;
-    text = ''                                  # same Bash helper as before
-      #!/usr/bin/env bash
-      set -euo pipefail
-      pdf="$1"
-      base="''${pdf%.*}"
-      csv="''${base}.csv"
-      ods="''${base}.ods"
-      tabula-java -lattice -p all -o "$csv" "$pdf"
-      soffice --headless --convert-to ods "$csv" >/dev/null
-      rm -f "$csv"
-      echo "✓ Wrote $ods"
-    '';
-  };
+home.file.".local/bin/pdf2ods" = {
+  executable = true;
+  text = ''
+    #!/usr/bin/env bash
+    set -euo pipefail
 
-  home.file."${menuRel}".text = ''
+    pdf="$1"
+    [[ -f "$pdf" ]] || { echo "No such file: $pdf" >&2; exit 1; }
+
+    dir="$(dirname "$pdf")"
+    base="$(basename "${pdf%.*}")"
+    csv="$dir/$base.csv"
+    ods="$dir/$base.ods"
+
+    # lattice = use cell borders; -p all = every page
+    tabula -lattice -p all -o "$csv" "$pdf"
+
+    # --outdir ensures the ODS lands next to the PDF, not in $PWD
+    soffice --headless --convert-to ods --outdir "$dir" "$csv" >/dev/null
+    rm -f "$csv"
+
+    echo "✓ Wrote $ods"
+  '';
+};
+
+
+  home.file.".local/share/kio/servicemenus/convert-weekly-bookings.desktop".text = ''
     [Desktop Entry]
     Type=Service
     X-KDE-ServiceTypes=KFileItemAction/Plugin
@@ -33,6 +43,6 @@ in
     [Desktop Action ConvertWeekly]
     Name=Convert to ODS
     Icon=application-vnd.oasis.opendocument.spreadsheet
-    Exec=${config.home.homeDirectory}/${scriptRel} %f
+    Exec=${config.home.homeDirectory}/.local/bin/pdf2ods %f
   '';
 }
