@@ -4,6 +4,6 @@
   imports = [
     ./right-click-menu.nix
     ./text2ods.nix
-    ./oular2csv.nix
+    ./okular2csv.nix
   ];
 }
