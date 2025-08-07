@@ -14,7 +14,7 @@ in
       base="''${pdf%.*}"
       csv="''${base}.csv"
       ods="''${base}.ods"
-      tabula -lattice -p all -o "$csv" "$pdf"
+      tabula-java -lattice -p all -o "$csv" "$pdf"
       soffice --headless --convert-to ods "$csv" >/dev/null
       rm -f "$csv"
       echo "✓ Wrote $ods"
