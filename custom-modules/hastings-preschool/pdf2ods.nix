@@ -14,21 +14,22 @@
       base="$(basename "''${pdf%.*}")"
       
       csv="$dir/$base.csv"
-      ods="$dir/output.ods"
+      ods="$dir/output.ods"           # fixed output name
       
+      # extract the grid exactly
       tabula-java --lattice --spreadsheet -p all -o "$csv" "$pdf"
       
-      # --------------- New, simpler conversion ---------------
+      # convert CSV → ODS
       ssconvert "$csv" "$ods" >/dev/null 2>&1
-      # -------------------------------------------------------
-      
       rm -f "$csv"
+      
       echo "✓ Wrote $ods"
     '';
   };
 
   home.packages = with pkgs; [
     tabula-java
+    gnumeric
     jdk17_headless
   ];
 }
