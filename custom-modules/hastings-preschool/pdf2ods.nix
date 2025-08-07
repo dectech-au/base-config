@@ -27,7 +27,7 @@
   };
 
   home.packages = with pkgs; [
-    tubula-java
+    tabula-java
     jdk17_headless
   ];
 }
