@@ -12,12 +12,12 @@
       dir="$(dirname "$pdf")"
       base="$(basename "''${pdf%.*}")"
       csv="$dir/$base.csv"
-      ods="$dir/$base.ods"
+      ods="$dir/output.ods"           # always the same target name
 
-      # lattice = use cell borders; -p all = every page
-      tabula-java -lattice -p all -o "$csv" "$pdf"
+      # --spreadsheet keeps column structure; -lattice follows cell borders
+      tabula-java --spreadsheet -lattice -p all -o "$csv" "$pdf"
 
-      # convert CSV → ODS in the same directory as the PDF
+      # LibreOffice converts CSV → ODS in the same dir
       soffice --headless --convert-to ods --outdir "$dir" "$csv" >/dev/null
       rm -f "$csv"
 
