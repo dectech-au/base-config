@@ -3,6 +3,7 @@
 {
   imports = [
     ./right-click-menu.nix
-    ./pdf2ods.nix
+    ./text2ods.nix
+    ./oular2csv.nix
   ];
 }
