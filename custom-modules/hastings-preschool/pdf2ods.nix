@@ -4,28 +4,30 @@
   home.file.".local/bin/pdf2ods" = {
     executable = true;
     text = ''
-#!/usr/bin/env bash
-set -euo pipefail
+      #!/usr/bin/env bash
+      set -euo pipefail
 
-pdf="$1"; [[ -f "$pdf" ]] || { echo "No such file: $pdf" >&2; exit 1; }
+      pdf="$1"
+      [[ -f "$pdf" ]] || { echo "No such file: $pdf" >&2; exit 1; }
 
-dir="$(dirname "$pdf")"
-base="$(basename "''${pdf%.*}")"
+      dir="$(dirname "$pdf")"
+      base="$(basename "''${pdf%.*}")"
 
-csv="$dir/$base.csv"
-ods="$dir/output.ods"
+      csv="$dir/$base.csv"
+      ods="$dir/output.ods"
 
-tabula-java --lattice              \
-            --spreadsheet          \
-            --no-spreadsheet-line-endings \
-            -p all                 \
-            -o "$csv" "$pdf"
+      # Extract table grid; keep exact column layout
+      tabula-java --lattice --spreadsheet -p all -o "$csv" "$pdf"
 
-soffice --headless --convert-to ods --outdir "$dir" "$csv" >/dev/null 2>&1
-mv -f "$dir/$base.ods" "$ods"      # rename to output.ods
-rm -f "$csv"
+      # Tell LibreOffice the CSV uses comma (44) & quote (34); no previews
+      soffice --headless \
+              --convert-to ods:"Text - txt - csv (StarCalc):44,34,76" \
+              --outdir "$dir" "$csv" >/dev/null 2>&1
 
-echo "✓ Wrote $ods"
+      mv -f "$dir/$base.ods" "$ods"
+      rm -f "$csv"
+
+      echo "✓ Wrote $ods"
     '';
   };
 
