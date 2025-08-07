@@ -21,7 +21,7 @@ in
       ods="$dir/$base.ods"
 
       # lattice = use cell borders; -p all = every page
-      tabula -lattice -p all -o "$csv" "$pdf"
+      tabula-java -lattice -p all -o "$csv" "$pdf"
 
       # convert CSV → ODS in the same directory as the PDF
       soffice --headless --convert-to ods --outdir "$dir" "$csv" >/dev/null
