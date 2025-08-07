@@ -25,7 +25,7 @@
 		../../home-modules/start-menu/update.nix
 		../../home-modules/start-menu/windows.nix
 		#./personalisation/wallpaper.nix
-		../../custom-modules/hastings-preschool/home-weekly-schedule.nix
+		../../custom-modules/hastings-preschool/0-imports.nix
   ];
 
   home.username = "dectec";
