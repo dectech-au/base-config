@@ -1,7 +1,7 @@
-#/etc/nixos/custom-modules/hastings-preschool/pdf2ods.nix
+#/etc/nixos/custom-modules/hastings-preschool/text2ods.nix
 { config, pkgs, ... }:
 {
-  home.file.".local/bin/pdf2ods" = {
+  home.file.".local/bin/text2ods" = {
     executable = true;
     text = ''
       #!/usr/bin/env bash
