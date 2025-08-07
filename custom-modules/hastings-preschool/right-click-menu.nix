@@ -1,7 +1,7 @@
 #/etc/nixos/custom-modules/hastings-preschool/right-click-menu.nix
 { config, lib, pkgs, ... }:
 {
-  home.file."${menuRel}".text = ''
+  home.file.".local/share/kio/servicemenus/convert-weekly-bookings.desktop".text = ''
     [Desktop Entry]
     Type=Service
     X-KDE-ServiceTypes=KFileItemAction/Plugin
@@ -13,6 +13,6 @@
     [Desktop Action ConvertWeekly]
     Name=Convert to ODS
     Icon=application-vnd.oasis.opendocument.spreadsheet
-    Exec=${config.home.homeDirectory}/${scriptRel} %f
+    Exec=${config.home.homeDirectory}/.local/bin/pdf2ods %f
   '';
 }
