@@ -4,25 +4,28 @@
   home.file.".local/bin/pdf2ods" = {
     executable = true;
     text = ''
-      #!/usr/bin/env bash
-      set -euo pipefail
+#!/usr/bin/env bash
+set -euo pipefail
 
-      pdf="$1"
-      [[ -f "$pdf" ]] || { echo "No such file: $pdf" >&2; exit 1; }
+pdf="$1"; [[ -f "$pdf" ]] || { echo "No such file: $pdf" >&2; exit 1; }
 
-      dir="$(dirname "$pdf")"
-      base="$(basename "''${pdf%.*}")"
-      csv="$dir/$base.csv"
-      ods="$dir/output.ods"           # always the same target name
+dir="$(dirname "$pdf")"
+base="$(basename "''${pdf%.*}")"
 
-      # --spreadsheet keeps column structure; -lattice follows cell borders
-      tabula-java --spreadsheet -lattice -p all -o "$csv" "$pdf"
+csv="$dir/$base.csv"
+ods="$dir/output.ods"
 
-      # LibreOffice converts CSV → ODS in the same dir
-      soffice --headless --convert-to ods --outdir "$dir" "$csv" >/dev/null
-      rm -f "$csv"
+tabula-java --lattice              \
+            --spreadsheet          \
+            --no-spreadsheet-line-endings \
+            -p all                 \
+            -o "$csv" "$pdf"
 
-      echo "✓ Wrote $ods"
+soffice --headless --convert-to ods --outdir "$dir" "$csv" >/dev/null 2>&1
+mv -f "$dir/$base.ods" "$ods"      # rename to output.ods
+rm -f "$csv"
+
+echo "✓ Wrote $ods"
     '';
   };
 
