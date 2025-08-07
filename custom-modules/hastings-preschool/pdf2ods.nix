@@ -31,5 +31,6 @@
     tabula-java
     gnumeric
     jdk17_headless
+    poppler
   ];
 }
