@@ -7,12 +7,17 @@
 #!/usr/bin/env python3
 # okular_txt_to_ods.py
 # Parse Okular "Export as Plain Text" and produce output.ods with one sheet per room.
-# No third-party Python deps. Requires: ssconvert (from gnumeric) on PATH.
+# Deps: python3 + odfpy (Nix: python311Packages.odfpy). No CSV/ssconvert needed.
 
-import sys, re, csv, tempfile, subprocess
+import sys, re
 from pathlib import Path
+from typing import List, Dict, Any
 
-DAYS = ["Mon","Tue","Wed","Thu","Fri"]  # drop Sat/Sun entirely
+from odf.opendocument import OpenDocumentSpreadsheet
+from odf.table import Table, TableRow, TableCell
+from odf.text import P
+
+DAYS = ["Mon","Tue","Wed","Thu","Fri"]  # Sat/Sun dropped
 
 ROOM_RE = re.compile(r"([A-Za-z/\- ]+ Room),")
 DATE_RE = re.compile(r"\d{2}/\d{2}/\d{4}")
@@ -21,27 +26,25 @@ def is_room_line(line: str):
     m = ROOM_RE.search(line)
     return m.group(1).strip() if m else None
 
-def find_date_positions(line: str):
-    # positions of dd/mm/yyyy; we use these as weekday column anchors
+def date_positions(line: str):
     return [m.start() for m in DATE_RE.finditer(line)]
 
 def is_age_or_contact(line: str):
     s = line.strip()
     return bool(re.search(r"\b\d+\s+yrs", s)) or bool(re.search(r"\b[MPHW]\s*:\s*\S", s)) or s == ""
 
-def parse_age(line: str) -> str | None:
+def parse_age(line: str):
     m = re.search(r"(\d+)\s*yrs(?:\s+(\d+)\s*mths)?", line)
     if not m: return None
-    y = int(m.group(1))
+    yy = int(m.group(1))
     mm = m.group(2)
-    return f"{y}y{int(mm)}m" if mm else f"{y}y"
+    return f"{yy}y{int(mm)}m" if mm else f"{yy}y"
 
 def split_name_guardian(seg: str):
-    # Prefer double-space split; fallback heuristic
-    m2 = list(re.finditer(r"\s{2,}", seg))
-    for r in m2:
-        left = seg[:r.start()].rstrip()
-        right = seg[r.end():].strip()
+    # Prefer double-space; fallback to first two tokens heuristic
+    for m in re.finditer(r"\s{2,}", seg):
+        left = seg[:m.start()].rstrip()
+        right = seg[m.end():].strip()
         if left and right and not right.lower().startswith("guardian"):
             return left, right
     toks = seg.split()
@@ -49,128 +52,121 @@ def split_name_guardian(seg: str):
         return " ".join(toks[:2]), " ".join(toks[2:])
     return None, None
 
-def normalize_room_key(room_header: str) -> str:
-    base = room_header.replace(" Room","").strip()
-    base = base.split(",")[0].strip()
-    return re.sub(r"[^A-Za-z0-9]+", "_", base)
+def parse_okular_text(lines: List[str]) -> Dict[str, Dict[str, Any]]:
+    rooms: Dict[str, Dict[str, Any]] = {}
+    current = None
+    days_pos: List[int] | None = None
+    days_start: int | None = None
+    day_dates: List[str] = []
 
-def parse_okular_text(lines: list[str]):
-    """
-    Returns: dict(room_key -> {"title": room_title, "rows": [ [Name(Age), Mon..Fri], ..., ["Totals", Mon..Fri] ]})
-    """
-    rooms = {}
-    current_room = None
-    days_pos = None
-    days_start = None
-
-    i = 0
-    n = len(lines)
+    i, n = 0, len(lines)
     while i < n:
         line = lines[i].rstrip("\n")
 
-        room_title = is_room_line(line)
-        if room_title:
-            key = normalize_room_key(room_title)
-            rooms[key] = {"title": room_title, "rows": []}
-            current_room = key
+        rt = is_room_line(line)
+        if rt:
+            key = rt.replace(" Room","").split(",")[0].strip()
+            rooms[key] = {"title": rt, "rows": [], "headers": None}
+            current = key
             days_pos = None
             days_start = None
+            day_dates = []
             i += 1
             continue
 
-        if current_room:
-            pos = find_date_positions(line)
+        if current:
+            pos = date_positions(line)
             if pos and len(pos) >= 5:
-                days_pos = pos[:5]  # Mon..Fri only
+                days_pos = pos[:5]
                 days_start = days_pos[0]
+                # capture the actual date strings for header labels
+                ends = days_pos[1:] + [len(line)]
+                day_dates = [line[s:e].strip() for s, e in zip(days_pos, ends)]
+                # save header labels once: "Mon 11/08/2025" etc
+                rooms[current]["headers"] = ["Name"] + [
+                    f"{day} {dt}" for day, dt in zip(DAYS, day_dates)
+                ]
                 i += 1
                 continue
 
-        if not (current_room and days_pos):
+        if not (current and days_pos and days_start is not None):
             i += 1
             continue
 
-        # Skip duplicated "Name  Guardian" header rows
         if "Name" in line and "Guardian" in line:
             i += 1
             continue
 
-        # Robust totals parsing: grab first five n/d fractions by regex, ignore "Closed"
+        # Totals row: take first five n/d pairs only (ignore any "Closed")
         if line.strip().lower().startswith("totals"):
             pairs = re.findall(r"(\d+)\s*/\s*(\d+)", line)
             vals = [f"{a}/{b}" for (a,b) in pairs[:5]]
-            while len(vals) < 5:
-                vals.append("")
-            rooms[current_room]["rows"].append(["Totals"] + vals)
+            while len(vals) < 5: vals.append("")
+            rooms[current]["rows"].append(["Totals"] + vals)
             i += 1
             continue
 
-        # Skip standalone age/contact lines; we read age explicitly below
         if is_age_or_contact(line):
             i += 1
             continue
 
-        # Candidate data row: Name + Guardian in the text segment before day columns
+        # Child row
         seg = line[:days_start]
         name, guardian = split_name_guardian(seg)
         if not (name and guardian):
             i += 1
             continue
 
-        # Pull age from the very next line (Okular dump format)
-        age = None
-        if i + 1 < n:
-            age = parse_age(lines[i+1])
+        # age from next line
+        age = parse_age(lines[i+1]) if i + 1 < n else None
         name_age = f"{name} ({age})" if age else name
 
-        # Collect weekday flags from this line and the next two lines
+        # day flags from this + next two lines
         look = [line]
         if i + 1 < n: look.append(lines[i+1])
         if i + 2 < n: look.append(lines[i+2])
-        ends = days_pos[1:] + [max(len(L) for L in look)]
-        day_vals = [
-            ("Fixed" if any("Fixed" in L[s:e] for L in look) else "")
-            for s, e in zip(days_pos, ends)
-        ]
+        maxlen = max(len(L) for L in look)
+        ends = days_pos[1:] + [maxlen]
+        day_vals = [("Fixed" if any("Fixed" in L[s:e] for L in look) else "")
+                    for s, e in zip(days_pos, ends)]
 
-        rooms[current_room]["rows"].append([name_age] + day_vals)
+        rooms[current]["rows"].append([name_age] + day_vals)
 
-        # advance and swallow following age/contact lines
+        # advance, skipping age/contact lines
         i += 1
         while i < n and is_age_or_contact(lines[i]):
             i += 1
         continue
 
-        # default
         i += 1
 
     return rooms
 
-def write_room_csvs(rooms: dict, outdir: Path) -> list[Path]:
-    paths = []
-    for key, data in rooms.items():
-        csv_path = outdir / f"{key}.csv"
-        with csv_path.open("w", newline="", encoding="utf-8") as f:
-            w = csv.writer(f)
-            w.writerow(["Name"] + DAYS)  # Guardian removed; weekend removed
-            for row in data["rows"]:
-                if row and row[0] == "Totals":
-                    w.writerow(["Totals"] + row[1:6])  # five weekday totals
-                else:
-                    w.writerow([row[0]] + row[1:6])    # Name(Age) + Mon..Fri
-        paths.append(csv_path)
-    return paths
-
-def merge_to_ods(csv_paths: list[Path], sheet_order: list[str], out_ods: Path):
-    ordered = []
-    name_map = {p.stem: p for p in csv_paths}
-    for name in sheet_order:
-        if name in name_map:
-            ordered.append(str(name_map[name]))
-    if not ordered:
-        ordered = [str(p) for p in csv_paths]
-    cmd = ["ssconvert", "--merge-to", str(out_ods)] + ordered
-    subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+def write_ods(rooms: Dict[str, Dict[str, Any]], out_path: Path):
+    doc = OpenDocumentSpreadsheet()
+    order = ["Barrang","Bilin","Naatiyn"]
+    for key in [k for k in order if k in rooms] + [k for k in rooms if k not in order]:
+        data = rooms[key]
+        table = Table(name=key)
+        # Title row
+        tr = TableRow(); tc = TableCell(valuetype="string"); tc.addElement(P(text=data["title"])); tr.addElement(tc)
+        table.addElement(tr)
+        # Header row
+        headers = data.get("headers") or (["Name"] + DAYS)
+        tr = TableRow()
+        for h in headers:
+            tc = TableCell(valuetype="string"); tc.addElement(P(text=h)); tr.addElement(tc)
+        table.addElement(tr)
+        # Data rows
+        for row in data["rows"]:
+            tr = TableRow()
+            for val in row:
+                # force text so 7/15 never becomes a date
+                tc = TableCell(valuetype="string"); tc.addElement(P(text=str(val)))
+                tr.addElement(tc)
+            table.addElement(tr)
+        doc.spreadsheet.addElement(table)
+    doc.save(str(out_path), True)
 
 def main():
     if len(sys.argv) not in (2,3):
@@ -187,15 +183,12 @@ def main():
         print("No rooms parsed. Is this an Okular plain-text export?", file=sys.stderr)
         sys.exit(2)
 
-    with tempfile.TemporaryDirectory() as tmpd:
-        csvs = write_room_csvs(rooms, Path(tmpd))
-        preferred = ["Barrang", "Bilin", "Naatiyn"]
-        merge_to_ods(csvs, preferred, out)
-
-    print(f"✓ Wrote {out}")
+    write_ods(rooms, out)
+    print(f"OK: wrote {out}")
 
 if __name__ == "__main__":
     main()
+
 
     '';
   };
