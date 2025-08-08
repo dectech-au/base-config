@@ -4,26 +4,18 @@
   home.file.".local/bin/text2ods" = {
     executable = true;
     text = ''
-      #!/usr/bin/env bash
-      set -euo pipefail
-      
-      pdf="$1"
-      [[ -f "$pdf" ]] || { echo "No such file: $pdf" >&2; exit 1; }
-      
-      dir="$(dirname "$pdf")"
-      base="$(basename "''${pdf%.*}")"
-      
-      csv="$dir/$base.csv"
-      ods="$dir/output.ods"           # fixed output name
-      
-      # extract the grid exactly
-      tabula-java --lattice --spreadsheet -p all -o "$csv" "$pdf"
-      
-      # convert CSV → ODS
-      ssconvert "$csv" "$ods" >/dev/null 2>&1
-      rm -f "$csv"
-      
-      echo "✓ Wrote $ods"
+#!/usr/bin/env bash
+set -euo pipefail
+txt="$1"
+[[ -f "$txt" ]] || { echo "No such file: $txt" >&2; exit 1; }
+dir="$(dirname "$txt")"
+base="$(basename "${txt%.*}")"
+csv="$dir/$base.csv"
+out="$dir/output.ods"
+python3 "$HOME/.local/bin/okular2csv.py" "$txt" "$csv"
+ssconvert "$csv" "$out" >/dev/null 2>&1
+rm -f "$csv"
+echo "✓ Wrote $out"
     '';
   };
 
