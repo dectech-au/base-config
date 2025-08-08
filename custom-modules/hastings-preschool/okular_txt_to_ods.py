@@ -16,14 +16,14 @@ DAYS = ["Mon","Tue","Wed","Thu","Fri"]  # weekend removed
 ROOM_LINE = re.compile(r"(.+ Room, .+ - .+)$")
 DATE_RE   = re.compile(r"\d{2}/\d{2}/\d{4}")
 
-# Column widths tuned for your LibreOffice pixel readout
+# Column widths tuned to your Calc pixel readout
 COL_A_CM   = "7.303cm"  # ~320 px
 COL_W_CM   = "2.622cm"  # ~111 px (weekday)
 COL_GAP_CM = "0.741cm"  # ~27 px  (gap)
 
-# Row heights (px * 0.75 = pt)
-ROW1_HEIGHT_PT  = "29.25pt"  # ~39 px  (cut ~1/3 from previous 59 px)
-BODY_HEIGHT_PT  = "21.75pt"  # ~29 px  (match your row 2, apply to ALL non-title rows)
+# Row heights (force exact heights; Calc won't auto-grow)
+ROW1_HEIGHT_PT  = "29.25pt"  # ~39 px (you said row 1 is perfect; keeping it)
+BODY_HEIGHT_PT  = "21.75pt"  # ~29 px (apply to ALL non-title rows)
 
 def find_room_line(line: str):
     m = ROOM_LINE.search(line)
@@ -45,7 +45,7 @@ def parse_age(line: str):
 def two_token_name(seg: str) -> str:
     toks = seg.strip().split()
     if not toks: return ""
-    return " ".join(toks[:2])  # strictly first + last; no guardian bleed
+    return " ".join(toks[:2])  # strictly first + last; never includes guardian
 
 def room_key_from_title(title_line: str) -> str:
     return title_line.split(" Room,", 1)[0].strip()
@@ -76,6 +76,7 @@ def parse_okular_text(lines: List[str]) -> Dict[str, Dict[str, Any]]:
             i += 1
             continue
 
+        # First date row -> establish column anchors + header labels
         if pos_all is None:
             positions = date_positions(line)
             if positions and len(positions) >= 5:
@@ -94,20 +95,29 @@ def parse_okular_text(lines: List[str]) -> Dict[str, Dict[str, Any]]:
             i += 1
             continue
 
-        if "Name" in line and "Guardian" in line:
+        # Skip any continuation headers that appear later (this was making "Mon Tue" & a date row into data)
+        if all(d in line for d in DAYS):
+            i += 1
+            continue
+        if date_positions(line):  # another date row later on the page
             i += 1
             continue
 
+        # Skip the "Name  Guardian" header and age/contact lines
+        if "Name" in line and "Guardian" in line:
+            i += 1
+            continue
+        if is_age_or_contact(line):
+            i += 1
+            continue
+
+        # Totals row closes the room
         if line.strip().lower().startswith("totals"):
             pairs = re.findall(r"(\d+)\s*/\s*(\d+)", line)
             vals = [f"{a}/{b}" for (a,b) in pairs[:5]]
             while len(vals) < 5: vals.append("")
             rooms[current]["rows"].append(["Totals"] + vals)
-            locked_after_totals[current] = True  # ignore any following noise
-            i += 1
-            continue
-
-        if is_age_or_contact(line):
+            locked_after_totals[current] = True  # ignore any following noise (like "Hastings Presc")
             i += 1
             continue
 
@@ -119,20 +129,20 @@ def parse_okular_text(lines: List[str]) -> Dict[str, Dict[str, Any]]:
         age = parse_age(lines[i+1]) if i + 1 < n else None
         name_age = f"{name} ({age})" if age else name
 
-        # Build slices using date anchors. Expand lookahead to catch wrapped "Fixed Daily".
+        # Build day slices using date anchors; scan across this line + next 3 lines for wrapped "Fixed Daily"
         look = [line]
         for k in (1,2,3):
             if i + k < n:
                 look.append(lines[i+k])
         maxlen = max(len(L) for L in look)
         fri_end = pos_all[5] if len(pos_all) > 5 else maxlen
-        ends = [pos_all[1], pos_all[2], pos_all[3], pos_all[4], fri_end]
         starts = pos_all[:5]
+        ends   = [pos_all[1], pos_all[2], pos_all[3], pos_all[4], fri_end]
 
         day_vals = []
         for s, e in zip(starts, ends):
-            cell_text = " ".join(L[s:e] for L in look)
-            v = "Fixed" if ("Fixed" in cell_text) else ""
+            cell_text = " ".join(L[s:e] for L in look).lower()
+            v = "Fixed" if "fixed" in cell_text else ""
             day_vals.append(v)
 
         rooms[current]["rows"].append([name_age] + day_vals)
@@ -142,8 +152,6 @@ def parse_okular_text(lines: List[str]) -> Dict[str, Dict[str, Any]]:
         while i < n and is_age_or_contact(lines[i]):
             i += 1
         continue
-
-        i += 1
 
     return rooms
 
@@ -163,11 +171,11 @@ def write_ods(rooms: Dict[str, Dict[str, Any]], out_path: Path):
     doc.automaticstyles.addElement(title_cell)
     doc.automaticstyles.addElement(body_cell)
 
-    # Row styles
+    # Row styles (force exact heights)
     rowTop = style.Style(name="RowTop", family="table-row")
-    rowTop.addElement(style.TableRowProperties(rowheight=ROW1_HEIGHT_PT))
+    rowTop.addElement(style.TableRowProperties(rowheight=ROW1_HEIGHT_PT, useoptimalrowheight="false"))
     rowBody = style.Style(name="RowBody", family="table-row")
-    rowBody.addElement(style.TableRowProperties(rowheight=BODY_HEIGHT_PT))
+    rowBody.addElement(style.TableRowProperties(rowheight=BODY_HEIGHT_PT, useoptimalrowheight="false"))
     doc.automaticstyles.addElement(rowTop)
     doc.automaticstyles.addElement(rowBody)
 
@@ -195,7 +203,7 @@ def write_ods(rooms: Dict[str, Dict[str, Any]], out_path: Path):
             table.addElement(TableColumn(stylename=colW))
             table.addElement(TableColumn(stylename=colG))
 
-        # Row 1: merge A..K, centered Verdana 17, height ~39 px
+        # Row 1: merge A..K, centered Verdana 17, fixed height
         tr = TableRow(stylename=rowTop)
         tc = TableCell(valuetype="string", numbercolumnsspanned=11, stylename=title_cell)
         tc.addElement(P(text=data["title"]))
@@ -204,7 +212,7 @@ def write_ods(rooms: Dict[str, Dict[str, Any]], out_path: Path):
             tr.addElement(CoveredTableCell())
         table.addElement(tr)
 
-        # Row 2: headers (A2="Name"; then B+C, D+E, F+G, H+I, J+K merged)
+        # Row 2: headers (A2="Name"; then B+C, D+E, F+G, H+I, J+K merged), fixed height
         tr = TableRow(stylename=rowBody)
         headers = data.get("headers") or (["Name"] + DAYS)
         tc = TableCell(valuetype="string", stylename=body_cell); tc.addElement(P(text=headers[0])); tr.addElement(tc)
@@ -215,24 +223,20 @@ def write_ods(rooms: Dict[str, Dict[str, Any]], out_path: Path):
             tr.addElement(CoveredTableCell())
         table.addElement(tr)
 
-        # All remaining rows use the same body height (~29 px)
+        # Remaining rows: ALL same body height
         for row in data["rows"]:
             tr = TableRow(stylename=rowBody)
             # A: Name(Age) or "Totals"
             tc = TableCell(valuetype="string", stylename=body_cell); tc.addElement(P(text=str(row[0]))); tr.addElement(tc)
             # B..K: weekday then blank gap
             for val in row[1:6]:
-                t1 = TableCell(valuetype="string", stylename=body_cell)
-                # normalize "Fixed Daily" to "Fixed" (just in case)
-                txt = "Fixed" if val and "Fixed" in val else (val or "")
-                t1.addElement(P(text=txt))
-                tr.addElement(t1)
+                txt = "Fixed" if (val and "fixed" in val.lower()) or (val == "Fixed") else (val or "")
+                t1 = TableCell(valuetype="string", stylename=body_cell); t1.addElement(P(text=txt)); tr.addElement(t1)
                 tr.addElement(TableCell(valuetype="string", stylename=body_cell))  # gap
             table.addElement(tr)
 
         doc.spreadsheet.addElement(table)
 
-    # Exact filename, no auto-suffix
     doc.save(str(out_path), addsuffix=False)
 
 def main():
