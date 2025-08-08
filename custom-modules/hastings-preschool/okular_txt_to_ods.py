@@ -59,16 +59,22 @@ def two_token_name(seg: str) -> str:
 def room_key_from_title(title_line: str) -> str:
     return title_line.split(" Room,", 1)[0].strip()
 
-def _nearest_day(pos_first5: List[int], idx: int) -> int:
-    """Return day index 0..4 (Mon..Fri) whose date-start is closest to idx."""
+FIX_RE = re.compile(r"\bfixed(?:\s+daily)?\b", re.IGNORECASE)
+
+def _nearest_day(pos_first5, idx):
     return min(range(5), key=lambda k: abs(idx - pos_first5[k]))
 
-def detect_fixed(window_lines: List[str], pos_first5: List[int]) -> List[str]:
-    """Mark weekdays 'Fixed' based on match start index -> nearest date-start."""
+def detect_fixed(window_lines, pos_first5):
+    """
+    For each 'Fixed' / 'Fixed Daily' match, map the **center** of the token
+    to the nearest date-start column (Mon..Fri). This prevents left-edge bleed
+    into Monday when the word starts a bit early.
+    """
     flags = [False]*5
     for s in window_lines:
         for m in FIX_RE.finditer(s):
-            j = _nearest_day(pos_first5, m.start())
+            center = m.start() + (len(m.group(0)) // 2)
+            j = _nearest_day(pos_first5, center)
             flags[j] = True
     return ["Fixed" if x else "" for x in flags]
 
