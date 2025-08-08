@@ -1,52 +1,48 @@
 #!/usr/bin/env python3
 # okular_txt_to_ods.py
-# Convert Okular "Export as Plain Text" to an ODS with one sheet per room.
+# Convert Okular "Export as Plain Text" -> output.ods (one sheet per room)
 # Deps: python3 + odfpy
 
 import sys, re
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Tuple
 
 from odf.opendocument import OpenDocumentSpreadsheet
 from odf.table import Table, TableRow, TableCell, CoveredTableCell, TableColumn
 from odf.text import P
 from odf import style
 
-# ---------- parsing helpers ----------
+# ---------- regex & helpers ----------
 
 DAYS       = ["Mon","Tue","Wed","Thu","Fri"]  # weekend removed
 ROOM_LINE  = re.compile(r"(.+ Room, .+ - .+)$")
 DATE_RE    = re.compile(r"\d{2}/\d{2}/\d{4}")
 FIX_RE     = re.compile(r"\bfixed(?:\s+daily)?\b", re.IGNORECASE)
 
-def find_room_line(line: str):
+def find_room_title(line: str) -> str | None:
     m = ROOM_LINE.search(line)
     return m.group(1).strip() if m else None
 
+def is_weekday_header(line: str) -> bool:
+    return all(d in line for d in DAYS)
+
 def date_positions(line: str) -> List[int]:
-    """Start indices of dd/mm/yyyy on a header row."""
     return [m.start() for m in DATE_RE.finditer(line)]
 
 def dayname_positions(line: str) -> List[int] | None:
-    """Start indices of 'Mon Tue Wed Thu Fri' in a header row, left-to-right."""
-    pos = []
-    cur = 0
+    pos, cur = [], 0
     for name in DAYS:
         idx = line.find(name, cur)
-        if idx == -1:
-            return None
+        if idx == -1: return None
         pos.append(idx)
         cur = idx + 1
     return pos
-
-def looks_like_weekday_header(line: str) -> bool:
-    return all(t in line for t in DAYS)
 
 def is_age_or_contact(line: str) -> bool:
     s = line.strip()
     return bool(re.search(r"\b\d+\s+yrs", s)) or bool(re.search(r"\b[MPHW]\s*:\s*\S", s)) or s == ""
 
-def parse_age(line: str):
+def parse_age(line: str) -> str | None:
     m = re.search(r"(\d+)\s*yrs(?:\s+(\d+)\s*mths)?", line)
     if not m: return None
     yy = int(m.group(1)); mm = m.group(2)
@@ -56,126 +52,176 @@ def two_token_name(seg: str) -> str:
     toks = seg.strip().split()
     return " ".join(toks[:2]) if toks else ""
 
-def room_key_from_title(title_line: str) -> str:
-    return title_line.split(" Room,", 1)[0].strip()
+# ---------- section calibration by “Fixed Daily” positions ----------
 
-FIX_RE = re.compile(r"\bfixed(?:\s+daily)?\b", re.IGNORECASE)
-
-def _nearest_day(pos_first5, idx):
-    return min(range(5), key=lambda k: abs(idx - pos_first5[k]))
-
-def detect_fixed(window_lines, pos_first5):
+def cluster_positions(positions: List[int], tol: int = 3) -> List[Tuple[int,int]]:
     """
-    For each 'Fixed' / 'Fixed Daily' match, map the **center** of the token
-    to the nearest date-start column (Mon..Fri). This prevents left-edge bleed
-    into Monday when the word starts a bit early.
+    Greedy cluster of sorted positions. Returns list of (center, count),
+    where center is rounded mean of the cluster.
     """
-    flags = [False]*5
-    for s in window_lines:
-        for m in FIX_RE.finditer(s):
-            center = m.start() + (len(m.group(0)) // 2)
-            j = _nearest_day(pos_first5, center)
-            flags[j] = True
-    return ["Fixed" if x else "" for x in flags]
+    if not positions: return []
+    positions.sort()
+    clusters: List[List[int]] = [[positions[0]]]
+    for p in positions[1:]:
+        if p - clusters[-1][-1] <= tol:
+            clusters[-1].append(p)
+        else:
+            clusters.append([p])
+    result: List[Tuple[int,int]] = []
+    for cl in clusters:
+        center = int(round(sum(cl) / len(cl)))
+        result.append((center, len(cl)))
+    return result
+
+def calibrate_anchors_by_fixed(lines: List[str], start: int, stop_pred) -> Tuple[List[int], int]:
+    """
+    From `start`, scan down until stop_pred(line) is True.
+    Wait until we see the first FIX_RE, then record ALL FIX_RE start indices until stop.
+    Return (anchors[5], stop_index).
+    If fewer than 5 anchors found, return empty list; caller can fallback.
+    """
+    i = start
+    n = len(lines)
+    started = False
+    positions: List[int] = []
+    while i < n and not stop_pred(lines[i]):
+        line = lines[i]
+        matches = list(FIX_RE.finditer(line))
+        if matches:
+            started = True
+            positions.extend(m.start() for m in matches)
+        i += 1
+    # Choose top-5 most frequent clusters (then left->right)
+    centers = cluster_positions(positions, tol=3)
+    if len(centers) >= 5:
+        # pick by frequency then sort by center
+        top = sorted(centers, key=lambda x: (-x[1], x[0]))[:5]
+        anchors = sorted(c for c, _ in top)
+    else:
+        anchors = []
+    return anchors, i  # i is at the stop line index
+
+# ---------- parsing into room -> rows ----------
 
 def parse_okular_text(lines: List[str]) -> Dict[str, Dict[str, Any]]:
     rooms: Dict[str, Dict[str, Any]] = {}
-    current = None
-    pos_all: List[int] | None = None      # current page-section's Mon..Fri starts
-    days_start: int | None = None         # left edge of day columns (Mon start)
-    wrote_headers_for_room: Dict[str, bool] = {}  # only write once per sheet
-
     i, n = 0, len(lines)
+    current: str | None = None
+
     while i < n:
         line = lines[i].rstrip("\n")
 
-        # New room title
-        title = find_room_line(line)
+        # Room title opens a new sheet
+        title = find_room_title(line)
         if title:
-            key = room_key_from_title(title)
+            key = title.split(" Room,", 1)[0].strip()
             rooms[key] = {"title": title, "rows": [], "headers": None}
-            wrote_headers_for_room[key] = False
             current = key
-            pos_all = None
-            days_start = None
             i += 1
             continue
 
         if not current:
             i += 1; continue
 
-        # (Re)calibrate anchors when we hit ANY header block in this page section.
-        # Prefer date positions; if missing, fall back to weekday names.
-        positions = date_positions(line)
-        if not positions or len(positions) < 5:
-            if looks_like_weekday_header(line):
-                positions = dayname_positions(line)
-        if positions and len(positions) >= 5:
-            pos_all = positions[:5]
-            days_start = pos_all[0]
-            # stash printable headers ONCE per room (use the first date row we saw)
-            if not rooms[current]["headers"]:
-                # If this line had dates, build "Mon dd/mm/yyyy" headers; otherwise just day names.
-                if DATE_RE.search(line):
-                    hdrs = ["Name"] + [f"{DAYS[idx]} {line[positions[idx]:positions[idx+1] if idx+1 < len(line) else None].strip()}"
+        # A header starts a SECTION
+        header_pos = date_positions(line)
+        header_kind = "dates" if header_pos and len(header_pos) >= 5 else None
+        if not header_kind and is_weekday_header(line):
+            header_pos = dayname_positions(line)
+            header_kind = "names" if header_pos and len(header_pos) >= 5 else None
+
+        if header_kind:
+            # For the very first header we see for this room, build printable headers
+            if rooms[current]["headers"] is None:
+                if header_kind == "dates":
+                    hdrs = ["Name"] + [f"{DAYS[idx]} {line[header_pos[idx]: header_pos[idx+1] if idx+1 < len(line) else None].strip()}"
                                        for idx in range(5)]
                 else:
                     hdrs = ["Name"] + DAYS
                 rooms[current]["headers"] = hdrs
-            i += 1
-            continue  # don't treat header lines as data
 
-        # Skip the "Name  Guardian" line
-        if "Name" in line and "Guardian" in line:
-            i += 1; continue
+            # Determine section stop: next header/room/totals/EOF
+            def is_section_stop(L: str) -> bool:
+                return (find_room_title(L) is not None
+                        or L.strip().lower().startswith("totals")
+                        or is_weekday_header(L)
+                        or (bool(DATE_RE.search(L)) and len(date_positions(L)) >= 5))
 
-        # Totals row -> record and close this room section
-        if line.strip().lower().startswith("totals"):
-            pairs = re.findall(r"(\d+)\s*/\s*(\d+)", line)
-            vals = [f"{a}/{b}" for (a,b) in pairs[:5]]
-            while len(vals) < 5: vals.append("")
-            rooms[current]["rows"].append(["Totals"] + vals)
-            i += 1
-            # after totals, keep scanning; if another title appears, we’ll start a new sheet
+            # Calibrate anchors for THIS section using “Fixed Daily” positions
+            anchors, stop_idx = calibrate_anchors_by_fixed(lines, i+1, is_section_stop)
+
+            # If calibration failed (rare), fallback to the header’s own column starts
+            if not anchors:
+                anchors = header_pos[:5]
+
+            # days_start for name slicing (left of Monday column)
+            days_start = min(anchors) if anchors else header_pos[0]
+
+            # Now parse the section content line-by-line until stop_idx
+            j = i + 1
+            while j < stop_idx:
+                L = lines[j].rstrip("\n")
+
+                # Totals inside this section
+                if L.strip().lower().startswith("totals"):
+                    pairs = re.findall(r"(\d+)\s*/\s*(\d+)", L)
+                    vals = [f"{a}/{b}" for (a,b) in pairs[:5]]
+                    while len(vals) < 5: vals.append("")
+                    rooms[current]["rows"].append(["Totals"] + vals)
+                    j += 1
+                    continue
+
+                # Skip the 'Name  Guardian' line
+                if "Name" in L and "Guardian" in L:
+                    j += 1; continue
+
+                # Child row?
+                name = two_token_name(L[:days_start])
+                if not name:
+                    j += 1; continue
+
+                # Build a small lookahead window (this + next two) for wrapped text
+                window = [L]
+                if j + 1 < stop_idx: window.append(lines[j+1])
+                if j + 2 < stop_idx: window.append(lines[j+2])
+
+                # Age from the immediate next line if present
+                age = parse_age(window[1]) if len(window) > 1 else None
+                name_age = f"{name} ({age})" if age else name
+
+                # Decide Fixed per weekday using **match center** mapped to nearest anchor
+                flags = [False]*5
+                for W in window:
+                    for m in FIX_RE.finditer(W):
+                        center = m.start() + (len(m.group(0)) // 2)
+                        # nearest anchor
+                        idx = min(range(5), key=lambda k: abs(center - anchors[k]))
+                        flags[idx] = True
+                row = [name_age] + ["Fixed" if f else "" for f in flags]
+                rooms[current]["rows"].append(row)
+
+                # Move to next candidate line; swallow trailing age/contact lines
+                j += 1
+                while j < stop_idx and is_age_or_contact(lines[j]):
+                    j += 1
+
+            # Continue from the stop line (which is the next header/totals/room or EOF)
+            i = stop_idx
             continue
 
-        # We need anchors before we can parse a child row
-        if not (pos_all and days_start is not None):
-            i += 1; continue
-
-        # Child row (left segment -> name)
-        name = two_token_name(line[:days_start])
-        if not name:
-            i += 1; continue
-
-        # Build a small window (this + next 2 lines) to catch wraps and the age/contact line
-        window = [line]
-        if i + 1 < n: window.append(lines[i+1])
-        if i + 2 < n: window.append(lines[i+2])
-
-        # Age (from the immediate next line if present)
-        age = parse_age(window[1]) if len(window) > 1 else None
-        name_age = f"{name} ({age})" if age else name
-
-        # Detect "Fixed" per weekday using nearest date-start
-        day_vals = detect_fixed(window, pos_all[:5])
-        rooms[current]["rows"].append([name_age] + day_vals)
-
-        # Advance 1, then swallow trailing age/contact lines
+        # Any other line outside a section: skip
         i += 1
-        while i < n and is_age_or_contact(lines[i]):
-            i += 1
 
     return rooms
 
 # ---------- ODS writer ----------
 
-# widths tuned for Calc’s pixel mapping
+# widths tuned to your Calc pixels
 COL_A_CM   = "7.303cm"  # ~320 px
 COL_W_CM   = "2.622cm"  # ~111 px
 COL_GAP_CM = "0.741cm"  # ~27 px
 
-ROW1_HEIGHT_PT = "29.25pt"  # ~39 px (title row)
+ROW1_HEIGHT_PT = "29.25pt"  # ~39 px (title)
 ROW_BODY_PT    = "14pt"     # header + all data rows
 
 def write_ods(rooms: Dict[str, Dict[str, Any]], out_path: Path):
@@ -190,9 +236,6 @@ def write_ods(rooms: Dict[str, Dict[str, Any]], out_path: Path):
     title_cell.addElement(style.TextProperties(fontname="Verdana", fontsize="17pt"))
     title_cell.addElement(style.ParagraphProperties(textalign="center"))
 
-    body_cell = style.Style(name="CellBody", family="table-cell")
-    body_cell.addElement(style.TextProperties(fontname="Calibri", fontsize="10pt"))
-
     header_bgborder = style.Style(name="HeaderBGBorder", family="table-cell")
     header_bgborder.addElement(style.TableCellProperties(backgroundcolor="#ededed", border="0.50pt solid #000"))
     header_bgborder.addElement(style.TextProperties(fontname="Calibri", fontsize="10pt"))
@@ -202,7 +245,6 @@ def write_ods(rooms: Dict[str, Dict[str, Any]], out_path: Path):
     body_border.addElement(style.TextProperties(fontname="Calibri", fontsize="10pt"))
 
     doc.automaticstyles.addElement(title_cell)
-    doc.automaticstyles.addElement(body_cell)
     doc.automaticstyles.addElement(header_bgborder)
     doc.automaticstyles.addElement(body_border)
 
@@ -211,8 +253,7 @@ def write_ods(rooms: Dict[str, Dict[str, Any]], out_path: Path):
     rowTop.addElement(style.TableRowProperties(rowheight=ROW1_HEIGHT_PT, useoptimalrowheight="false"))
     rowBody = style.Style(name="RowBody", family="table-row")
     rowBody.addElement(style.TableRowProperties(rowheight=ROW_BODY_PT, useoptimalrowheight="false"))
-    doc.automaticstyles.addElement(rowTop)
-    doc.automaticstyles.addElement(rowBody)
+    doc.automaticstyles.addElement(rowTop); doc.automaticstyles.addElement(rowBody)
 
     # Column styles
     colA = style.Style(name="ColA", family="table-column")
@@ -230,7 +271,7 @@ def write_ods(rooms: Dict[str, Dict[str, Any]], out_path: Path):
         data = rooms[key]
         table = Table(name=key)
 
-        # Define columns: A, then (weekday,gap)*5 => A..K
+        # Columns: A + (weekday,gap)*5 => A..K
         table.addElement(TableColumn(stylename=colA))
         for _ in range(5):
             table.addElement(TableColumn(stylename=colW))
@@ -247,10 +288,9 @@ def write_ods(rooms: Dict[str, Dict[str, Any]], out_path: Path):
         # Row 2 — headers: A2 and each weekday merged pair (B+C, D+E, F+G, H+I, J+K)
         tr = TableRow(stylename=rowBody)
         headers = data.get("headers") or (["Name"] + DAYS)
-
         # A2
         t = TableCell(valuetype="string", stylename=header_bgborder); t.addElement(P(text=headers[0])); tr.addElement(t)
-        # Weekdays (style BOTH the anchor and covered cell so the merge is fully boxed)
+        # merged weekday pairs (style anchor + covered so borders fully enclose)
         for label in headers[1:6]:
             t = TableCell(valuetype="string", numbercolumnsspanned=2, stylename=header_bgborder)
             t.addElement(P(text=label))
@@ -258,28 +298,26 @@ def write_ods(rooms: Dict[str, Dict[str, Any]], out_path: Path):
             tr.addElement(CoveredTableCell(stylename=header_bgborder))
         table.addElement(tr)
 
-        # Rows 3..Totals — every cell A..K bordered; children get "Fixed"; totals show n/d
+        # Rows 3..Totals — border every cell A..K
         for row in data["rows"]:
             tr = TableRow(stylename=rowBody)
             is_totals = (row and row[0] == "Totals")
 
-            # Column A (name or Totals)
+            # A
             tA = TableCell(valuetype="string", stylename=body_border); tA.addElement(P(text=str(row[0]))); tr.addElement(tA)
 
             if not is_totals:
                 for val in row[1:6]:
                     t1 = TableCell(valuetype="string", stylename=body_border); t1.addElement(P(text=val)); tr.addElement(t1)
-                    tr.addElement(TableCell(valuetype="string", stylename=body_border))  # gap (bordered)
+                    tr.addElement(TableCell(valuetype="string", stylename=body_border))  # gap
             else:
                 for frac in row[1:6]:
                     t1 = TableCell(valuetype="string", stylename=body_border); t1.addElement(P(text=str(frac))); tr.addElement(t1)
                     tr.addElement(TableCell(valuetype="string", stylename=body_border))
-
             table.addElement(tr)
 
         doc.spreadsheet.addElement(table)
 
-    # exact name (no ".ods" twice)
     doc.save(str(out_path), addsuffix=False)
 
 # ---------- CLI ----------
