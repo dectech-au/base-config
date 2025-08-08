@@ -1,6 +1,11 @@
 #/etc/nixos/custom-modules/hastings-preschool/okular_txt_to_ods.nix
 { config, pkgs, ... }:
 {
+  home.packages = with pkgs; [
+    python311
+    python311Packages.odfpy
+  ];
+
   home.file.".local/bin/okular_txt_to_ods.py" = {
     executable = true;
     text = ''
