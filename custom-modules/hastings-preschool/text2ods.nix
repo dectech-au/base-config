@@ -23,6 +23,7 @@
   };
 
   home.packages = with pkgs; [
+    python311
     tabula-java
     gnumeric
     jdk17_headless
