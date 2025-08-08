@@ -19,6 +19,23 @@ ROOM_LINE  = re.compile(r"(.+ Room, .+ - .+)$")
 DATE_RE    = re.compile(r"\d{2}/\d{2}/\d{4}")
 FIX_RE     = re.compile(r"\bfixed(?:\s+daily)?\b", re.IGNORECASE)
 
+
+def _nearest_day(pos_first5: list[int], idx: int) -> int:
+    """Return day index 0..4 (Mon..Fri) whose date-start is closest to idx."""
+    return min(range(5), key=lambda k: abs(idx - pos_first5[k]))
+
+def detect_fixed(window_lines: list[str], pos_first5: list[int]) -> list[str]:
+    """
+    Mark weekdays 'Fixed' based purely on match start index mapped
+    to the *nearest* date-start column. No slice/tolerance leakage.
+    """
+    flags = [False] * 5
+    for s in window_lines:
+        for m in FIX_RE.finditer(s):
+            j = _nearest_day(pos_first5, m.start())
+            flags[j] = True
+    return ["Fixed" if f else "" for f in flags]
+
 def find_room_line(line: str):
     m = ROOM_LINE.search(line)
     return m.group(1).strip() if m else None
@@ -57,34 +74,6 @@ def _day_edges_from_positions(pos_first5: List[int], line_len: int) -> List[int]
     mid34 = (p[2] + p[3]) // 2
     mid45 = (p[3] + p[4]) // 2
     return [-10, mid12, mid23, mid34, mid45, line_len + 10]  # generous outer edges
-
-def detect_fixed(window_lines: List[str], pos_first5: List[int]) -> List[str]:
-    """
-    Mark which weekdays get 'Fixed' for this child row.
-    Combines position-based and slice-based detection per window.
-    """
-    L = max(len(s) for s in window_lines)
-    edges = _day_edges_from_positions(pos_first5, L)
-    flags = [False]*5
-
-    # (1) slice-based (±2 char tolerance at edges)
-    for j in range(5):
-        lo = max(0, edges[j]   - 2)
-        hi = min(L, edges[j+1] + 2)
-        slab = " ".join(s[lo:hi] for s in window_lines)
-        if FIX_RE.search(slab):
-            flags[j] = True
-
-    # (2) position-based (start index of match falls in window)
-    for s in window_lines:
-        for m in FIX_RE.finditer(s):
-            idx = m.start()
-            for j in range(5):
-                if edges[j] <= idx < edges[j+1]:
-                    flags[j] = True
-                    break
-
-    return ["Fixed" if x else "" for x in flags]
 
 def parse_okular_text(lines: List[str]) -> Dict[str, Dict[str, Any]]:
     rooms: Dict[str, Dict[str, Any]] = {}
