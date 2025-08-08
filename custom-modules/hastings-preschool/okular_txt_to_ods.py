@@ -23,7 +23,7 @@ COL_W_CM   = "2.622cm"  # ~111 px (weekday)
 COL_GAP_CM = "0.741cm"  # ~27 px  (gap)
 
 # Row 1 height only (others default)
-ROW1_HEIGHT_PT  = "29.25pt"  # ~39 px
+ROW1_HEIGHT_PT  = "29.25pt"  # ~39 px (you said row 1 was perfect earlier)
 
 def find_room_line(line: str):
     m = ROOM_LINE.search(line)
@@ -171,8 +171,19 @@ def write_ods(rooms: Dict[str, Dict[str, Any]], out_path: Path):
     title_cell.addElement(style.ParagraphProperties(textalign="center"))
     body_cell = style.Style(name="CellBody", family="table-cell")
     body_cell.addElement(style.TextProperties(fontname="Calibri", fontsize="10pt"))
+
+    header_bg_border = style.Style(name="HeaderBGBorder", family="table-cell")
+    header_bg_border.addElement(style.TableCellProperties(backgroundcolor="#ededed", border="0.50pt solid #000000"))
+    header_bg_border.addElement(style.TextProperties(fontname="Calibri", fontsize="10pt"))
+
+    body_border = style.Style(name="BodyBorder", family="table-cell")
+    body_border.addElement(style.TableCellProperties(border="0.50pt solid #000000"))
+    body_border.addElement(style.TextProperties(fontname="Calibri", fontsize="10pt"))
+
     doc.automaticstyles.addElement(title_cell)
     doc.automaticstyles.addElement(body_cell)
+    doc.automaticstyles.addElement(header_bg_border)
+    doc.automaticstyles.addElement(body_border)
 
     # Row 1 height only; others default
     rowTop = style.Style(name="RowTop", family="table-row")
@@ -189,18 +200,6 @@ def write_ods(rooms: Dict[str, Dict[str, Any]], out_path: Path):
     doc.automaticstyles.addElement(colA)
     doc.automaticstyles.addElement(colW)
     doc.automaticstyles.addElement(colG)
-
-    # Gray header background for row 2
-    header_bg = style.Style(name="HeaderBG", family="table-cell")
-    header_bg.addElement(style.TableCellProperties(backgroundcolor="#ededed"))
-    header_bg.addElement(style.TextProperties(fontname="Calibri", fontsize="10pt"))
-    doc.automaticstyles.addElement(header_bg)
-
-    # Thin black border style
-    thin_border = style.Style(name="ThinBorder", family="table-cell")
-    thin_border.addElement(style.TableCellProperties(border="0.50pt solid #000000"))
-    thin_border.addElement(style.TextProperties(fontname="Calibri", fontsize="10pt"))
-    doc.automaticstyles.addElement(thin_border)
 
     order = ["Barrang","Bilin","Naatiyn"]
     sheet_keys = [k for k in order if k in rooms] + [k for k in rooms if k not in order]
@@ -224,62 +223,31 @@ def write_ods(rooms: Dict[str, Dict[str, Any]], out_path: Path):
             tr.addElement(CoveredTableCell())
         table.addElement(tr)
 
-        # Row 2: headers (A2="Name"; then B+C, D+E, F+G, H+I, J+K merged)
+        # Row 2: headers (A2="Name"; then B+C, D+E, F+G, H+I, J+K merged) with bg + border
         tr = TableRow()
         headers = data.get("headers") or (["Name"] + DAYS)
-
-        # A2 with bg + border
-        tc = TableCell(valuetype="string", stylename=header_bg); tc.addElement(P(text=headers[0])); 
-        # border on A2
-        tc_with_border = TableCell(valuetype="string", stylename=header_bg); tc_with_border.addElement(P(text=headers[0]))
-        tr.addElement(tc_with_border)  # A2 (will add border via separate cell style below)
-        # B..K labels merged; apply bg and border to the weekday cell (left of each pair)
+        # A2
+        t = TableCell(valuetype="string", stylename=header_bg_border); t.addElement(P(text=headers[0])); tr.addElement(t)
+        # Weekday header cells merged across weekday+gap, with bg+border
         for label in headers[1:6]:
-            t = TableCell(valuetype="string", numbercolumnsspanned=2, stylename=header_bg)
-            t.addElement(P(text=label))
-            # add the left cell with border by using a separate bordered cell on top
-            tr.addElement(t)
-            tr.addElement(CoveredTableCell())
-        table.addElement(tr)
-
-        # Now re-style specific header cells with border: A2, B2, D2, F2, H2, J2
-        # We can't easily "edit" placed cells, so add a second header row with zero-height? Not worth it.
-        # Instead, write the header row explicitly with borders:
-        table._content.pop()  # remove last added header row
-        tr = TableRow()
-        # A2 bordered
-        t = TableCell(valuetype="string", stylename=thin_border); t.addElement(P(text=headers[0])); tr.addElement(t)
-        # For each weekday, left cell bordered + merged with covered cell, both keep bg
-        for label in headers[1:6]:
-            t = TableCell(valuetype="string", numbercolumnsspanned=2, stylename=thin_border)
-            # retain gray bg by nesting a P only; border style doesn’t remove bg; add bg directly too:
-            # so compose: border + bg by using a dedicated style:
-            t = TableCell(valuetype="string", numbercolumnsspanned=2)
-            # combine: border + bg via a composite style
-            hb = style.Style(name="HB", family="table-cell")
-            hb.addElement(style.TableCellProperties(backgroundcolor="#ededed", border="0.50pt solid #000000"))
-            hb.addElement(style.TextProperties(fontname="Calibri", fontsize="10pt"))
-            doc.automaticstyles.addElement(hb)
-            t.setAttribute("table:style-name", hb.getAttribute("style:name"))
+            t = TableCell(valuetype="string", numbercolumnsspanned=2, stylename=header_bg_border)
             t.addElement(P(text=label))
             tr.addElement(t)
             tr.addElement(CoveredTableCell())
         table.addElement(tr)
 
-        # Data rows (no forced height): write borders only on non-empty cells
+        # Data rows (default height): border only on non-empty cells in A..K
         for row in data["rows"]:
             tr = TableRow()
-            # A: Name(Age) or "Totals"
-            name_cell_style = thin_border if str(row[0]).strip() else body_cell
-            tc = TableCell(valuetype="string", stylename=name_cell_style); tc.addElement(P(text=str(row[0]))); tr.addElement(tc)
-            # B..K: weekday then blank gap
+            # A: Name(Age) or "Totals" -> always non-empty => border
+            tA = TableCell(valuetype="string", stylename=body_border); tA.addElement(P(text=str(row[0]))); tr.addElement(tA)
+            # B..K: weekday then blank gap (no border on gap)
             for val in row[1:6]:
                 if val:
-                    t1 = TableCell(valuetype="string", stylename=thin_border); t1.addElement(P(text="Fixed")); tr.addElement(t1)
+                    t1 = TableCell(valuetype="string", stylename=body_border); t1.addElement(P(text="Fixed")); tr.addElement(t1)
                 else:
                     t1 = TableCell(valuetype="string", stylename=body_cell); t1.addElement(P(text="")); tr.addElement(t1)
-                # gap column (always blank, no border)
-                tr.addElement(TableCell(valuetype="string", stylename=body_cell))
+                tr.addElement(TableCell(valuetype="string", stylename=body_cell))  # gap
             table.addElement(tr)
 
         doc.spreadsheet.addElement(table)
