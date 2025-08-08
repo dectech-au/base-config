@@ -5,5 +5,6 @@
     ./right-click-menu.nix
     ./text2ods.nix
     ./okular2csv.nix
+    ./okular_txt_to_ods.nix
   ];
 }
