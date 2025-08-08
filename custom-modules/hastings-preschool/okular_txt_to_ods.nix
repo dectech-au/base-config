@@ -1,7 +1,7 @@
-#/etc/nixos/custom-modules/hastings-preschool/okular2csv.nix
+#/etc/nixos/custom-modules/hastings-preschool/okular_txt_to_ods.nix
 { config, pkgs, ... }:
 {
-  home.file.".local/bin/okular2csv.py" = {
+  home.file.".local/bin/okular_txt_to_ods.py" = {
     executable = true;
     text = ''
       #!/usr/bin/env python3
