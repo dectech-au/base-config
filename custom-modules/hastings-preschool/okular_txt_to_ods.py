@@ -19,23 +19,6 @@ ROOM_LINE  = re.compile(r"(.+ Room, .+ - .+)$")
 DATE_RE    = re.compile(r"\d{2}/\d{2}/\d{4}")
 FIX_RE     = re.compile(r"\bfixed(?:\s+daily)?\b", re.IGNORECASE)
 
-
-def _nearest_day(pos_first5: list[int], idx: int) -> int:
-    """Return day index 0..4 (Mon..Fri) whose date-start is closest to idx."""
-    return min(range(5), key=lambda k: abs(idx - pos_first5[k]))
-
-def detect_fixed(window_lines: list[str], pos_first5: list[int]) -> list[str]:
-    """
-    Mark weekdays 'Fixed' based purely on match start index mapped
-    to the *nearest* date-start column. No slice/tolerance leakage.
-    """
-    flags = [False] * 5
-    for s in window_lines:
-        for m in FIX_RE.finditer(s):
-            j = _nearest_day(pos_first5, m.start())
-            flags[j] = True
-    return ["Fixed" if f else "" for f in flags]
-
 def find_room_line(line: str):
     m = ROOM_LINE.search(line)
     return m.group(1).strip() if m else None
@@ -63,17 +46,21 @@ def two_token_name(seg: str) -> str:
 def room_key_from_title(title_line: str) -> str:
     return title_line.split(" Room,", 1)[0].strip()
 
-def _day_edges_from_positions(pos_first5: List[int], line_len: int) -> List[int]:
+def _nearest_day(pos_first5: List[int], idx: int) -> int:
+    """Return day index 0..4 (Mon..Fri) whose date-start is closest to idx."""
+    return min(range(5), key=lambda k: abs(idx - pos_first5[k]))
+
+def detect_fixed(window_lines: List[str], pos_first5: List[int]) -> List[str]:
     """
-    Convert Mon..Fri start cols into six edges via midpoints.
-    edges[j]..edges[j+1] is the window for day j (0..4).
+    Mark weekdays 'Fixed' for this child row based purely on match start index
+    mapped to the *nearest* date-start column. No midpoint/slice leakage.
     """
-    p = pos_first5
-    mid12 = (p[0] + p[1]) // 2
-    mid23 = (p[1] + p[2]) // 2
-    mid34 = (p[2] + p[3]) // 2
-    mid45 = (p[3] + p[4]) // 2
-    return [-10, mid12, mid23, mid34, mid45, line_len + 10]  # generous outer edges
+    flags = [False]*5
+    for s in window_lines:
+        for m in FIX_RE.finditer(s):
+            j = _nearest_day(pos_first5, m.start())
+            flags[j] = True
+    return ["Fixed" if x else "" for x in flags]
 
 def parse_okular_text(lines: List[str]) -> Dict[str, Dict[str, Any]]:
     rooms: Dict[str, Dict[str, Any]] = {}
@@ -153,7 +140,7 @@ def parse_okular_text(lines: List[str]) -> Dict[str, Dict[str, Any]]:
         age = parse_age(window[1]) if len(window) > 1 else None
         name_age = f"{name} ({age})" if age else name
 
-        # Detect "Fixed" per weekday using mid-point windows
+        # Detect "Fixed" per weekday using nearest date-start
         pos_first5 = pos_all[:5]
         day_vals = detect_fixed(window, pos_first5)
         rooms[current]["rows"].append([name_age] + day_vals)
@@ -167,7 +154,7 @@ def parse_okular_text(lines: List[str]) -> Dict[str, Dict[str, Any]]:
 
 # ---------- ODS writer ----------
 
-# widths tuned for Calc’s pixel mapping (your previous targets)
+# widths tuned for Calc’s pixel mapping (your targets)
 COL_A_CM   = "7.303cm"  # ~320 px
 COL_W_CM   = "2.622cm"  # ~111 px
 COL_GAP_CM = "0.741cm"  # ~27 px
@@ -241,14 +228,13 @@ def write_ods(rooms: Dict[str, Dict[str, Any]], out_path: Path):
         for _ in range(10): tr.addElement(CoveredTableCell())
         table.addElement(tr)
 
-        # Row 2 — headers: A2 and each weekday merged pair (B+C, D+E, ...)
+        # Row 2 — headers: A2 and each weekday merged pair (B+C, D+E, F+G, H+I, J+K) with bg+full border
         tr = TableRow(stylename=rowBody)
         headers = data.get("headers") or (["Name"] + DAYS)
 
-        # A2 with grey bg + border
+        # A2
         t = TableCell(valuetype="string", stylename=header_bgborder); t.addElement(P(text=headers[0])); tr.addElement(t)
-
-        # Weekday headers: style BOTH the anchor and the covered cell -> full border box
+        # Weekdays (style BOTH the anchor and covered cell so the merge is fully boxed)
         for label in headers[1:6]:
             t = TableCell(valuetype="string", numbercolumnsspanned=2, stylename=header_bgborder)
             t.addElement(P(text=label))
