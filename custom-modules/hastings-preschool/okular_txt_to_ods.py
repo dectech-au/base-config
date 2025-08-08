@@ -16,17 +16,14 @@ DAYS = ["Mon","Tue","Wed","Thu","Fri"]  # weekend removed
 ROOM_LINE = re.compile(r"(.+ Room, .+ - .+)$")
 DATE_RE   = re.compile(r"\d{2}/\d{2}/\d{4}")
 
-# ===== Column widths =====
-# You reported: A=320 px, weekday=111 px, gap=27 px.
-# LibreOffice shows a bit larger than straight 96-DPI math, so apply offsets that
-# match your observed values.
-COL_A_CM   = "7.303cm"  # tuned to land ~320 px for you (was 8.467cm ~ 364 px)
-COL_W_CM   = "2.622cm"  # tuned to land ~111 px (was 2.939cm ~ 123 px)
-COL_GAP_CM = "0.741cm"  # tuned to land ~27 px  (was 0.714cm ~ 26 px)
+# Column widths tuned for your LibreOffice pixel readout
+COL_A_CM   = "7.303cm"  # ~320 px
+COL_W_CM   = "2.622cm"  # ~111 px (weekday)
+COL_GAP_CM = "0.741cm"  # ~27 px  (gap)
 
-# ===== Row heights =====
-ROW1_HEIGHT_PT   = "44.25pt"  # 59 px
-CHILD_HEIGHT_PT  = "21.75pt"  # 29 px
+# Row heights (px * 0.75 = pt)
+ROW1_HEIGHT_PT  = "29.25pt"  # ~39 px  (cut ~1/3 from previous 59 px)
+BODY_HEIGHT_PT  = "21.75pt"  # ~29 px  (match your row 2, apply to ALL non-title rows)
 
 def find_room_line(line: str):
     m = ROOM_LINE.search(line)
@@ -48,7 +45,7 @@ def parse_age(line: str):
 def two_token_name(seg: str) -> str:
     toks = seg.strip().split()
     if not toks: return ""
-    return " ".join(toks[:2])  # strictly first + last; no guardian
+    return " ".join(toks[:2])  # strictly first + last; no guardian bleed
 
 def room_key_from_title(title_line: str) -> str:
     return title_line.split(" Room,", 1)[0].strip()
@@ -58,8 +55,7 @@ def parse_okular_text(lines: List[str]) -> Dict[str, Dict[str, Any]]:
     current = None
     pos_all: List[int] | None = None
     days_start: int | None = None
-    child_row_flags: Dict[str, List[bool]] = {}
-    room_locked_after_totals: Dict[str, bool] = {}
+    locked_after_totals: Dict[str, bool] = {}
 
     i, n = 0, len(lines)
     while i < n:
@@ -69,20 +65,18 @@ def parse_okular_text(lines: List[str]) -> Dict[str, Dict[str, Any]]:
         if title:
             key = room_key_from_title(title)
             rooms[key] = {"title": title, "rows": [], "headers": None}
-            child_row_flags[key] = []
-            room_locked_after_totals[key] = False
+            locked_after_totals[key] = False
             current = key
             pos_all = None
             days_start = None
             i += 1
             continue
 
-        if current and room_locked_after_totals[current]:
-            # Ignore everything until the next room header
+        if not current or locked_after_totals[current]:
             i += 1
             continue
 
-        if current and pos_all is None:
+        if pos_all is None:
             positions = date_positions(line)
             if positions and len(positions) >= 5:
                 pos_all = positions
@@ -96,7 +90,7 @@ def parse_okular_text(lines: List[str]) -> Dict[str, Dict[str, Any]]:
                 i += 1
                 continue
 
-        if not (current and pos_all and days_start is not None):
+        if not (pos_all and days_start is not None):
             i += 1
             continue
 
@@ -109,8 +103,7 @@ def parse_okular_text(lines: List[str]) -> Dict[str, Dict[str, Any]]:
             vals = [f"{a}/{b}" for (a,b) in pairs[:5]]
             while len(vals) < 5: vals.append("")
             rooms[current]["rows"].append(["Totals"] + vals)
-            child_row_flags[current].append(False)
-            room_locked_after_totals[current] = True  # stop parsing any more lines for this room
+            locked_after_totals[current] = True  # ignore any following noise
             i += 1
             continue
 
@@ -126,9 +119,11 @@ def parse_okular_text(lines: List[str]) -> Dict[str, Dict[str, Any]]:
         age = parse_age(lines[i+1]) if i + 1 < n else None
         name_age = f"{name} ({age})" if age else name
 
+        # Build slices using date anchors. Expand lookahead to catch wrapped "Fixed Daily".
         look = [line]
-        if i + 1 < n: look.append(lines[i+1])
-        if i + 2 < n: look.append(lines[i+2])
+        for k in (1,2,3):
+            if i + k < n:
+                look.append(lines[i+k])
         maxlen = max(len(L) for L in look)
         fri_end = pos_all[5] if len(pos_all) > 5 else maxlen
         ends = [pos_all[1], pos_all[2], pos_all[3], pos_all[4], fri_end]
@@ -136,12 +131,13 @@ def parse_okular_text(lines: List[str]) -> Dict[str, Dict[str, Any]]:
 
         day_vals = []
         for s, e in zip(starts, ends):
-            has_fixed = any("Fixed" in L[s:e] for L in look)
-            day_vals.append("Fixed" if has_fixed else "")
+            cell_text = " ".join(L[s:e] for L in look)
+            v = "Fixed" if ("Fixed" in cell_text) else ""
+            day_vals.append(v)
 
         rooms[current]["rows"].append([name_age] + day_vals)
-        child_row_flags[current].append(True)
 
+        # advance past any trailing age/contact lines
         i += 1
         while i < n and is_age_or_contact(lines[i]):
             i += 1
@@ -149,14 +145,12 @@ def parse_okular_text(lines: List[str]) -> Dict[str, Dict[str, Any]]:
 
         i += 1
 
-    for k in rooms:
-        rooms[k]["child_flags"] = child_row_flags[k]
     return rooms
 
 def write_ods(rooms: Dict[str, Dict[str, Any]], out_path: Path):
     doc = OpenDocumentSpreadsheet()
 
-    # Font faces
+    # Fonts
     doc.fontfacedecls.addElement(style.FontFace(name="Verdana"))
     doc.fontfacedecls.addElement(style.FontFace(name="Calibri"))
 
@@ -170,12 +164,12 @@ def write_ods(rooms: Dict[str, Dict[str, Any]], out_path: Path):
     doc.automaticstyles.addElement(body_cell)
 
     # Row styles
-    row59 = style.Style(name="Row59px", family="table-row")
-    row59.addElement(style.TableRowProperties(rowheight=ROW1_HEIGHT_PT))
-    row29 = style.Style(name="Row29px", family="table-row")
-    row29.addElement(style.TableRowProperties(rowheight=CHILD_HEIGHT_PT))
-    doc.automaticstyles.addElement(row59)
-    doc.automaticstyles.addElement(row29)
+    rowTop = style.Style(name="RowTop", family="table-row")
+    rowTop.addElement(style.TableRowProperties(rowheight=ROW1_HEIGHT_PT))
+    rowBody = style.Style(name="RowBody", family="table-row")
+    rowBody.addElement(style.TableRowProperties(rowheight=BODY_HEIGHT_PT))
+    doc.automaticstyles.addElement(rowTop)
+    doc.automaticstyles.addElement(rowBody)
 
     # Column styles
     colA = style.Style(name="ColA", family="table-column")
@@ -195,14 +189,14 @@ def write_ods(rooms: Dict[str, Dict[str, Any]], out_path: Path):
         data = rooms[key]
         table = Table(name=key)
 
-        # Define columns: A, then (W, Gap)*5 -> B..K
+        # Columns: A, then (weekday,gap)*5 => A..K
         table.addElement(TableColumn(stylename=colA))
         for _ in range(5):
             table.addElement(TableColumn(stylename=colW))
             table.addElement(TableColumn(stylename=colG))
 
-        # Row 1: merge A..K, centered Verdana 17, height 59 px
-        tr = TableRow(stylename=row59)
+        # Row 1: merge A..K, centered Verdana 17, height ~39 px
+        tr = TableRow(stylename=rowTop)
         tc = TableCell(valuetype="string", numbercolumnsspanned=11, stylename=title_cell)
         tc.addElement(P(text=data["title"]))
         tr.addElement(tc)
@@ -210,12 +204,10 @@ def write_ods(rooms: Dict[str, Dict[str, Any]], out_path: Path):
             tr.addElement(CoveredTableCell())
         table.addElement(tr)
 
-        # Row 2: headers with merges (B+C, D+E, F+G, H+I, J+K)
+        # Row 2: headers (A2="Name"; then B+C, D+E, F+G, H+I, J+K merged)
+        tr = TableRow(stylename=rowBody)
         headers = data.get("headers") or (["Name"] + DAYS)
-        tr = TableRow()
-        # A2
         tc = TableCell(valuetype="string", stylename=body_cell); tc.addElement(P(text=headers[0])); tr.addElement(tc)
-        # Days (each merged across weekday+gap)
         for label in headers[1:6]:
             tc = TableCell(valuetype="string", numbercolumnsspanned=2, stylename=body_cell)
             tc.addElement(P(text=label))
@@ -223,19 +215,24 @@ def write_ods(rooms: Dict[str, Dict[str, Any]], out_path: Path):
             tr.addElement(CoveredTableCell())
         table.addElement(tr)
 
-        # Data rows: child rows at 29 px
-        for row, is_child in zip(data["rows"], data["child_flags"]):
-            tr = TableRow(stylename=(row29 if is_child else None))
+        # All remaining rows use the same body height (~29 px)
+        for row in data["rows"]:
+            tr = TableRow(stylename=rowBody)
             # A: Name(Age) or "Totals"
             tc = TableCell(valuetype="string", stylename=body_cell); tc.addElement(P(text=str(row[0]))); tr.addElement(tc)
             # B..K: weekday then blank gap
             for val in row[1:6]:
-                t1 = TableCell(valuetype="string", stylename=body_cell); t1.addElement(P(text=str(val))); tr.addElement(t1)
-                tgap = TableCell(valuetype="string", stylename=body_cell); tgap.addElement(P(text="")); tr.addElement(tgap)
+                t1 = TableCell(valuetype="string", stylename=body_cell)
+                # normalize "Fixed Daily" to "Fixed" (just in case)
+                txt = "Fixed" if val and "Fixed" in val else (val or "")
+                t1.addElement(P(text=txt))
+                tr.addElement(t1)
+                tr.addElement(TableCell(valuetype="string", stylename=body_cell))  # gap
             table.addElement(tr)
 
         doc.spreadsheet.addElement(table)
 
+    # Exact filename, no auto-suffix
     doc.save(str(out_path), addsuffix=False)
 
 def main():
