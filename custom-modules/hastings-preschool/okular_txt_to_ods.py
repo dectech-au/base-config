@@ -14,7 +14,7 @@ from odf import style
 
 # ---------- parsing helpers ----------
 
-DAYS       = ["Mon","Tue","Wed","Thu","Fri"]          # weekend removed
+DAYS       = ["Mon","Tue","Wed","Thu","Fri"]  # weekend removed
 ROOM_LINE  = re.compile(r"(.+ Room, .+ - .+)$")
 DATE_RE    = re.compile(r"\d{2}/\d{2}/\d{4}")
 FIX_RE     = re.compile(r"\bfixed(?:\s+daily)?\b", re.IGNORECASE)
@@ -24,7 +24,20 @@ def find_room_line(line: str):
     return m.group(1).strip() if m else None
 
 def date_positions(line: str) -> List[int]:
+    """Start indices of dd/mm/yyyy on a header row."""
     return [m.start() for m in DATE_RE.finditer(line)]
+
+def dayname_positions(line: str) -> List[int] | None:
+    """Start indices of 'Mon Tue Wed Thu Fri' in a header row, left-to-right."""
+    pos = []
+    cur = 0
+    for name in DAYS:
+        idx = line.find(name, cur)
+        if idx == -1:
+            return None
+        pos.append(idx)
+        cur = idx + 1
+    return pos
 
 def looks_like_weekday_header(line: str) -> bool:
     return all(t in line for t in DAYS)
@@ -51,10 +64,7 @@ def _nearest_day(pos_first5: List[int], idx: int) -> int:
     return min(range(5), key=lambda k: abs(idx - pos_first5[k]))
 
 def detect_fixed(window_lines: List[str], pos_first5: List[int]) -> List[str]:
-    """
-    Mark weekdays 'Fixed' for this child row based purely on match start index
-    mapped to the *nearest* date-start column. No midpoint/slice leakage.
-    """
+    """Mark weekdays 'Fixed' based on match start index -> nearest date-start."""
     flags = [False]*5
     for s in window_lines:
         for m in FIX_RE.finditer(s):
@@ -65,10 +75,9 @@ def detect_fixed(window_lines: List[str], pos_first5: List[int]) -> List[str]:
 def parse_okular_text(lines: List[str]) -> Dict[str, Dict[str, Any]]:
     rooms: Dict[str, Dict[str, Any]] = {}
     current = None
-    pos_all: List[int] | None = None
-    days_start: int | None = None
-    locked_after_totals: Dict[str, bool] = {}
-    saw_header: Dict[str, bool] = {}
+    pos_all: List[int] | None = None      # current page-section's Mon..Fri starts
+    days_start: int | None = None         # left edge of day columns (Mon start)
+    wrote_headers_for_room: Dict[str, bool] = {}  # only write once per sheet
 
     i, n = 0, len(lines)
     while i < n:
@@ -79,54 +88,56 @@ def parse_okular_text(lines: List[str]) -> Dict[str, Dict[str, Any]]:
         if title:
             key = room_key_from_title(title)
             rooms[key] = {"title": title, "rows": [], "headers": None}
-            locked_after_totals[key] = False
-            saw_header[key] = False
+            wrote_headers_for_room[key] = False
             current = key
             pos_all = None
             days_start = None
             i += 1
             continue
 
-        if not current or locked_after_totals[current]:
+        if not current:
             i += 1; continue
 
-        # First date row defines day anchors + header labels
-        if pos_all is None:
-            positions = date_positions(line)
-            if positions and len(positions) >= 5:
-                pos_all = positions
-                days_start = positions[0]
-                headers = ["Name"]
-                for idx, day in enumerate(DAYS):
-                    s = positions[idx]
-                    e = positions[idx + 1] if idx + 1 < len(positions) else len(line)
-                    headers.append(f"{day} {line[s:e].strip()}")
-                rooms[current]["headers"] = headers
-                saw_header[current] = True
-                i += 1
-                continue
-
-        if not (pos_all and days_start is not None):
-            i += 1; continue
-
-        # Skip continuation weekday/date headers later in the page
-        if saw_header.get(current, False) and (looks_like_weekday_header(line) or date_positions(line)):
-            i += 1; continue
+        # (Re)calibrate anchors when we hit ANY header block in this page section.
+        # Prefer date positions; if missing, fall back to weekday names.
+        positions = date_positions(line)
+        if not positions or len(positions) < 5:
+            if looks_like_weekday_header(line):
+                positions = dayname_positions(line)
+        if positions and len(positions) >= 5:
+            pos_all = positions[:5]
+            days_start = pos_all[0]
+            # stash printable headers ONCE per room (use the first date row we saw)
+            if not rooms[current]["headers"]:
+                # If this line had dates, build "Mon dd/mm/yyyy" headers; otherwise just day names.
+                if DATE_RE.search(line):
+                    hdrs = ["Name"] + [f"{DAYS[idx]} {line[positions[idx]:positions[idx+1] if idx+1 < len(line) else None].strip()}"
+                                       for idx in range(5)]
+                else:
+                    hdrs = ["Name"] + DAYS
+                rooms[current]["headers"] = hdrs
+            i += 1
+            continue  # don't treat header lines as data
 
         # Skip the "Name  Guardian" line
         if "Name" in line and "Guardian" in line:
             i += 1; continue
 
-        # Totals row -> record and stop for this room
+        # Totals row -> record and close this room section
         if line.strip().lower().startswith("totals"):
             pairs = re.findall(r"(\d+)\s*/\s*(\d+)", line)
             vals = [f"{a}/{b}" for (a,b) in pairs[:5]]
             while len(vals) < 5: vals.append("")
             rooms[current]["rows"].append(["Totals"] + vals)
-            locked_after_totals[current] = True
+            i += 1
+            # after totals, keep scanning; if another title appears, we’ll start a new sheet
+            continue
+
+        # We need anchors before we can parse a child row
+        if not (pos_all and days_start is not None):
             i += 1; continue
 
-        # Child row
+        # Child row (left segment -> name)
         name = two_token_name(line[:days_start])
         if not name:
             i += 1; continue
@@ -141,11 +152,10 @@ def parse_okular_text(lines: List[str]) -> Dict[str, Dict[str, Any]]:
         name_age = f"{name} ({age})" if age else name
 
         # Detect "Fixed" per weekday using nearest date-start
-        pos_first5 = pos_all[:5]
-        day_vals = detect_fixed(window, pos_first5)
+        day_vals = detect_fixed(window, pos_all[:5])
         rooms[current]["rows"].append([name_age] + day_vals)
 
-        # Advance 1 line, then swallow trailing age/contact lines
+        # Advance 1, then swallow trailing age/contact lines
         i += 1
         while i < n and is_age_or_contact(lines[i]):
             i += 1
@@ -154,7 +164,7 @@ def parse_okular_text(lines: List[str]) -> Dict[str, Dict[str, Any]]:
 
 # ---------- ODS writer ----------
 
-# widths tuned for Calc’s pixel mapping (your targets)
+# widths tuned for Calc’s pixel mapping
 COL_A_CM   = "7.303cm"  # ~320 px
 COL_W_CM   = "2.622cm"  # ~111 px
 COL_GAP_CM = "0.741cm"  # ~27 px
@@ -228,7 +238,7 @@ def write_ods(rooms: Dict[str, Dict[str, Any]], out_path: Path):
         for _ in range(10): tr.addElement(CoveredTableCell())
         table.addElement(tr)
 
-        # Row 2 — headers: A2 and each weekday merged pair (B+C, D+E, F+G, H+I, J+K) with bg+full border
+        # Row 2 — headers: A2 and each weekday merged pair (B+C, D+E, F+G, H+I, J+K)
         tr = TableRow(stylename=rowBody)
         headers = data.get("headers") or (["Name"] + DAYS)
 
