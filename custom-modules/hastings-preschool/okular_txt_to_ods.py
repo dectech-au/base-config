@@ -15,15 +15,15 @@ from odf import style
 DAYS = ["Mon","Tue","Wed","Thu","Fri"]  # weekend removed
 ROOM_LINE = re.compile(r"(.+ Room, .+ - .+)$")
 DATE_RE   = re.compile(r"\d{2}/\d{2}/\d{4}")
+FIX_RE    = re.compile(r"\bfixed(?:\s+daily)?\b", re.IGNORECASE)
 
 # Column widths tuned to your Calc pixel readout
 COL_A_CM   = "7.303cm"  # ~320 px
 COL_W_CM   = "2.622cm"  # ~111 px (weekday)
 COL_GAP_CM = "0.741cm"  # ~27 px  (gap)
 
-# Row heights (force exact heights; Calc won't auto-grow)
-ROW1_HEIGHT_PT  = "29.25pt"  # ~39 px (you said row 1 is perfect; keeping it)
-BODY_HEIGHT_PT  = "21.75pt"  # ~29 px (apply to ALL non-title rows)
+# Row 1 height only (others default)
+ROW1_HEIGHT_PT  = "29.25pt"  # ~39 px
 
 def find_room_line(line: str):
     m = ROOM_LINE.search(line)
@@ -31,6 +31,10 @@ def find_room_line(line: str):
 
 def date_positions(line: str) -> List[int]:
     return [m.start() for m in DATE_RE.finditer(line)]
+
+def looks_like_weekday_header(line: str) -> bool:
+    tokens = ["Mon","Tue","Wed","Thu","Fri"]
+    return all(t in line for t in tokens)
 
 def is_age_or_contact(line: str) -> bool:
     s = line.strip()
@@ -56,6 +60,7 @@ def parse_okular_text(lines: List[str]) -> Dict[str, Dict[str, Any]]:
     pos_all: List[int] | None = None
     days_start: int | None = None
     locked_after_totals: Dict[str, bool] = {}
+    saw_header_for_room: Dict[str, bool] = {}
 
     i, n = 0, len(lines)
     while i < n:
@@ -66,6 +71,7 @@ def parse_okular_text(lines: List[str]) -> Dict[str, Dict[str, Any]]:
             key = room_key_from_title(title)
             rooms[key] = {"title": title, "rows": [], "headers": None}
             locked_after_totals[key] = False
+            saw_header_for_room[key] = False
             current = key
             pos_all = None
             days_start = None
@@ -88,6 +94,7 @@ def parse_okular_text(lines: List[str]) -> Dict[str, Dict[str, Any]]:
                     e = positions[idx + 1] if idx + 1 < len(positions) else len(line)
                     headers.append(f"{day} {line[s:e].strip()}")
                 rooms[current]["headers"] = headers
+                saw_header_for_room[current] = True
                 i += 1
                 continue
 
@@ -95,11 +102,8 @@ def parse_okular_text(lines: List[str]) -> Dict[str, Dict[str, Any]]:
             i += 1
             continue
 
-        # Skip any continuation headers that appear later (this was making "Mon Tue" & a date row into data)
-        if all(d in line for d in DAYS):
-            i += 1
-            continue
-        if date_positions(line):  # another date row later on the page
+        # Skip any continuation headers after we've already set headers
+        if saw_header_for_room.get(current, False) and (looks_like_weekday_header(line) or date_positions(line)):
             i += 1
             continue
 
@@ -117,7 +121,7 @@ def parse_okular_text(lines: List[str]) -> Dict[str, Dict[str, Any]]:
             vals = [f"{a}/{b}" for (a,b) in pairs[:5]]
             while len(vals) < 5: vals.append("")
             rooms[current]["rows"].append(["Totals"] + vals)
-            locked_after_totals[current] = True  # ignore any following noise (like "Hastings Presc")
+            locked_after_totals[current] = True  # ignore any following noise
             i += 1
             continue
 
@@ -129,7 +133,7 @@ def parse_okular_text(lines: List[str]) -> Dict[str, Dict[str, Any]]:
         age = parse_age(lines[i+1]) if i + 1 < n else None
         name_age = f"{name} ({age})" if age else name
 
-        # Build day slices using date anchors; scan across this line + next 3 lines for wrapped "Fixed Daily"
+        # Build day slices using date anchors; scan across this line + next 3 lines
         look = [line]
         for k in (1,2,3):
             if i + k < n:
@@ -141,9 +145,8 @@ def parse_okular_text(lines: List[str]) -> Dict[str, Dict[str, Any]]:
 
         day_vals = []
         for s, e in zip(starts, ends):
-            cell_text = " ".join(L[s:e] for L in look).lower()
-            v = "Fixed" if "fixed" in cell_text else ""
-            day_vals.append(v)
+            cell_text = " ".join(L[s:e] for L in look)
+            day_vals.append("Fixed" if FIX_RE.search(cell_text) else "")
 
         rooms[current]["rows"].append([name_age] + day_vals)
 
@@ -171,13 +174,10 @@ def write_ods(rooms: Dict[str, Dict[str, Any]], out_path: Path):
     doc.automaticstyles.addElement(title_cell)
     doc.automaticstyles.addElement(body_cell)
 
-    # Row styles (force exact heights)
+    # Row 1 height only; others default
     rowTop = style.Style(name="RowTop", family="table-row")
     rowTop.addElement(style.TableRowProperties(rowheight=ROW1_HEIGHT_PT, useoptimalrowheight="false"))
-    rowBody = style.Style(name="RowBody", family="table-row")
-    rowBody.addElement(style.TableRowProperties(rowheight=BODY_HEIGHT_PT, useoptimalrowheight="false"))
     doc.automaticstyles.addElement(rowTop)
-    doc.automaticstyles.addElement(rowBody)
 
     # Column styles
     colA = style.Style(name="ColA", family="table-column")
@@ -189,6 +189,18 @@ def write_ods(rooms: Dict[str, Dict[str, Any]], out_path: Path):
     doc.automaticstyles.addElement(colA)
     doc.automaticstyles.addElement(colW)
     doc.automaticstyles.addElement(colG)
+
+    # Gray header background for row 2
+    header_bg = style.Style(name="HeaderBG", family="table-cell")
+    header_bg.addElement(style.TableCellProperties(backgroundcolor="#ededed"))
+    header_bg.addElement(style.TextProperties(fontname="Calibri", fontsize="10pt"))
+    doc.automaticstyles.addElement(header_bg)
+
+    # Thin black border style
+    thin_border = style.Style(name="ThinBorder", family="table-cell")
+    thin_border.addElement(style.TableCellProperties(border="0.50pt solid #000000"))
+    thin_border.addElement(style.TextProperties(fontname="Calibri", fontsize="10pt"))
+    doc.automaticstyles.addElement(thin_border)
 
     order = ["Barrang","Bilin","Naatiyn"]
     sheet_keys = [k for k in order if k in rooms] + [k for k in rooms if k not in order]
@@ -212,27 +224,62 @@ def write_ods(rooms: Dict[str, Dict[str, Any]], out_path: Path):
             tr.addElement(CoveredTableCell())
         table.addElement(tr)
 
-        # Row 2: headers (A2="Name"; then B+C, D+E, F+G, H+I, J+K merged), fixed height
-        tr = TableRow(stylename=rowBody)
+        # Row 2: headers (A2="Name"; then B+C, D+E, F+G, H+I, J+K merged)
+        tr = TableRow()
         headers = data.get("headers") or (["Name"] + DAYS)
-        tc = TableCell(valuetype="string", stylename=body_cell); tc.addElement(P(text=headers[0])); tr.addElement(tc)
+
+        # A2 with bg + border
+        tc = TableCell(valuetype="string", stylename=header_bg); tc.addElement(P(text=headers[0])); 
+        # border on A2
+        tc_with_border = TableCell(valuetype="string", stylename=header_bg); tc_with_border.addElement(P(text=headers[0]))
+        tr.addElement(tc_with_border)  # A2 (will add border via separate cell style below)
+        # B..K labels merged; apply bg and border to the weekday cell (left of each pair)
         for label in headers[1:6]:
-            tc = TableCell(valuetype="string", numbercolumnsspanned=2, stylename=body_cell)
-            tc.addElement(P(text=label))
-            tr.addElement(tc)
+            t = TableCell(valuetype="string", numbercolumnsspanned=2, stylename=header_bg)
+            t.addElement(P(text=label))
+            # add the left cell with border by using a separate bordered cell on top
+            tr.addElement(t)
             tr.addElement(CoveredTableCell())
         table.addElement(tr)
 
-        # Remaining rows: ALL same body height
+        # Now re-style specific header cells with border: A2, B2, D2, F2, H2, J2
+        # We can't easily "edit" placed cells, so add a second header row with zero-height? Not worth it.
+        # Instead, write the header row explicitly with borders:
+        table._content.pop()  # remove last added header row
+        tr = TableRow()
+        # A2 bordered
+        t = TableCell(valuetype="string", stylename=thin_border); t.addElement(P(text=headers[0])); tr.addElement(t)
+        # For each weekday, left cell bordered + merged with covered cell, both keep bg
+        for label in headers[1:6]:
+            t = TableCell(valuetype="string", numbercolumnsspanned=2, stylename=thin_border)
+            # retain gray bg by nesting a P only; border style doesn’t remove bg; add bg directly too:
+            # so compose: border + bg by using a dedicated style:
+            t = TableCell(valuetype="string", numbercolumnsspanned=2)
+            # combine: border + bg via a composite style
+            hb = style.Style(name="HB", family="table-cell")
+            hb.addElement(style.TableCellProperties(backgroundcolor="#ededed", border="0.50pt solid #000000"))
+            hb.addElement(style.TextProperties(fontname="Calibri", fontsize="10pt"))
+            doc.automaticstyles.addElement(hb)
+            t.setAttribute("table:style-name", hb.getAttribute("style:name"))
+            t.addElement(P(text=label))
+            tr.addElement(t)
+            tr.addElement(CoveredTableCell())
+        table.addElement(tr)
+
+        # Data rows (no forced height): write borders only on non-empty cells
         for row in data["rows"]:
-            tr = TableRow(stylename=rowBody)
+            tr = TableRow()
             # A: Name(Age) or "Totals"
-            tc = TableCell(valuetype="string", stylename=body_cell); tc.addElement(P(text=str(row[0]))); tr.addElement(tc)
+            name_cell_style = thin_border if str(row[0]).strip() else body_cell
+            tc = TableCell(valuetype="string", stylename=name_cell_style); tc.addElement(P(text=str(row[0]))); tr.addElement(tc)
             # B..K: weekday then blank gap
             for val in row[1:6]:
-                txt = "Fixed" if (val and "fixed" in val.lower()) or (val == "Fixed") else (val or "")
-                t1 = TableCell(valuetype="string", stylename=body_cell); t1.addElement(P(text=txt)); tr.addElement(t1)
-                tr.addElement(TableCell(valuetype="string", stylename=body_cell))  # gap
+                if val:
+                    t1 = TableCell(valuetype="string", stylename=thin_border); t1.addElement(P(text="Fixed")); tr.addElement(t1)
+                else:
+                    t1 = TableCell(valuetype="string", stylename=body_cell); t1.addElement(P(text="")); tr.addElement(t1)
+                # gap column (always blank, no border)
+                tr.addElement(TableCell(valuetype="string", stylename=body_cell))
             table.addElement(tr)
 
         doc.spreadsheet.addElement(table)
