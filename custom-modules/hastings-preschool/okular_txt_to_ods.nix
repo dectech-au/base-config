@@ -2,25 +2,28 @@
 { config, pkgs, ... }:
 
 let
-  pythonWithOdf = pkgs.python311.withPackages (ps: [ ps.odfpy ]);
+  pyEnv = pkgs.python311.withPackages (ps: [
+    ps.odfpy
+    (ps.pdfplumber.overridePythonAttrs (_: { doCheck = false; }))
+    # pdfplumber pulls pdfminer.six + Pillow itself; leave them out.
+  ]);
 in
 {
-  # 1) Install the interpreter that *includes* odfpy
-  home.packages = [ pythonWithOdf ];
+  # Single python env with both deps (DO NOT also install pkgs.python311 elsewhere)
+  home.packages = [ pyEnv ];
 
-  # 2) Drop your Python script body from disk (no Unicode ellipsis!)  
-  #    Keep the shebang as /usr/bin/env python3 inside the file; we’ll wrap it.
-  home.file.".local/bin/okular_txt_to_ods.py" = {
+  # The script you want to run (make sure this is the *PDF* version if that’s your plan)
+  home.file.".local/bin/pdf_to_ods_boxes.py" = {
     executable = true;
-    text = builtins.readFile ./okular_txt_to_ods.py;  # <-- the script body I gave you earlier
+    text = builtins.readFile ./pdf_to_ods_boxes.py;
   };
 
-  # 3) Add a tiny launcher that forces the right interpreter
-  home.file.".local/bin/okular_txt_to_ods" = {
+  # Thin launcher that forces the right interpreter
+  home.file.".local/bin/pdf2ods" = {
     executable = true;
     text = ''
       #!/usr/bin/env bash
-      exec ${pythonWithOdf}/bin/python "$HOME/.local/bin/okular_txt_to_ods.py" "$@"
+      exec ${pyEnv}/bin/python "$HOME/.local/bin/pdf_to_ods_boxes.py" "$@"
     '';
   };
 }
