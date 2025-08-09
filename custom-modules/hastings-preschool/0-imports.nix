@@ -7,10 +7,4 @@
     #./okular2csv.nix
     ./okular_txt_to_ods.nix
   ];
-
-  home.packages = with pkgs; [
-    python311
-    python311Packages.pdfplumber
-    python311Packages.odfpy
-  ];
 }
