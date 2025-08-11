@@ -4,6 +4,12 @@
 
 set -euo pipefail
 
+###
+# 1.5 Copy age keys to repo directory
+###
+sudo cp ~/.secrets/sops-keys.txt /etc/nixos/keys.txt
+sudo chmod 777 /etc/nixos/keys.txt
+
 ###############################################################################
 # Become root if needed, preserving args
 ###############################################################################
@@ -29,11 +35,7 @@ ssh-add -l 2>/dev/null | grep -q "$KEY" || ssh-add -q "$KEY"
 git fetch --quiet origin
 git reset --hard origin/main
 
-###
-# 1.5 Copy age keys to repo directory
-###
-sudo cp ~/.secrets/sops-keys.txt /etc/nixos/keys.txt
-sudo chmod 777 /etc/nixos/keys.txt
+
 ###############################################################################
 # 2. nix flake update (max once every 10 min)
 ###############################################################################
