@@ -6,9 +6,11 @@
   perSystem = { pkgs, system, ... }:
     let
       remotemouse = pkgs.callPackage ./pkg/remote-mouse.nix { xdotool = pkgs.xdotool; };
-      overlay = final: prev: { remotemouse = remotemouse; };
     in {
       packages = { inherit remotemouse; default = remotemouse; };
-      overlays.default = overlay;
     };
+
+  overlays.default = final: prev: {
+    remotemouse = inputs.self.packages.${prev.system}.remotemouse;
+  };
 }
