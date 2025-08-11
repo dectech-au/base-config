@@ -10,22 +10,10 @@
       age.keyFile = "/var/lib/sops-nix/key.txt";
       
       secrets = {
-        "ssh_host_rsa_key" = {
-          mode = "0400";
-          owner = "root";
-          group = "root";
-        };
-        
         "tailscale/hskey.txt" = {
           mode = "0400";
           owner = "root";
           group = "root";
-        };
-        
-        "database/password" = {
-          mode = "0400";
-          owner = "postgres";
-          group = "postgres";
         };
       };
     };
