@@ -35,7 +35,7 @@ git reset --hard origin/main
 ###
 # 1.5 Copy age keys to repo directory
 ###
-sudo ln -s ~/.config/sops/age/keys.txt /etc/nixos/keys.txt
+sudo ln -s -f ~/.config/sops/age/keys.txt /etc/nixos/keys.txt
 
 ###############################################################################
 # 2. nix flake update (max once every 10 min)
