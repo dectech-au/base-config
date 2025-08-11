@@ -6,7 +6,7 @@
   config = {
     
     sops = {
-      defaultSopsFile = ../secrets.yaml;
+      #defaultSopsFile = ../secrets.yaml;
 
       secrets = {
         "tailscale/hskey.txt" = {
@@ -20,3 +20,6 @@
     environment.systemPackages = with pkgs; [ sops age gnupg ];
   };
 }
+# process to set up sops
+# 1. generate key-pair with age
+# $ mkdir -p ~/.config/sops/age && age-keygen -o ~/.config/sops/age/keys.txt
