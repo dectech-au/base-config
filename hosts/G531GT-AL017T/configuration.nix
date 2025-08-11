@@ -7,7 +7,7 @@
 	imports = [ 
 		#./hostname.nix
 		../../hardware-configuration.nix
-		../../flake-parts/sops-nix/flake.nix
+		../../flake-parts/sops-nix.nix
 		../../sys-modules/baobab.nix
 		../../sys-modules/birdtray.nix
 		../../sys-modules/bluetooth.nix
