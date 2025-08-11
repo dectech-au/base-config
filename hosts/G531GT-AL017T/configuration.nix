@@ -8,6 +8,7 @@
 		#./hostname.nix
 		../../hardware-configuration.nix
 		../../flake-parts/sops-nix.nix
+		../../flake-parts/remotemouse.nix
 		../../sys-modules/baobab.nix
 		../../sys-modules/birdtray.nix
 		../../sys-modules/bluetooth.nix
