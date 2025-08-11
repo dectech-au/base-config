@@ -1,7 +1,7 @@
 # sys-modules/sops.nix
 { pkgs, sops-nix, ... }:
 let
-  ageKeyFile = pkgs.writeText "age-key" (builtins.readFile /var/lib/sops-nix/key.txt);
+  ageKeyFile = pkgs.writeText "age-key" (builtins.readFile ~/.config/sops/age/keys.txt);
 in
 {
   imports = [ sops-nix.nixosModules.sops ];
