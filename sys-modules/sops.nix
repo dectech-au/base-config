@@ -4,13 +4,15 @@
   imports = [ inputs.sops-nix.nixosModules.sops ];
 
   sops = {
-    # Encrypted secrets live here, adjust the path to your repo layout
     defaultSopsFile = ../secrets/secrets.yaml;
-
-    # Example secret to prove the plumbing
-    secrets."headscale/server_key" = { };
+    secrets."headscale/server_key" = { };        # 
   };
 }
+
+environment.systemPackages = with pkgs; [
+  sops
+  age
+];
 
 ####################################
 # SETTING UP SOPS
@@ -30,4 +32,15 @@
 # 4. Use ssh-to-age to generate the key
 #       ssh-to-age < /etc/ssh/ssh_host_ed25519_key.pub
 #
-# 5. 
+# 5.
+#
+#
+#
+#
+# ?. Access sops by entering the repo root, and run:
+# sops s
+#
+# ?. reference the secret in the relevant module
+# password = config.sops.secrets."secretheading/secretname".path;
+#
+# ?. add the name of the secret to sys-modules/sops.nix
