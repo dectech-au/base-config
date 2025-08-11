@@ -33,8 +33,8 @@ in
 
         ./configuration.nix
         inputs.nixvim.nixosModules.nixvim
-        inputs.self.flakeModules.remotemouse
-        inputs.self.flakeModules.sops
+        ../../sys-modules/remotemouse.nix
+        ../../sys-modules/sops.nix
         inputs.home-manager.nixosModules.home-manager
 
         {
