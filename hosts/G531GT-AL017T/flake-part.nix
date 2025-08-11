@@ -34,7 +34,10 @@ in
         ./configuration.nix
         inputs.nixvim.nixosModules.nixvim
         (import ../../sys-modules/remotemouse.nix)
-        (import ../../sys-modules/sops.nix { inherit (inputs) sops-nix; })
+        (import ../../sys-modules/sops.nix { 
+          inherit (inputs) sops-nix; 
+          inherit pkgs; 
+        })
         inputs.home-manager.nixosModules.home-manager
 
         {
