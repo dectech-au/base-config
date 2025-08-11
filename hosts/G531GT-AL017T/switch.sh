@@ -52,3 +52,4 @@ fi
 
 echo "[+] nixos-rebuild switch"
 nixos-rebuild switch --upgrade --flake "$FLAKE" --show-trace
+sudo rm /etc/nixos/keys.txt
