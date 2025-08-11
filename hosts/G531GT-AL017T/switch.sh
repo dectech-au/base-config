@@ -4,12 +4,6 @@
 
 set -euo pipefail
 
-###
-# 1.5 Copy age keys to repo directory
-###
-sudo cp ~/.secrets/sops-keys.txt /etc/nixos/keys.txt
-sudo chmod 777 /etc/nixos/keys.txt
-
 ###############################################################################
 # Become root if needed, preserving args
 ###############################################################################
@@ -54,4 +48,3 @@ fi
 
 echo "[+] nixos-rebuild switch"
 nixos-rebuild switch --upgrade --flake "$FLAKE" --show-trace
-sudo rm /etc/nixos/keys.txt
