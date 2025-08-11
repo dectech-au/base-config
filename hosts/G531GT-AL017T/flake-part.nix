@@ -1,13 +1,5 @@
-# /etc/nixos/hosts/G531GT-AL017T/flake-part.nix
-#
-# ▸ You pass the real hostname from switch.sh:
-#       nixos-rebuild … --argstr hostName "$name"
-# ▸ We grab that arg from the flake-evaluation args set (`args`),
-#   fall back to "placeholder" if it isn’t supplied,
-#   and push it into `specialArgs` so every module can see it.
-# ▸ An inline module sets `networking.hostName = hostName`.
-
-{ inputs, self, ... } @ args:            # note the trailing @args
+# hosts/G531GT-AL017T/flake-part.nix
+{ inputs, self, ... } @ args:
 let
   hostName =
     if args ? hostName then args.hostName
@@ -34,8 +26,9 @@ in
 
         ./configuration.nix
         inputs.nixvim.nixosModules.nixvim
-       (import ../../sys-modules/remotemouse.nix { inherit pkgs; })
-        (import ../../sys-modules/sops.nix { inherit (inputs) sops-nix; inherit pkgs; })
+        # Import sys-modules directly (they'll get pkgs from specialArgs)
+        ../../sys-modules/remotemouse.nix
+        ../../sys-modules/sops.nix
         inputs.home-manager.nixosModules.home-manager
 
         {
