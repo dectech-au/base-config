@@ -1,8 +1,8 @@
+# flake-parts/remotemouse.nix
 { inputs, ... }:
 
-# Everything lives in THIS file; no more scattering.
 {
-  systems = [ "x86_64-linux" ];
+  systems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
 
   ##################################################
   # 1.  Build the package and publish an overlay
@@ -20,11 +20,11 @@
         inherit remotemouse;
         default = remotemouse;
       };
-      inherit overlay;          # flake-parts hoists this to self.overlays.default
+      inherit overlay;
     };
 
   ##################################################
-  # 2.  NixOS module that wires it up
+  # 2.  NixOS module that wires it up (merged config)
   ##################################################
   nixosModules.remotemouse = { lib, pkgs, ... }: {
     config = {
@@ -33,15 +33,16 @@
         inputs.self.overlays.default
       ];
 
+      # All the configuration from your sys-modules/remotemouse.nix
       environment.systemPackages = [
         pkgs.remotemouse
-        pkgs.xorg.xhost
+        pkgs.xorg.xhost  # handy for X auth troubleshooting
       ];
-
+      
+      nixpkgs.config.allowUnfree = true;
+      
       networking.firewall.allowedTCPPorts = [ 1978 ];
       networking.firewall.allowedUDPPorts = [ 1978 ];
-
-      nixpkgs.config.allowUnfree = true;
     };
   };
 }
