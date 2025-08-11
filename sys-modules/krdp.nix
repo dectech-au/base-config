@@ -49,5 +49,5 @@ in
   };
 
   # 4. Open RDP port
-  networking.firewall.allowedTCPPorts = [ 3389 ];
+  # networking.firewall.allowedTCPPorts = [ 3389 ];
 }
