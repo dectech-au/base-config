@@ -9,6 +9,6 @@
       overlay = final: prev: { remotemouse = remotemouse; };
     in {
       packages = { inherit remotemouse; default = remotemouse; };
-      inherit overlay;
+      overlays.default = overlay;
     };
 }
