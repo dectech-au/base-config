@@ -7,12 +7,12 @@
     defaultSopsFile = ../secrets/secrets.yaml;
     secrets."headscale/server_key" = { };        # 
   };
-}
 
-environment.systemPackages = with pkgs; [
-  sops
-  age
-];
+  environment.systemPackages = with pkgs; [
+    sops
+    age
+  ];
+}
 
 ####################################
 # SETTING UP SOPS
