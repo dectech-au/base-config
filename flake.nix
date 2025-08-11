@@ -35,7 +35,7 @@
 
       imports = [
         ./hosts/overlays.nix
-        ./flake-parts/sops-nix.nix
+        ./flake-parts/sops.nix
         ./flake-parts/remotemouse.nix
 
         ./hosts/enterprise-base/flake-part.nix
