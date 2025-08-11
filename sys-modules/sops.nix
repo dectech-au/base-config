@@ -1,8 +1,9 @@
 # sys-modules/sops.nix
 { pkgs, sops-nix, ... }:
 {
+  imports = [ sops-nix.nixosModules.sops ];
+
   config = {
-    imports = [ sops-nix.nixosModules.sops ];
     
     sops = {
       defaultSopsFile = ../../../secrets.yaml;  # Fixed path
