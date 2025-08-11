@@ -28,7 +28,7 @@ in
         inputs.nixvim.nixosModules.nixvim
         # Import sys-modules directly (they'll get pkgs from specialArgs)
         ../../sys-modules/remotemouse.nix
-        ../../sys-modules/sops.nix
+        #../../sys-modules/sops.nix
         inputs.home-manager.nixosModules.home-manager
 
         {
