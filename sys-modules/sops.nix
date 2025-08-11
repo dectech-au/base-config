@@ -5,7 +5,7 @@
     imports = [ sops-nix.nixosModules.sops ];
     
     sops = {
-      defaultSopsFile = ../../secrets.yaml;
+      defaultSopsFile = ../../../secrets.yaml;  # Fixed path
       age.keyFile = "/var/lib/sops-nix/key.txt";
       
       secrets = {
