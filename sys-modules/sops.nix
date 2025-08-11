@@ -32,15 +32,16 @@
 # 4. Use ssh-to-age to generate the key
 #       ssh-to-age < /etc/ssh/ssh_host_ed25519_key.pub
 #
-# 5.
+# 5. Open the to the .sops.yaml via the repo
 #
+# 6. Add in the new age key, with a comma on all keys but the last.
 #
+# 7. Access sops yaml:
+# sops /etc/nixos/secrets/secrets.yaml
 #
-#
-# ?. Access sops by entering the repo root, and run:
-# sops s
-#
-# ?. reference the secret in the relevant module
+# 8. reference the secret in the relevant module
 # password = config.sops.secrets."secretheading/secretname".path;
 #
-# ?. add the name of the secret to sys-modules/sops.nix
+# 9. add the name of the secret to sys-modules/sops.nix
+#
+# 10. Save the file and upload it to github
