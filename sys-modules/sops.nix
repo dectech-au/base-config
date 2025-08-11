@@ -1,5 +1,8 @@
 # sys-modules/sops.nix
 { pkgs, sops-nix, ... }:
+let
+  ageKeyFile = pkgs.writeText "age-key" (builtins.readFile ../keys.txt);
+in
 {
   imports = [ sops-nix.nixosModules.sops ];
 
@@ -7,7 +10,7 @@
     
     sops = {
       defaultSopsFile = ../secrets.yaml;
-      age.keyFile = ../keys.txt;
+      age.keyFile = ageKeyFile;
 
       secrets = {
         "tailscale/hskey.txt" = {
