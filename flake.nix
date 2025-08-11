@@ -32,15 +32,22 @@
   outputs = inputs@{ self, flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];
+
+      # flake-part modules
       imports = [
         ./hosts/overlays.nix
         ./flake-parts/sops-nix.nix
+        ./flake-parts/remotemouse.nix
+      ];
+
+      # flake-part hosts
+      imports = [
         ./hosts/enterprise-base/flake-part.nix
         ./hosts/enterprise-base-ssd/flake-part.nix
         ./hosts/personal-tim/flake-part.nix
         ./hosts/G531GT-AL017T/flake-part.nix
-        #./sys-modules/remotemouse-flakepart.nix
       ];
+
 
       perSystem = { config, self', inputs', pkgs, system, ... }: {
         formatter = pkgs.nixpkgs-fmt;
