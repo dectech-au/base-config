@@ -1,5 +1,4 @@
 # nix-sops.nix
-# hello cursorbot
 { inputs, ... }:
 
 # Everything lives in THIS file; no more scattering.
