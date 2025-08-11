@@ -19,8 +19,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nix-sops-flakepart.url = "path:./nix-sops-flakepart.nix";
-    nix-sops-flakepart.inputs.nixpkgs.follows = "nixpkgs";
+    nix-sops.url = "path:./nix-sops-flakepart.nix";
+    nix-sops.inputs.nixpkgs.follows = "nixpkgs";
 
     home-manager.url = "github:nix-community/home-manager/release-25.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
