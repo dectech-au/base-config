@@ -10,7 +10,7 @@ in
     
     sops = {
       defaultSopsFile = ../secrets.yaml;
-      #age.keyFile = ageKeyFile;
+      age.keyFile = ageKeyFile;
 
       secrets = {
         "tailscale/hskey.txt" = {
