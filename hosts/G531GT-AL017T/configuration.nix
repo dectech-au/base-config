@@ -6,7 +6,6 @@
 
 	imports = [ 
 		../../hardware-configuration.nix
-		../../sys-modules/age.nix
 		../../sys-modules/baobab.nix
 		../../sys-modules/birdtray.nix
 		../../sys-modules/bluetooth.nix
