@@ -26,7 +26,6 @@ in
 
         ./configuration.nix
         inputs.nixvim.nixosModules.nixvim
-        # Import sys-modules directly (they'll get pkgs from specialArgs)
         inputs.home-manager.nixosModules.home-manager
 
         {
