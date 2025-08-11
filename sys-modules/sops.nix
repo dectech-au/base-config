@@ -8,7 +8,7 @@
     # defaultSopsFile = ../secrets/secrets.yaml;
 
     # Example secret to prove the plumbing
-    secrets."example/db_password" = { };
+    secrets."headscale/server_key" = { };
   };
 }
 
