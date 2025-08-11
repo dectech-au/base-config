@@ -104,15 +104,8 @@
 
   ##################################################
   # 3.  Home-manager module for user-level secrets
+  # Note: This is handled by the sops-nix homeManagerModules
+  # You can import it directly in your home.nix files:
+  # imports = [ inputs.sops-nix.homeManagerModules.sops ];
   ##################################################
-  homeManagerModules.sops = { lib, pkgs, ... }: {
-    imports = [ inputs.sops-nix.homeManagerModules.sops ];
-    
-    config = {
-      sops = {
-        defaultSopsFile = ./secrets.yaml;
-        age.keyFile = "~/.config/sops/age/keys.txt";
-      };
-    };
-  };
 }
