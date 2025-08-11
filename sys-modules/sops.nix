@@ -2,10 +2,6 @@
 { pkgs, sops-nix, ... }:
 {
   config = {
-    nixpkgs.overlays = [ (final: prev: { 
-      inherit (pkgs) sops age gnupg; 
-    }) ];
-    
     imports = [ sops-nix.nixosModules.sops ];
     
     sops = {
