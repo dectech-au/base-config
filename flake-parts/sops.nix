@@ -23,6 +23,26 @@
         default = sops;
       };
       inherit overlay;          # flake-parts hoists this to self.overlays.default
+      
+      # Development shell with sops tools
+      devShells.default = pkgs.mkShell {
+        packages = with pkgs; [
+          sops
+          age
+          gnupg
+        ];
+        
+        shellHook = ''
+          echo "🔐 Nix-sops development environment loaded"
+          echo "Available tools: sops, age, gpg"
+          echo ""
+          echo "To create a new age key:"
+          echo "  age-keygen -o key.txt"
+          echo ""
+          echo "To encrypt a file:"
+          echo "  sops -e -i secrets.yaml"
+        '';
+      };
     };
 
   ##################################################
@@ -94,27 +114,5 @@
         age.keyFile = "~/.config/sops/age/keys.txt";
       };
     };
-  };
-
-  ##################################################
-  # 4.  Development shell with sops tools
-  ##################################################
-  devShells.default = { pkgs, ... }: {
-    packages = with pkgs; [
-      sops
-      age
-      gnupg
-    ];
-    
-    shellHook = ''
-      echo "🔐 Nix-sops development environment loaded"
-      echo "Available tools: sops, age, gpg"
-      echo ""
-      echo "To create a new age key:"
-      echo "  age-keygen -o key.txt"
-      echo ""
-      echo "To encrypt a file:"
-      echo "  sops -e -i secrets.yaml"
-    '';
   };
 }
