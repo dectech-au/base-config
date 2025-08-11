@@ -35,6 +35,7 @@ in
         inputs.nixvim.nixosModules.nixvim
         inputs.remotemouse.nixosModules.remotemouse
         inputs.home-manager.nixosModules.home-manager
+        inputs.nix-sops.nixosModules.sops-defaults
         {
           home-manager = {
             useGlobalPkgs       = true;
