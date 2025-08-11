@@ -1,12 +1,12 @@
 # sys-modules/sops.nix
-{ pkgs, ... }:
+{ pkgs, sops-nix, ... }:
 {
   config = {
     nixpkgs.overlays = [ (final: prev: { 
       inherit (pkgs) sops age gnupg; 
     }) ];
     
-    imports = [ inputs.sops-nix.nixosModules.sops ];
+    imports = [ sops-nix.nixosModules.sops ];
     
     sops = {
       defaultSopsFile = ../../secrets.yaml;
