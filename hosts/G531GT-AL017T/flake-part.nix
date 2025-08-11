@@ -22,6 +22,7 @@ in
 
       specialArgs = {
         inherit inputs hostName;
+        inherit (inputs) sops-nix;
       };
 
       modules = [
