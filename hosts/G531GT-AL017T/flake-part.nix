@@ -25,6 +25,7 @@ in
         ({ hostName, ... }: { networking.hostName = hostName; })
 
         ./configuration.nix
+        ../../sys-modules/sops.nix
         inputs.nixvim.nixosModules.nixvim
         inputs.home-manager.nixosModules.home-manager
 
