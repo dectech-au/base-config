@@ -35,7 +35,6 @@ in
         inputs.nixvim.nixosModules.nixvim
         ../../sys-modules/remotemouse.nix
         ../../sys-modules/sops.nix
-        })
         inputs.home-manager.nixosModules.home-manager
 
         {
