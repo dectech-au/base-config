@@ -4,7 +4,7 @@
   services.tailscale = {
     enable               = true;
     openFirewall         = true;        # punches UDP/41641 etc.
-    authKeyFile          = config.sops.secrets."tailscale/hskey.txt".path;   # Headscale pre-auth key
+    authKeyFile          = config.sops.secrets."tailscale".path;   # Headscale pre-auth key
     useRoutingFeatures   = "client";    # you are not an exit node
     extraUpFlags         = [
       "--login-server=https://headscale.dectech.au"
