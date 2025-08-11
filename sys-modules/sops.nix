@@ -18,6 +18,5 @@
     };
     
     environment.systemPackages = with pkgs; [ sops age gnupg ];
-    systemd.tmpfiles.rules = [ "d /var/lib/sops-nix 0700 root root" ];
   };
 }
