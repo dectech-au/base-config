@@ -1,3 +1,4 @@
 flake.lock
 .secrets/hskey.txt
 sys-modules/hostname.nix
+secrets.yaml
