@@ -1,117 +1,65 @@
-#/etc/nixos/flake-parts/nix-sops.nix
+# nix-sops.nix
+{ inputs, ... }:
+
+# Everything lives in THIS file; no more scattering.
 {
-  inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
-    sops-nix.url = "github:Mic92/sops-nix";
-    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
-  };
+  systems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
 
-  outputs = inputs@{ self, nixpkgs, sops-nix, ... }:
+  ##################################################
+  # 1.  Build the packages and publish an overlay
+  ##################################################
+  perSystem = { pkgs, system, ... }:
     let
-      supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+      sops = pkgs.sops;
+      age = pkgs.age;
+      gnupg = pkgs.gnupg;
       
-      forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
-    in
-    {
-      # NixOS modules
-      nixosModules = {
-        sops = sops-nix.nixosModules.sops;
-        sops-defaults = { config, lib, pkgs, ... }: {
-          imports = [ sops-nix.nixosModules.sops ];
-          
-          # Default sops configuration
-          sops = {
-            defaultSopsFile = ./secrets.yaml;
-            age.keyFile = "/var/lib/sops-nix/key.txt";
-            
-            # Optional: configure secrets validation
-            secrets = {
-              # Example: SSH host key
-              "ssh_host_rsa_key" = {
-                mode = "0400";
-                owner = "root";
-                group = "root";
-              };
-              
-              # Example: Tailscale key
-              "tailscale/hskey.txt" = {
-                mode = "0400";
-                owner = "root";
-                group = "root";
-              };
-            };
-          };
-        };
+      overlay = final: prev: { 
+        inherit sops age gnupg;
       };
-
-      # Home-manager modules
-      homeManagerModules = {
-        sops = sops-nix.homeManagerModules.sops;
+    in {
+      packages = {
+        inherit sops age gnupg;
+        default = sops;
       };
+      inherit overlay;          # flake-parts hoists this to self.overlays.default
+    };
 
-      # Development shell
-      devShells = forAllSystems (system: {
-        default = nixpkgs.legacyPackages.${system}.mkShell {
-          packages = with nixpkgs.legacyPackages.${system}; [
-            sops
-            age
-            gnupg
-          ];
-          
-          shellHook = ''
-            echo "🔐 Nix-sops development environment loaded"
-            echo "Available tools: sops, age, gpg"
-            echo ""
-            echo "To create a new age key:"
-            echo "  age-keygen -o key.txt"
-            echo ""
-            echo "To encrypt a file:"
-            echo "  sops -e -i secrets.yaml"
-          '';
-        };
-      });
+  ##################################################
+  # 2.  NixOS module that wires it up
+  ##################################################
+  nixosModules.sops = { lib, pkgs, ... }: {
+    config = {
+      # Pull in the overlay we just exported
+      nixpkgs.overlays = [
+        inputs.self.overlays.default
+      ];
 
-      # Packages
-      packages = forAllSystems (system: {
-        sops = nixpkgs.legacyPackages.${system}.sops;
-        age = nixpkgs.legacyPackages.${system}.age;
-      });
+      # Import the sops-nix NixOS module
+      imports = [ inputs.sops-nix.nixosModules.sops ];
 
-      # Checks
-      checks = forAllSystems (system: {
-        sops-check = nixpkgs.legacyPackages.${system}.runCommand "sops-check" {
-          buildInputs = [ nixpkgs.legacyPackages.${system}.sops ];
-        } ''
-          echo "Checking sops installation..."
-          sops --version
-          echo "✅ Sops check passed"
-          touch $out
-        '';
-      });
-
-      # Documentation
-      lib = {
-        # Helper function to create a secrets file
-        mkSecretsFile = { secrets, ageKeyFile ? "/var/lib/sops-nix/key.txt" }: {
-          sops = {
-            defaultSopsFile = ./secrets.yaml;
-            age.keyFile = ageKeyFile;
-            secrets = secrets;
-          };
-        };
-
-        # Example secrets configuration
-        exampleSecrets = {
+      # Default sops configuration
+      sops = {
+        defaultSopsFile = ./secrets.yaml;
+        age.keyFile = "/var/lib/sops-nix/key.txt";
+        
+        # Configure secrets with proper permissions
+        secrets = {
+          # SSH host key example
           "ssh_host_rsa_key" = {
             mode = "0400";
             owner = "root";
             group = "root";
           };
+          
+          # Tailscale key example
           "tailscale/hskey.txt" = {
             mode = "0400";
             owner = "root";
             group = "root";
           };
+          
+          # Database password example
           "database/password" = {
             mode = "0400";
             owner = "postgres";
@@ -119,5 +67,54 @@
           };
         };
       };
+
+      # Install sops tools in system packages
+      environment.systemPackages = with pkgs; [
+        sops
+        age
+        gnupg
+      ];
+
+      # Create the sops-nix directory
+      systemd.tmpfiles.rules = [
+        "d /var/lib/sops-nix 0700 root root"
+      ];
     };
+  };
+
+  ##################################################
+  # 3.  Home-manager module for user-level secrets
+  ##################################################
+  homeManagerModules.sops = { lib, pkgs, ... }: {
+    imports = [ inputs.sops-nix.homeManagerModules.sops ];
+    
+    config = {
+      sops = {
+        defaultSopsFile = ./secrets.yaml;
+        age.keyFile = "~/.config/sops/age/keys.txt";
+      };
+    };
+  };
+
+  ##################################################
+  # 4.  Development shell with sops tools
+  ##################################################
+  devShells.default = { pkgs, ... }: {
+    packages = with pkgs; [
+      sops
+      age
+      gnupg
+    ];
+    
+    shellHook = ''
+      echo "🔐 Nix-sops development environment loaded"
+      echo "Available tools: sops, age, gpg"
+      echo ""
+      echo "To create a new age key:"
+      echo "  age-keygen -o key.txt"
+      echo ""
+      echo "To encrypt a file:"
+      echo "  sops -e -i secrets.yaml"
+    '';
+  };
 }
