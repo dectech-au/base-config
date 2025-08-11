@@ -5,7 +5,6 @@
 	nix.settings.cores = 1;
 
 	imports = [ 
-		#./hostname.nix
 		../../hardware-configuration.nix
 		../../sys-modules/age.nix
 		../../sys-modules/baobab.nix
@@ -138,7 +137,6 @@
     isNormalUser = true;
     description = "dectec";
     extraGroups = [ "networkmanager" "wheel" "vboxusers" ];
-	];
     packages = with pkgs; [
       kdePackages.kate
     ];
