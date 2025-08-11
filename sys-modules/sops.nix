@@ -5,7 +5,7 @@
 
   sops = {
     # Encrypted secrets live here, adjust the path to your repo layout
-    defaultSopsFile = ../secrets/secrets.yaml;
+    # defaultSopsFile = ../secrets/secrets.yaml;
 
     # Example secret to prove the plumbing
     secrets."example/db_password" = { };
