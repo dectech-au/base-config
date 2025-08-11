@@ -8,5 +8,6 @@
       remotemouse = pkgs.callPackage ./pkg/remote-mouse.nix { xdotool = pkgs.xdotool; };
     in {
       packages = { inherit remotemouse; default = remotemouse; };
+      overlays.default = final: prev: { inherit remotemouse; };
     };
 }
