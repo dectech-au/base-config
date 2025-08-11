@@ -9,8 +9,4 @@
     in {
       packages = { inherit remotemouse; default = remotemouse; };
     };
-
-  overlays.default = final: prev: {
-    remotemouse = inputs.self.packages.${prev.system}.remotemouse;
-  };
 }
