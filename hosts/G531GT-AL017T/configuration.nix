@@ -138,19 +138,17 @@
     isNormalUser = true;
     description = "dectec";
     extraGroups = [ "networkmanager" "wheel" "vboxusers" ];
-		openssh.authorizedKeys.keys = [
-			"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHHUlyS9q+o6rORRBmKSbrKf/jV6HRJtoetiPxjnsVS5 z-home@z-home-mac"
-		];
+	];
     packages = with pkgs; [
       kdePackages.kate
     ];
   };
 
-  # Enable automatic login for the user.
- #  services.displayManager.autoLogin = {
+	# Enable automatic login for the user.
+	#  services.displayManager.autoLogin = {
 	# enable = false;
- #  	user = "dectec";
- #  };
+	#  	user = "dectec";
+	#  };
   
   # Allow unfree packages
   # nixpkgs.config.allowUnfree = true;
