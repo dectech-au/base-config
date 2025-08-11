@@ -33,7 +33,6 @@
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];
       imports = [
-        ./flake-parts/sops-nix/flake.nix
         ./hosts/overlays.nix
         ./hosts/enterprise-base/flake-part.nix
         ./hosts/enterprise-base-ssd/flake-part.nix
