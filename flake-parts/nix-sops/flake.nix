@@ -1,7 +1,5 @@
 #/etc/nixos/flake-parts/nix-sops.nix
 {
-  description = "Nix-sops secrets management flake part";
-
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
     sops-nix.url = "github:Mic92/sops-nix";
