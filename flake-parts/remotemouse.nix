@@ -12,7 +12,7 @@
       inherit overlay;
     };
 
-  flakeModules.remotemouse = { lib, pkgs, ... }: {
+  nixosModules.remotemouse = { lib, pkgs, ... }: {
     config = {
       nixpkgs.overlays = [ inputs.self.overlays.default ];
       environment.systemPackages = [ pkgs.remotemouse pkgs.xorg.xhost ];
