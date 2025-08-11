@@ -11,14 +11,4 @@
       packages = { inherit remotemouse; default = remotemouse; };
       inherit overlay;
     };
-
-  flakeModules.remotemouse = { lib, pkgs, ... }: {
-    config = {
-      nixpkgs.overlays = [ inputs.self.overlays.default ];
-      environment.systemPackages = [ pkgs.remotemouse pkgs.xorg.xhost ];
-      nixpkgs.config.allowUnfree = true;
-      networking.firewall.allowedTCPPorts = [ 1978 ];
-      networking.firewall.allowedUDPPorts = [ 1978 ];
-    };
-  };
 }
