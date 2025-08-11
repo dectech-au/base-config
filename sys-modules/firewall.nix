@@ -3,8 +3,8 @@
 {
   networking.firewall = {
     enable = true;
-    allowedTCPPorts = [ 6666 ]; # remote mouse
-    allowedUDPPorts = [ 6666 ]; # remote mouse 
+    # allowedTCPPorts = [ 6666 ]; # remote mouse
+    # allowedUDPPorts = [ 6666 ]; # remote mouse 
   };
 
   environment.systemPackages = with pkgs; [
