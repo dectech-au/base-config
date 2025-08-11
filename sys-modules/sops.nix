@@ -1,25 +1,17 @@
 # sys-modules/sops.nix
-{ pkgs, sops-nix, ... }:
+{ inputs, config, lib, pkgs, ... }:
 {
-  imports = [ sops-nix.nixosModules.sops ];
+  imports = [ inputs.sops-nix.nixosModules.sops ];
 
-  config = {
-    
-    sops = {
-      #defaultSopsFile = ../secrets.yaml;
+  sops = {
+    # Encrypted secrets live here, adjust the path to your repo layout
+    defaultSopsFile = ../secrets/secrets.yaml;
 
-      secrets = {
-        "tailscale/hskey.txt" = {
-          mode = "0400";
-          owner = "root";
-          group = "root";
-        };
-      };
-    };
-    
-    environment.systemPackages = with pkgs; [ sops age gnupg ];
+    # Example secret to prove the plumbing
+    secrets."example/db_password" = { };
   };
 }
+
 # process to set up sops
 # 1. generate key-pair with age
 # $ mkdir -p ~/.config/sops/age && age-keygen -o ~/.config/sops/age/keys.txt
