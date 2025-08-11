@@ -1,10 +1,6 @@
 # /etc/nixos/sys-modules/tailscale.nix
 { config, pkgs, lib, ... }:
 {
-  ## Copy the key into the immutable Nix store at build time.
-  ## Replace the source with wherever you actually stash the key.
-  environment.etc."tailscale/hskey.txt".source = "/root/.secrets/hskey.txt";
-
   services.tailscale = {
     enable               = true;
     openFirewall         = true;        # punches UDP/41641 etc.
