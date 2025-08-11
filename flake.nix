@@ -34,6 +34,7 @@
       systems = [ "x86_64-linux" ];
       imports = [
         ./hosts/overlays.nix
+        ./flake-parts/sops-nix.nix
         ./hosts/enterprise-base/flake-part.nix
         ./hosts/enterprise-base-ssd/flake-part.nix
         ./hosts/personal-tim/flake-part.nix
