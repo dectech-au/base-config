@@ -19,8 +19,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nix-sops.url = "path:./flake-parts/nix-sops";
-    nix-sops.inputs.nixpkgs.follows = "nixpkgs";
+    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
     home-manager.url = "github:nix-community/home-manager/release-25.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -33,7 +33,7 @@
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];
       imports = [
-        ./flake-parts/nix-sops/flake.nix
+        ./flake-parts/sops-nix/flake.nix
         ./hosts/overlays.nix
         ./hosts/enterprise-base/flake-part.nix
         ./hosts/enterprise-base-ssd/flake-part.nix
