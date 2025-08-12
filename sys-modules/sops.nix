@@ -28,7 +28,9 @@
 # creation_rules:
 #  - path_regex: ^secrets/.*\.yaml$
 #    age: >-
-#      age1<string>
+#      age1<string>, # commas
+#      age1<string>, # commas
+#      age1<string>  #no commas
 #
 # 3. generate the target machines public ssh key:
 #       sudo ssh-keygen -A
@@ -41,6 +43,7 @@
 # 6. Add in the new age key, with a comma on all keys but the last.
 #
 # 7. Access sops yaml:
+# mkdir -p /etc/nixos/secrets
 # sops /etc/nixos/secrets/secrets.yaml
 #
 # 8. reference the secret in the relevant module
