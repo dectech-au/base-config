@@ -20,13 +20,15 @@
 # SETTING UP SOPS
 ####################################
 # 1. Generate age-key for admins
+#        mkdir -p ~/.config/sops/age/
 #       age-keygen -o ~/.config/sops/age/keys.txt
 #
 # 2. create in the repo root ".sops.yaml" which contains the creation rules in the following format:
+# .sops.yaml
 # creation_rules:
-#    - path_regex: ^secrets/.*\.yaml$
-#      age:
-#        - age1<string>
+#  - path_regex: ^secrets/.*\.yaml$
+#    age: >-
+#      age1<string>
 #
 # 3. generate the target machines public ssh key:
 #       sudo ssh-keygen -A
