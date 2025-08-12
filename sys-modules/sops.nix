@@ -5,7 +5,8 @@
 
   sops = {
     defaultSopsFile = ../secrets/secrets.yaml;
-    secrets."headscale/server_key" = { };        # 
+    secrets."headscale/server_key" = { };
+    secrets."ssh/z-home-mac" = { }; 
   };
 
   environment.systemPackages = with pkgs; [
