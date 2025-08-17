@@ -6,7 +6,7 @@
     workspace = {
       lookAndFeel = "org.kde.breeze.desktop";
       iconTheme   = "Papirus";
-      wallpaper   = "${homeDir}/Pictures/Wallpapers/dectech-no-label.png";
+      wallpaper   = "${home.homeDirectory}/Pictures/Wallpapers/dectech-no-label.png";
     };
 
     hotkeys.commands."launch-kitty" = {
