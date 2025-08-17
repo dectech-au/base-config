@@ -1,10 +1,4 @@
 { config, lib, pkgs, ... }:
-
-let
-  myWallpaper = pkgs.runCommand "my-wallpaper" { } ''
-    install -Dm444 ${./Pictures/untitled.jpg} $out/share/wallpapers/untitled.jpg
-  '';
-in
 {
   programs.plasma = {
     enable = true;
@@ -12,7 +6,7 @@ in
     workspace = {
       lookAndFeel = "org.kde.breeze.desktop";
       iconTheme   = "Papirus";
-      wallpaper   = "${myWallpaper}/share/wallpapers/untitled.jpg";
+      wallpaper   = "../personalisation/wallpapers/dectech.jpg";
     };
 
     hotkeys.commands."launch-kitty" = {
