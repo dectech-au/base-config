@@ -11,6 +11,7 @@
 		../../home-modules/kdeconnect.nix
 		../../home-modules/kitty.nix
 		../../home-modules/librewolf.nix
+		../../home-modules/lutris.nix
 		#../../home-modules/onlyoffice.nix
 		#../../home-modules/papirus-theme.nix
 		../../home-modules/plasma-manager.nix
