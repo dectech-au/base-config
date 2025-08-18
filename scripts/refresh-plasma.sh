@@ -1,125 +1,68 @@
 #!/usr/bin/env bash
 # script is useful for ensuring that the favourites menu in kickoff doesn't stagnate
-# Refresh Plasma menus and favorites after an update
-# Refresh Plasma menus and favorites after an update, with logging
-# ----- Plasma refresh helpers -----
+
+# ----- Plasma refresh, immediate only -----
 log() { echo "[plasma-refresh] $(date +'%F %T') $*"; }
 
-refresh_now_for_user() {
+_refresh_user_now() {
   local uid="$1" user="$2" rt="/run/user/$1"
-  log "Now-refresh for user=$user uid=$uid"
+  log "Refreshing for user=$user uid=$uid"
 
-  if [ ! -S "$rt/bus" ]; then
-    log "No DBus session at $rt/bus; cannot refresh now"
-    return 1
-  fi
-
-  sudo -u "$user" env XDG_RUNTIME_DIR="$rt" DBUS_SESSION_BUS_ADDRESS="unix:path=$rt/bus" bash -lc '
+  # Rebuild sycoca as the target user; no DBus needed
+  sudo -u "$user" bash -lc '
     set -e
-    echo "  -> Removing $HOME/.cache/ksycoca*"
+    echo "  -> Clearing $HOME/.cache/ksycoca*"
     rm -f "$HOME/.cache/ksycoca"* || true
 
+    export XDG_DATA_DIRS="${XDG_DATA_DIRS:-/run/current-system/sw/share:/usr/local/share:/usr/share}"
     if command -v kbuildsycoca6 >/dev/null 2>&1; then
-      echo "  -> Rebuilding sycoca with kbuildsycoca6"
+      echo "  -> kbuildsycoca6 --noincremental"
       kbuildsycoca6 --noincremental || true
     elif command -v nix >/dev/null 2>&1; then
-      echo "  -> Rebuilding sycoca via nix run nixpkgs#kdePackages.kservice"
+      echo "  -> nix run nixpkgs#kdePackages.kservice -- kbuildsycoca6"
       nix run nixpkgs#kdePackages.kservice --command kbuildsycoca6 --noincremental || true
     else
-      echo "  !! kbuildsycoca6 not found; skipped rebuild"
+      echo "  !! kbuildsycoca6 not found and nix not available; skipped rebuild"
     fi
-
-    # Restart what we can; safe if not running
-    echo "  -> Restarting kactivitymanagerd"
-    systemctl --user restart kactivitymanagerd.service || true
-    echo "  -> Restarting plasma-plasmashell"
-    systemctl --user restart plasma-plasmashell.service || true
   '
-}
 
-queue_autostart_for_user() {
-  local uid="$1" user="$2"
-  local home dir_bin dir_autostart
-  home="$(getent passwd "$user" | cut -d: -f6)"
-  dir_bin="$home/.local/bin"
-  dir_autostart="$home/.config/autostart"
-
-  log "Queue refresh at next Plasma login for $user"
-
-  sudo -u "$user" bash -lc "
-    set -e
-    mkdir -p '$dir_bin' '$dir_autostart' '$home/.local/state'
-    cat > '$dir_bin/plasma-refresh-once.sh' <<'EOF'
-#!/usr/bin/env bash
-set -e
-logf=\"$HOME/.local/state/plasma-refresh.log\"
-echo \"[plasma-refresh] \$(date +'%F %T') Autostart running\" | tee -a \"\$logf\"
-rm -f \"\$HOME/.cache/ksycoca\"* || true
-if command -v kbuildsycoca6 >/dev/null 2>&1; then
-  echo \"  -> kbuildsycoca6\" | tee -a \"\$logf\"
-  kbuildsycoca6 --noincremental || true
-elif command -v nix >/dev/null 2>&1; then
-  echo \"  -> nix run kbuildsycoca6\" | tee -a \"\$logf\"
-  nix run nixpkgs#kdePackages.kservice --command kbuildsycoca6 --noincremental || true
-else
-  echo \"  !! no kbuildsycoca6 available\" | tee -a \"\$logf\"
-fi
-echo \"  -> restart kactivitymanagerd\" | tee -a \"\$logf\"
-systemctl --user restart kactivitymanagerd.service || true
-echo \"  -> restart plasmashell\" | tee -a \"\$logf\"
-systemctl --user restart plasma-plasmashell.service || true
-echo \"[plasma-refresh] \$(date +'%F %T') Autostart done\" | tee -a \"\$logf\"
-rm -f \"\$HOME/.config/autostart/plasma-refresh-once.desktop\" || true
-EOF
-    chmod +x '$dir_bin/plasma-refresh-once.sh'
-
-    cat > '$dir_autostart/plasma-refresh-once.desktop' <<'EOF'
-[Desktop Entry]
-Type=Application
-Name=Plasma refresh one-shot
-Comment=Rebuild KDE sycoca and restart activity manager and shell once after update
-Exec=/bin/bash -lc "$HOME/.local/bin/plasma-refresh-once.sh"
-OnlyShowIn=KDE;
-X-KDE-autostart-phase=2
-X-GNOME-Autostart-Delay=8
-EOF
-  "
-}
-
-refresh_plasma_for_user() {
-  local uid="$1" user="$2" rt="/run/user/$1"
-  log "Start for user=$user uid=$uid"
-
-  # If a Plasma session is up, do it now; else queue for next login
+  # Only try to touch session services if the user has a session bus
   if [ -S "$rt/bus" ]; then
-    if pgrep -u "$uid" -x plasmashell >/dev/null 2>&1 || pgrep -u "$uid" -x kactivitymanagerd >/dev/null 2>&1; then
-      refresh_now_for_user "$uid" "$user" && { log "Done for $user"; return; }
-      log "Now-refresh failed for $user; will queue autostart"
-      queue_autostart_for_user "$uid" "$user"
-    else
-      log "Session bus exists but shell not running; queue autostart for $user"
-      queue_autostart_for_user "$uid" "$user"
-    fi
+    log "Attempting user service restarts for $user"
+    sudo -u "$user" env DBUS_SESSION_BUS_ADDRESS="unix:path=$rt/bus" bash -lc '
+      # Restart only if present; ignore failures
+      echo "  -> systemctl --user try-restart kactivitymanagerd.service"
+      systemctl --user try-restart kactivitymanagerd.service || true
+
+      echo "  -> systemctl --user try-restart plasma-plasmashell.service"
+      systemctl --user try-restart plasma-plasmashell.service || true
+
+      echo "  -> kactivitymanagerd status:"
+      systemctl --user is-active kactivitymanagerd.service >/dev/null && echo "     active" || echo "     inactive"
+
+      echo "  -> plasmashell status:"
+      systemctl --user is-active plasma-plasmashell.service >/dev/null && echo "     active" || echo "     inactive"
+    '
   else
-    log "No user bus; user is not logged in graphically; queue autostart for $user"
-    queue_autostart_for_user "$uid" "$user"
+    log "No DBus session for $user; skipped restarts, cache already rebuilt"
   fi
+
+  log "Done for $user"
 }
 
-run_plasma_refresh() {
+run_plasma_refresh_now() {
   log "Scanning logged-in users"
   if command -v loginctl >/dev/null 2>&1; then
     loginctl list-users --no-legend 2>/dev/null | while read -r uid user _; do
       [ -n "$uid" ] && [ -n "$user" ] || continue
-      refresh_plasma_for_user "$uid" "$user"
+      _refresh_user_now "$uid" "$user"
     done
   else
     log "loginctl not found; falling back to current user"
-    refresh_plasma_for_user "$(id -u)" "$(id -un)"
+    _refresh_user_now "$(id -u)" "$(id -un)"
   fi
   log "Plasma refresh complete"
 }
-# ----- end helpers -----
 
-# Call it from your update flow
-run_plasma_refresh
+# Call from your update flow
+run_plasma_refresh_now
