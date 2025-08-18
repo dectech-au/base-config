@@ -1,20 +1,26 @@
 #!/usr/bin/env bash
 # script is useful for ensuring that the favourites menu in kickoff doesn't stagnate
 
-# ----- Plasma refresh, immediate only -----
-log() { echo "[plasma-refresh] $(date +'%F %T') $*"; }
-
 _refresh_user_now() {
   local uid="$1" user="$2" rt="/run/user/$1"
   log "Refreshing for user=$user uid=$uid"
 
-  # Rebuild sycoca as the target user; no DBus needed
+  # Rebuild sycoca as the target user, with sane XDG env
   sudo -u "$user" bash -lc '
     set -e
     echo "  -> Clearing $HOME/.cache/ksycoca*"
     rm -f "$HOME/.cache/ksycoca"* || true
 
-    export XDG_DATA_DIRS="${XDG_DATA_DIRS:-/run/current-system/sw/share:/usr/local/share:/usr/share}"
+    # Ensure KDE sees NixOS menu and desktop entries
+    export XDG_CONFIG_DIRS="/etc/xdg:/etc/profiles/per-user/$USER/etc/xdg:/run/current-system/sw/etc/xdg"
+    export XDG_DATA_DIRS="/etc/profiles/per-user/$USER/share:/run/current-system/sw/share:/usr/local/share:/usr/share"
+
+    if [ -e "/etc/xdg/menus/applications.menu" ] || [ -e "/run/current-system/sw/etc/xdg/menus/applications.menu" ]; then
+      echo "  -> Menu file present"
+    else
+      echo "  !! Menu file not found under $XDG_CONFIG_DIRS; proceeding anyway"
+    fi
+
     if command -v kbuildsycoca6 >/dev/null 2>&1; then
       echo "  -> kbuildsycoca6 --noincremental"
       kbuildsycoca6 --noincremental || true
@@ -26,19 +32,31 @@ _refresh_user_now() {
     fi
   '
 
-  # Only try to touch session services if the user has a session bus
+  # If a session bus exists, try gentle restarts; else just finish
   if [ -S "$rt/bus" ]; then
     log "Attempting user service restarts for $user"
     sudo -u "$user" env DBUS_SESSION_BUS_ADDRESS="unix:path=$rt/bus" bash -lc '
-      # Restart only if present; ignore failures
-      echo "  -> systemctl --user try-restart kactivitymanagerd.service"
-      systemctl --user try-restart kactivitymanagerd.service || true
-
+      # Plasmashell via systemd user unit
       echo "  -> systemctl --user try-restart plasma-plasmashell.service"
       systemctl --user try-restart plasma-plasmashell.service || true
 
+      # kactivitymanagerd: try systemd, then fall back to kill, then start if missing
+      echo "  -> systemctl --user try-restart kactivitymanagerd.service"
+      if ! systemctl --user try-restart kactivitymanagerd.service >/dev/null 2>&1; then
+        if pgrep -x kactivitymanagerd >/dev/null 2>&1; then
+          echo "     unit missing; killing running kactivitymanagerd"
+          pkill -x kactivitymanagerd || true
+        else
+          echo "     unit missing; kactivitymanagerd not running"
+        fi
+        if command -v kactivitymanagerd >/dev/null 2>&1; then
+          echo "  -> starting kactivitymanagerd"
+          nohup kactivitymanagerd >/dev/null 2>&1 &
+        fi
+      fi
+
       echo "  -> kactivitymanagerd status:"
-      systemctl --user is-active kactivitymanagerd.service >/dev/null && echo "     active" || echo "     inactive"
+      pgrep -x kactivitymanagerd >/dev/null && echo "     running" || echo "     not running"
 
       echo "  -> plasmashell status:"
       systemctl --user is-active plasma-plasmashell.service >/dev/null && echo "     active" || echo "     inactive"
@@ -49,20 +67,3 @@ _refresh_user_now() {
 
   log "Done for $user"
 }
-
-run_plasma_refresh_now() {
-  log "Scanning logged-in users"
-  if command -v loginctl >/dev/null 2>&1; then
-    loginctl list-users --no-legend 2>/dev/null | while read -r uid user _; do
-      [ -n "$uid" ] && [ -n "$user" ] || continue
-      _refresh_user_now "$uid" "$user"
-    done
-  else
-    log "loginctl not found; falling back to current user"
-    _refresh_user_now "$(id -u)" "$(id -un)"
-  fi
-  log "Plasma refresh complete"
-}
-
-# Call from your update flow
-run_plasma_refresh_now
