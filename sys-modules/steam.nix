@@ -7,5 +7,6 @@
     protonup-ng
     protonup-qt
     protonplus
+    steamtinkerlaunch
   ];
 }
