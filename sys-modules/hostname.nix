@@ -1,10 +1,8 @@
-# sys-modules/dynamic-hostname.nix
 { config, pkgs, lib, ... }:
 
 let
   setHost = pkgs.writeShellScript "derive-hostname" ''
     set -euo pipefail
-
     serial=""
     if [ -r /sys/class/dmi/id/product_serial ]; then
       serial=$(tr -d ' \n' </sys/class/dmi/id/product_serial || true)
@@ -12,21 +10,18 @@ let
     if [ -z "$serial" ] && [ -r /etc/machine-id ]; then
       serial=$(cut -c1-8 /etc/machine-id || true)
     fi
-
     short=$(printf %s "$serial" | tail -c 6)
     name="dectech-$short"
 
     current=$(cat /proc/sys/kernel/hostname 2>/dev/null || true)
     if [ "$current" != "$name" ]; then
-      echo "Setting kernel hostname to $name"
       /run/current-system/sw/bin/hostname "$name"
     fi
   '';
 in {
-  # Harmless default so evaluation/boot never fail
   networking.hostName = lib.mkDefault "placeholder";
 
-  # Run *after* NixOS activation has finished setting the static name
+  # Ensure it runs after activation sets the static name
   systemd.services.dynamic-hostname = {
     description = "Set hostname from serial/machine-id";
     wantedBy    = [ "multi-user.target" ];
@@ -40,13 +35,12 @@ in {
     };
   };
 
-  # Stop your network stack from rewriting the hostname later
-  # If you use NetworkManager:
-  networking.networkmanager.extraConfig = ''
-    [main]
-    hostname-mode=none
-  '';
+  # Also run on every rebuild and boot after /etc is generated
+  system.activationScripts.deriveHostname = {
+    deps = [ "etc" ];
+    text = "${setHost}";
+  };
 
-  # If you use dhcpcd instead, use this line and remove the NM block:
-  # networking.dhcpcd.extraConfig = "nohook hostname\n";
+  # NetworkManager: stop it from changing the hostname
+  networking.networkmanager.settings.main."hostname-mode" = "none";
 }
