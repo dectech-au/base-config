@@ -1,12 +1,19 @@
-# sys-modules/dynamic-hostname.nix
 { config, pkgs, lib, ... }:
 
 let
   setHost = pkgs.writeShellScript "derive-hostname" ''
-    serial=$(tr -d ' ' </sys/class/dmi/id/product_serial 2>/dev/null || echo "")
-    [ -z "$serial" ] && serial=$(cut -c1-8 /etc/machine-id)
-    name="dectech-${serial: -6}"
-    current=$(hostnamectl --static || true)
+    set -eu
+    serial=""
+    if [ -r /sys/class/dmi/id/product_serial ]; then
+      serial=$(tr -d ' \n' </sys/class/dmi/id/product_serial || true)
+    fi
+    if [ -z "$serial" ] && [ -r /etc/machine-id ]; then
+      serial=$(cut -c1-8 /etc/machine-id || true)
+    fi
+
+    short=$(printf %s "$serial" | tail -c 6)
+    name="dectech-$short"
+    current=$(hostnamectl --static 2>/dev/null || true)
 
     if [ "$current" != "$name" ]; then
       echo "Setting hostname to $name"
@@ -14,17 +21,16 @@ let
     fi
   '';
 in {
-  # Give a harmless default so NixOS boots even before the
-  # service runs. It gets overwritten seconds later.
-  networking.hostName = lib.mkDefault "placeholder";
+  networking.hostName = lib.mkDefault "placeholder";  # valid option, documented by MyNixOS. :contentReference[oaicite:0]{index=0}
 
   systemd.services.dynamic-hostname = {
     description = "Set hostname from serial/machine-id";
-    wantedBy    = [ "multi-user.target" ];
+    wantedBy    = [ "multi-user.target" ];            # documented systemd.services.<name>.wantedBy. :contentReference[oaicite:1]{index=1}
     after       = [ "network.target" ];
     serviceConfig = {
       Type      = "oneshot";
       ExecStart = "${setHost}";
+      Restart   = lib.mkForce "no";                   # service options go under serviceConfig. :contentReference[oaicite:2]{index=2}
     };
   };
 }
