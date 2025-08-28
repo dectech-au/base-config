@@ -1,4 +1,3 @@
-# sys-modules/dynamic-hostname.nix
 { config, pkgs, lib, ... }:
 
 let
@@ -20,15 +19,15 @@ let
     fi
   '';
 in {
-  # Let transient hostname be used; do NOT set a static one
-  networking.hostName = "";
+  # do not write /etc/hostname
+  networking.hostName = lib.mkForce "";
 
-  # Run early so getty, sshd, and DHCP see the final name
+  # run before networking is brought up
   systemd.services.dynamic-hostname = {
     description = "Set hostname from serial/machine-id";
-    wantedBy    = [ "multi-user.target" ];
-    before      = [ "network-pre.target" "network.target" "getty.target" "sshd.service" ];
+    wantedBy    = [ "network-pre.target" ];
     after       = [ "local-fs.target" ];
+    before      = [ "network-pre.target" "getty.target" "sshd.service" ];
     serviceConfig = {
       Type      = "oneshot";
       ExecStart = "${setHost}";
@@ -36,11 +35,10 @@ in {
     };
   };
 
-  # If you use NetworkManager, stop it touching the hostname
-  networking.networkmanager.settings.main."hostname-mode" = "none";  # NM’s knob. :contentReference[oaicite:2]{index=2}
+  # prevent NM from messing with the transient hostname
+  networking.networkmanager.settings.main."hostname-mode" = "none";  # disables NM’s transient-hostname updates. :contentReference[oaicite:1]{index=1}
 
-  # If you use dhcpcd, belt-and-braces:
-  # dhcpcd only sets the hostname when it’s empty/localhost/nixos; after our unit runs, it won’t change it.
-  # You can still hard-disable:
-  # networking.dhcpcd.setHostname = false;  # option docs here. :contentReference[oaicite:3]{index=3}
+  # if you use dhcpcd instead of NM, disable its hostname writes
+  # it only writes when the hostname is empty/localhost/nixos
+  # networking.dhcpcd.setHostname = false;  # option exists; default true. :contentReference[oaicite:2]{index=2}
 }
