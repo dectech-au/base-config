@@ -1,3 +1,4 @@
+# sys-modules/dynamic-hostname.nix
 { config, pkgs, lib, ... }:
 
 let
@@ -19,15 +20,15 @@ let
     fi
   '';
 in {
-  networking.hostName = lib.mkDefault "placeholder";
+  # Let transient hostname be used; do NOT set a static one
+  networking.hostName = "";
 
-  # Ensure it runs after activation sets the static name
+  # Run early so getty, sshd, and DHCP see the final name
   systemd.services.dynamic-hostname = {
     description = "Set hostname from serial/machine-id";
     wantedBy    = [ "multi-user.target" ];
-    after       = [ "nixos-activation.service" ];
-    requires    = [ "nixos-activation.service" ];
-    before      = [ "network.target" "getty.target" "sshd.service" ];
+    before      = [ "network-pre.target" "network.target" "getty.target" "sshd.service" ];
+    after       = [ "local-fs.target" ];
     serviceConfig = {
       Type      = "oneshot";
       ExecStart = "${setHost}";
@@ -35,12 +36,11 @@ in {
     };
   };
 
-  # Also run on every rebuild and boot after /etc is generated
-  system.activationScripts.deriveHostname = {
-    deps = [ "etc" ];
-    text = "${setHost}";
-  };
+  # If you use NetworkManager, stop it touching the hostname
+  networking.networkmanager.settings.main."hostname-mode" = "none";  # NM’s knob. :contentReference[oaicite:2]{index=2}
 
-  # NetworkManager: stop it from changing the hostname
-  networking.networkmanager.settings.main."hostname-mode" = "none";
+  # If you use dhcpcd, belt-and-braces:
+  # dhcpcd only sets the hostname when it’s empty/localhost/nixos; after our unit runs, it won’t change it.
+  # You can still hard-disable:
+  # networking.dhcpcd.setHostname = false;  # option docs here. :contentReference[oaicite:3]{index=3}
 }
