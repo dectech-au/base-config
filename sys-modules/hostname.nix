@@ -4,6 +4,7 @@
 let
   setHost = pkgs.writeShellScript "derive-hostname" ''
     set -euo pipefail
+
     serial=""
     if [ -r /sys/class/dmi/id/product_serial ]; then
       serial=$(tr -d ' \n' </sys/class/dmi/id/product_serial || true)
@@ -11,6 +12,7 @@ let
     if [ -z "$serial" ] && [ -r /etc/machine-id ]; then
       serial=$(cut -c1-8 /etc/machine-id || true)
     fi
+
     short=$(printf %s "$serial" | tail -c 6)
     name="dectech-$short"
 
@@ -20,24 +22,25 @@ let
     fi
   '';
 in {
-  # Harmless default; valid option. :contentReference[oaicite:0]{index=0}
-  networking.hostName = lib.mkDefault "placeholder";
+  # Harmless default, documented option.
+  networking.hostName = lib.mkDefault "placeholder";  # MyNixOS: networking.hostName. :contentReference[oaicite:0]{index=0}
 
+  # Run on every boot and every nixos-rebuild, AFTER /etc is populated.
+  system.activationScripts.deriveHostname = {
+    # Ordered fragments are supported; "etc" is a valid dependency example. 
+    # This ensures our script runs late enough to override the static name. 
+    deps = [ "etc" ];
+    text = "${setHost}";
+  };  # Activation scripts are the right hook here; see docs. :contentReference[oaicite:1]{index=1}
+
+  # Optional: keep a manual trigger.
   systemd.services.dynamic-hostname = {
     description = "Set hostname from serial/machine-id";
-    wantedBy    = [ "multi-user.target" ];  # install target. :contentReference[oaicite:1]{index=1}
-
-    # Run early, before login and network
-    unitConfig = {
-      DefaultDependencies = false;                        # valid under [Unit]. :contentReference[oaicite:2]{index=2}
-      Before = [ "network-pre.target" "network.target" "getty.target" "sshd.service" ];
-      After  = [ "local-fs.target" ];
-    };
-
+    wantedBy = [ "multi-user.target" ];  # standard install hook. :contentReference[oaicite:2]{index=2}
     serviceConfig = {
-      Type      = "oneshot";
+      Type = "oneshot";
       ExecStart = "${setHost}";
-      Restart   = lib.mkForce "no";                       # oneshot must not have Restart. :contentReference[oaicite:3]{index=3}
+      Restart = lib.mkForce "no";
     };
   };
 }
