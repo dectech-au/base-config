@@ -29,7 +29,7 @@ in {
     wantedBy = [ "sysinit.target" ];
     unitConfig = [
       DefaultDependencies = false;
-      before      = [ 
+      before = [ 
         "basic.target"
         "network-pre.target"
         "prometheus-node-exporter.service"
