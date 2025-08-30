@@ -25,9 +25,19 @@ in {
   # run before networking is brought up
   systemd.services.dynamic-hostname = {
     description = "Set hostname from serial/machine-id";
-    wantedBy    = [ "network-pre.target" ];
-    after       = [ "local-fs.target" ];
-    before      = [ "network-pre.target" "getty.target" "sshd.service" ];
+    # wantedBy    = [ "network-pre.target" ];
+    wantedBy = [ "sysinit.target" ];
+    unitConfig = [
+      DefaultDependencies = false;
+      before      = [ 
+        "basic.target"
+        "network-pre.target"
+        "prometheus-node-exporter.service"
+        "getty.target"
+        "sshd.service"
+      ];
+      after       = [ "local-fs.target" ];
+    };
     serviceConfig = {
       Type      = "oneshot";
       ExecStart = "${setHost}";
