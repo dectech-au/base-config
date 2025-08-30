@@ -23,27 +23,25 @@ in {
   networking.hostName = lib.mkForce "";
 
   # run before networking is brought up
-  systemd.services.dynamic-hostname = {
-    description = "Set hostname from serial/machine-id";
-    # wantedBy    = [ "network-pre.target" ];
-    wantedBy = [ "sysinit.target" ];
-    unitConfig = [
-      DefaultDependencies = false;
-      before = [ 
-        "basic.target"
-        "network-pre.target"
-        "prometheus-node-exporter.service"
-        "getty.target"
-        "sshd.service"
-      ];
-      after       = [ "local-fs.target" ];
-    };
-    serviceConfig = {
-      Type      = "oneshot";
-      ExecStart = "${setHost}";
-      Restart   = lib.mkForce "no";
-    };
+systemd.services.dynamic-hostname = {
+  wantedBy = [ "sysinit.target" ];
+  unitConfig = {
+    DefaultDependencies = false;
+    Before = [
+      "basic.target"
+      "network-pre.target"
+      "prometheus-node-exporter.service"
+      "sshd.service"
+      "getty.target"
+    ];
+    After = [ "local-fs.target" ];
   };
+  serviceConfig = {
+    Type = "oneshot";
+    ExecStart = "${setHost}";
+    Restart = lib.mkForce "no";
+  };
+};
 
   # prevent NM from messing with the transient hostname
   networking.networkmanager.settings.main."hostname-mode" = "none";  # disables NM’s transient-hostname updates. :contentReference[oaicite:1]{index=1}
