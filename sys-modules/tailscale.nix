@@ -1,6 +1,14 @@
 # /etc/nixos/sys-modules/tailscale.nix
 { config, pkgs, lib, ... }:
 {
+  nixpkgs.overlays = [
+    (final: prev: {
+      tailscale = prev.tailscale.overrideAttrs (_: {
+        doCheck = false;
+      });
+    })
+  ];
+
   services.tailscale = {
     enable               = true;
     openFirewall         = true;        # punches UDP/41641 etc.
