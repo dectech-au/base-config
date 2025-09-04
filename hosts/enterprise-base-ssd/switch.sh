@@ -66,4 +66,4 @@ echo "[+] wrote hostname module: $MODULE_DIR/hostname.nix → hostName=${name}"
 # 4. Rebuild system
 ###############################################################################
 echo "[+] nixos-rebuild switch"
-nixos-rebuild switch --upgrade --flake "$FLAKE" --show-trace
+nixos-rebuild switch --flake "$FLAKE" --show-trace
