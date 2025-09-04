@@ -47,5 +47,5 @@ fi
 ###############################################################################
 
 echo "[+] nixos-rebuild switch"
-nixos-rebuild switch --upgrade --flake "$FLAKE" --show-trace
+nixos-rebuild switch --flake "$FLAKE" --show-trace
 bash /etc/nixos/scripts/refresh-plasma.sh
