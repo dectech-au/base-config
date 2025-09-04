@@ -36,7 +36,7 @@ in
             backupFileExtension = "bak";
             users.dectec        = import ./home.nix;
             sharedModules       = [
-              inputs.plasma-manager.homeManagerModules.plasma-manager
+              inputs.plasma-manager.homeModules.plasma-manager
             ];
           };
         }
