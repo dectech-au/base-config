@@ -41,7 +41,7 @@
       lsp = {
         enable = true;
         servers = {
-          dockerls.package = {
+          dockerls = {
             enable = false;
             package = pkgs.nodePackages.dockerfile-language-server-nodejs;
           };
