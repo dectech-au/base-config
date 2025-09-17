@@ -48,6 +48,7 @@
           html.enable = true;
           bashls.enable = true;
           pylsp.enable = true;
+          dockerfile-language-server.enable = true;
         };
       };
 
