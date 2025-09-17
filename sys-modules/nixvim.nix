@@ -68,6 +68,10 @@
       nvim-autopairs.enable = true;        # Automatic pairing of parentheses and brackets
       indent-blankline.enable = true;      # Visual indentation guides
       fugitive.enable = true;              # Git commands inside Neovim
+      dockerls = {
+        enable = true;
+        package = pkgs.nodePackages.dockerfile-language-server-nodejs;
+      };
     };
 
     opts = {
