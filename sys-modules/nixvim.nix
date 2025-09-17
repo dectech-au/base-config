@@ -10,33 +10,33 @@
     clipboard.providers.wl-copy.enable = true;
     colorschemes.gruvbox.enable = true;  # Gruvbox colorscheme
   
- #   extraConfigLua = ''
- #     local format_enabled = true
- #     vim.keymap.set("n", "<leader>lg", ":LazyGit<CR>", { noremap = true, silent = true })
- #     vim.api.nvim_create_user_command(
- #       "ToggleFormatNotified",
- #       function()
- #       if format_enabled then
- #         vim.cmd("FormatDisable")
- #         require("notify")("Disabled formatting")
- #         format_enabled = false
- #       else
- #         vim.cmd("FormatEnable")
- #         require("notify")("Enabled formatting")
- #         format_enabled = true
- #         end
- #       end,
- #       {}
- #     )
- #   '';
+    extraConfigLua = ''
+      local format_enabled = true
+      vim.keymap.set("n", "<leader>lg", ":LazyGit<CR>", { noremap = true, silent = true })
+      vim.api.nvim_create_user_command(
+        "ToggleFormatNotified",
+        function()
+        if format_enabled then
+          vim.cmd("FormatDisable")
+          require("notify")("Disabled formatting")
+          format_enabled = false
+        else
+          vim.cmd("FormatEnable")
+          require("notify")("Enabled formatting")
+          format_enabled = true
+          end
+        end,
+        {}
+      )
+    '';
   
   
     plugins = {
      
-      cmp = {
-        enable = true;
-        autoEnableSources = true;
-      };
+      #cmp = {
+        #enable = true;
+        #autoEnableSources = true;
+      #};
       
       lsp = {
         enable = true;
