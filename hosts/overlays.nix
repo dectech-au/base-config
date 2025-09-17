@@ -1,13 +1,6 @@
 #/etc/nixos/hosts/overlays.nix
 { inputs, pkgs, ... }:
 {
-  nixpkgs.overlays = [
-    (final: prev: {
-      dockerfile-language-server = prev.nodePackages.dockerfile-language-server-nodejs;
-    })
-  ];
-
-
   perSystem = { system, ... }: {
     _module.args.pkgs = import inputs.nixpkgs {
       inherit system;
