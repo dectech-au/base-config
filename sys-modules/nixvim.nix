@@ -48,10 +48,6 @@
           html.enable = true;
           bashls.enable = true;
           pylsp.enable = true;
-           dockerls = {
-            enable = true;
-            package = pkgs.nodePackages.dockerfile-language-server-nodejs;
-          };
         };
       };
 
