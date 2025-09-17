@@ -1,5 +1,5 @@
 #/etc/nixos/hosts/overlays.nix
-{ inputs, pkgs, ... }:
+{ inputs, ... }:
 {
   perSystem = { system, ... }: {
     _module.args.pkgs = import inputs.nixpkgs {
