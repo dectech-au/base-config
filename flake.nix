@@ -35,6 +35,7 @@
 
       imports = [
         ./hosts/overlays.nix
+        ./sys-modules/nixvim-overlay.nix
         ./flake-parts/sops.nix
         ./flake-parts/remotemouse.nix
 
