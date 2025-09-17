@@ -38,25 +38,25 @@
         autoEnableSources = true;
       };
       
-      #lsp = {
-        #enable = true;
-        #servers = {
-          #lua_ls.enable = true;
-          #ts_ls.enable = true;
-          #nil_ls.enable = true;
-          #cssls.enable = true;
-          #html.enable = true;
-          #bashls.enable = true;
-          #pylsp.enable = true;
-        #};
-      #};
-
-      treesitter = {
-        enable = true;            # Advanced syntax highlighting
-        settings = {
-          indent.enable = true;
+      lsp = {
+        enable = true;
+        servers = {
+          lua_ls.enable = true;
+          ts_ls.enable = true;
+          nil_ls.enable = true;
+          cssls.enable = true;
+          html.enable = true;
+          bashls.enable = true;
+          pylsp.enable = true;
         };
       };
+
+      #treesitter = {
+      #  enable = true;            # Advanced syntax highlighting
+      #  settings = {
+      #    indent.enable = true;
+      #  };
+      #};
 
       notify.enable = true;
       lualine.enable = true;               # Statusline plugin
