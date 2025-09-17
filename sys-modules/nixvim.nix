@@ -51,23 +51,23 @@
         };
       };
 
-      #treesitter = {
-      #  enable = true;            # Advanced syntax highlighting
-      #  settings = {
-      #    indent.enable = true;
-      #  };
-      #};
+      treesitter = {
+        enable = true;            # Advanced syntax highlighting
+        settings = {
+          indent.enable = true;
+        };
+      };
 
-      notify.enable = true;
-      lualine.enable = true;               # Statusline plugin
-      telescope.enable = true;             # Fuzzy finder for files and more
-      web-devicons.enable = true;          # File icons for Neovim
-      bufferline.enable = true;            # Buffer tabline for better navigation
-      gitsigns.enable = true;              # Git integration in the editor
+      #notify.enable = true;
+      #lualine.enable = true;               # Statusline plugin
+      #telescope.enable = true;             # Fuzzy finder for files and more
+      #web-devicons.enable = true;          # File icons for Neovim
+      #bufferline.enable = true;            # Buffer tabline for better navigation
+      #gitsigns.enable = true;              # Git integration in the editor
       # comment.enable = true;               # Easy commenting of code
-      nvim-autopairs.enable = true;        # Automatic pairing of parentheses and brackets
-      indent-blankline.enable = true;      # Visual indentation guides
-      fugitive.enable = true;              # Git commands inside Neovim
+      #nvim-autopairs.enable = true;        # Automatic pairing of parentheses and brackets
+      #indent-blankline.enable = true;      # Visual indentation guides
+      #fugitive.enable = true;              # Git commands inside Neovim
     };
 
     opts = {
