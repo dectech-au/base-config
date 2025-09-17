@@ -42,8 +42,8 @@
         enable = true;
         servers = {
           dockerls.package = {
-            enable = true;
-            package =   pkgs.nodePackages.dockerfile-language-server-nodejs;
+            enable = false;
+            package = pkgs.nodePackages.dockerfile-language-server-nodejs;
           };
       #    lua_ls.enable = true;
       #    ts_ls.enable = true;
