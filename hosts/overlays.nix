@@ -8,6 +8,7 @@
       overlays = [
         (final: prev: {
           firefox-addons = inputs.firefox-addons.packages.${system};
+          dockerfile-language-server = prev.nodePackages.dockerfile-language-server-nodejs;
         })
       ];
     };
