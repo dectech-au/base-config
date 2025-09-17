@@ -59,7 +59,7 @@
         };
       };
 
-
+      notify.enable = true;
       lualine.enable = true;               # Statusline plugin
       telescope.enable = true;             # Fuzzy finder for files and more
       web-devicons.enable = true;          # File icons for Neovim
