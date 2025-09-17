@@ -48,7 +48,6 @@
           html.enable = true;
           bashls.enable = true;
           pylsp.enable = true;
-          dockerls.enable = false;
         };
       };
 
