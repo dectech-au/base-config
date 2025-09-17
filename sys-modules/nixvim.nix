@@ -33,23 +33,23 @@
   
     plugins = {
      
-      #cmp = {
-        #enable = true;
-        #autoEnableSources = true;
-      #};
-      
-      lsp = {
+      cmp = {
         enable = true;
-        servers = {
-          lua_ls.enable = true;
-          ts_ls.enable = true;
-          nil_ls.enable = true;
-          cssls.enable = true;
-          html.enable = true;
-          bashls.enable = true;
-          pylsp.enable = true;
-        };
+        autoEnableSources = true;
       };
+      
+      #lsp = {
+        #enable = true;
+        #servers = {
+          #lua_ls.enable = true;
+          #ts_ls.enable = true;
+          #nil_ls.enable = true;
+          #cssls.enable = true;
+          #html.enable = true;
+          #bashls.enable = true;
+          #pylsp.enable = true;
+        #};
+      #};
 
       treesitter = {
         enable = true;            # Advanced syntax highlighting
