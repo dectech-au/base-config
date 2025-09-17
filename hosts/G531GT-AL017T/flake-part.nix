@@ -18,13 +18,6 @@ in
       };
 
       modules = [
-    ({ ... }: {
-      nixpkgs.overlays = [
-        (final: prev: {
-          dockerfile-language-server = prev.nodePackages.dockerfile-language-server-nodejs;
-        })
-      ];
-    })
         # allow unfree
         { nixpkgs.config.allowUnfree = true; }
 
