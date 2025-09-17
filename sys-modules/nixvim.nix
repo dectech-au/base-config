@@ -31,16 +31,20 @@
     #'';
   
   
-    #plugins = {
+    plugins = {
       
       #cmp = {
       #  enable = true;
       #  autoEnableSources = true;
       #};
       
-      #lsp = {
-      #  enable = true;
-      #  servers = {
+      lsp = {
+        enable = true;
+        servers = {
+          dockerls.package = {
+            enable = true;
+            package =   pkgs.nodePackages.dockerfile-language-server-nodejs;
+          };
       #    lua_ls.enable = true;
       #    ts_ls.enable = true;
       #    nil_ls.enable = true;
@@ -48,8 +52,8 @@
       #    html.enable = true;
       #    bashls.enable = true;
       #    pylsp.enable = true;
-      #  };
-      #};
+        };
+      };
 
       #treesitter = {
       #  enable = true;            # Advanced syntax highlighting
@@ -69,7 +73,7 @@
       #nvim-autopairs.enable = true;        # Automatic pairing of parentheses and brackets
       #indent-blankline.enable = true;      # Visual indentation guides
       #fugitive.enable = true;              # Git commands inside Neovim
-    #};
+    };
 
     #opts = {
       #number = true;                       # Show absolute line numbers
