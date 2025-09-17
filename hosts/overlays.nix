@@ -1,5 +1,5 @@
 #/etc/nixos/hosts/overlays.nix
-{ inputs, ... }:
+{ inputs, pkgs, ... }:
 {
   nixpkgs.overlays = [
     (final: prev: {
