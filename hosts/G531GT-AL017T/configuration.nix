@@ -32,7 +32,7 @@
 		../../sys-modules/papirus-theme.nix
 		../../sys-modules/libreoffice.nix
 		../../sys-modules/morph.nix
-		#../../sys-modules/nixvim.nix
+		../../sys-modules/nixvim.nix
 		#../../sys-modules/nextcloud.nix
 		../../sys-modules/ntfs.nix
 		../../sys-modules/nvidia.nix
