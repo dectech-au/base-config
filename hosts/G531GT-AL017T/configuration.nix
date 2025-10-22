@@ -60,6 +60,7 @@
 		#../../sys-modules/update-passwordless.nix
 		#../../sys-modules/virtualbox.nix
 		../../sys-modules/vlc.nix
+		../../sys-modules/whisper.nix
 		../../sys-modules/windows-reboot.nix
 		../../sys-modules/wine.nix
 		#../../sys-modules/wordpress.nix
