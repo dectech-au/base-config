@@ -3,5 +3,6 @@
 {
   environment.systemPackages = with pkgs; [
     code-cursor
+    eigenwallet
   ];
 }
