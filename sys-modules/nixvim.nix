@@ -35,7 +35,7 @@
           bashls.enable = true;     # Bash
           html.enable = true;       # HTML
           cssls.enable = true;      # CSS
-          tsserver.enable = true;   # TS/JS (use tsserver on 25.05)
+          ts_ls.enable = true;   # TS/JS (use tsserver on 25.05)
           pylsp.enable = true;      # Python
           dockerls.enable = true;   # Dockerfile
           # yamlls.enable = true;
