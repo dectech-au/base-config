@@ -30,14 +30,14 @@
         enable = true;
 
         servers = {
-          nil_ls.enable = true;    # Nix
-          lua_ls.enable = true;    # Lua
-          bashls.enable = true;    # Bash
-          html.enable = true;      # HTML
-          cssls.enable = true;     # CSS
-          ts_ls.enable = true;     # TS/JS
-          pylsp.enable = true;     # Python
-          dockerls.enable = true;  # Dockerfile
+          nil_ls.enable = true;     # Nix
+          lua_ls.enable = true;     # Lua
+          bashls.enable = true;     # Bash
+          html.enable = true;       # HTML
+          cssls.enable = true;      # CSS
+          tsserver.enable = true;   # TS/JS (use tsserver on 25.05)
+          pylsp.enable = true;      # Python
+          dockerls.enable = true;   # Dockerfile
           # yamlls.enable = true;
           # jsonls.enable = true;
         };
@@ -48,15 +48,13 @@
           goto_prev  = "[d";
         };
 
-        # 25.05 expects a boolean here.
-        inlayHints = true;
+        inlayHints = true;  # boolean on 25.05
       };
 
       # Completion + snippets
       cmp = {
         enable = true;
         autoEnableSources = true;
-        # Defaults are fine on 25.05; custom Lua mappings trimmed for compatibility.
       };
       luasnip.enable = true;
 
@@ -64,10 +62,10 @@
       telescope = {
         enable = true;
         keymaps = {
-          "<leader>ff" = { action = "find_files"; desc = "Find files"; };
-          "<leader>fg" = { action = "live_grep";  desc = "Live grep";  };
-          "<leader>fb" = { action = "buffers";    desc = "Buffers";    };
-          "<leader>fh" = { action = "help_tags";  desc = "Help tags";  };
+          "<leader>ff" = "find_files";
+          "<leader>fg" = "live_grep";
+          "<leader>fb" = "buffers";
+          "<leader>fh" = "help_tags";
         };
         extensions."fzf-native".enable = true;
       };
@@ -88,11 +86,8 @@
       nvim-autopairs.enable = true;
       indent-blankline.enable = true;
 
-      # File explorer (optional)
-      neo-tree = {
-        enable = true;
-        filesystem.followCurrentFile.enabled = true;
-      };
+      # File explorer (keep simple for schema safety)
+      neo-tree.enable = true;
 
       # Formatting on save (conservative)
       conform-nvim = {
