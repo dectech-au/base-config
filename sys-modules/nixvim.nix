@@ -33,7 +33,10 @@
           nil_ls = {
             enable = true;     # Nix
             settings = {
+              formatting.command = [ "nixpkgs-fmt" ];
               nix.flake.autoArchive = true;
+              nixos.options.enable = true;
+              home-manager.options.enable = true;
             };
           };
           lua_ls.enable = true;     # Lua
