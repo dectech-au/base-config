@@ -28,8 +28,7 @@
       # LSP
       lsp = {
         enable = true;
-        nix.enable = true;
-        nix.autoArchive = true;
+        autoArchive = true;
         servers = {
           nil_ls.enable = true;     # Nix
           lua_ls.enable = true;     # Lua
