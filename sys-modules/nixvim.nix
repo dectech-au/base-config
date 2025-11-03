@@ -28,12 +28,14 @@
       # LSP
       lsp = {
         enable = true;
-        nix = {
-          enable = true;
-          autoArchive = true;
-        };
+
         servers = {
-          nil_ls.enable = true;     # Nix
+          nil_ls = {
+            enable = true;     # Nix
+            settings = {
+              nix.flake.autoArchive = true;
+            };
+          };
           lua_ls.enable = true;     # Lua
           bashls.enable = true;     # Bash
           html.enable = true;       # HTML
