@@ -28,27 +28,20 @@
       # LSP
       lsp = {
         enable = true;
-
         servers = {
           nil_ls.enable = true;     # Nix
           lua_ls.enable = true;     # Lua
           bashls.enable = true;     # Bash
           html.enable = true;       # HTML
           cssls.enable = true;      # CSS
-          ts_ls.enable = true;   # TS/JS (use tsserver on 25.05)
+          ts_ls.enable = true;   # TS/JS
           pylsp.enable = true;      # Python
           dockerls.enable = true;   # Dockerfile
           # yamlls.enable = true;
           # jsonls.enable = true;
         };
-
-        keymaps.diagnostic = {
-          open_float = "gl";
-          goto_next  = "]d";
-          goto_prev  = "[d";
-        };
-
-        inlayHints = true;  # boolean on 25.05
+        inlayHints = true;          # boolean on 25.05
+        # NOTE: omit custom diagnostic keymaps here; they caused a Lua parse error.
       };
 
       # Completion + snippets
@@ -86,7 +79,7 @@
       nvim-autopairs.enable = true;
       indent-blankline.enable = true;
 
-      # File explorer (keep simple for schema safety)
+      # File explorer
       neo-tree.enable = true;
 
       # Formatting on save (conservative)
@@ -127,9 +120,9 @@
     # Extra Lua
     extraConfigLua = ''
       vim.g.mapleader = " "
-      vim.keymap.set("n", "<leader>w", "<cmd>write<CR>", { desc = "Write" })
-      vim.keymap.set("n", "<leader>q", "<cmd>quit<CR>",  { desc = "Quit"  })
-      vim.keymap.set("n", "<leader>e", "<cmd>Neotree toggle<CR>", { desc = "File Explorer" })
+      vim.keymap.set("n", "<leader>w", "<cmd>write<CR>")
+      vim.keymap.set("n", "<leader>q", "<cmd>quit<CR>")
+      vim.keymap.set("n", "<leader>e", "<cmd>Neotree toggle<CR>")
       vim.keymap.set("n", "n", "nzzzv")
       vim.keymap.set("n", "N", "Nzzzv")
       vim.keymap.set("n", "J", "mzJ`z")
