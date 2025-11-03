@@ -1,104 +1,89 @@
-{ pkgs, self, ... }: 
+{ pkgs, lib, ... }:
 {
-  nixpkgs.overlays = [
-    (final: prev: {
-      dockerfile-language-server = prev.nodePackages.dockerfile-language-server-nodejs;
-    })
-  ];
-
+  # No overlays. Keep it simple.
 
   programs.nixvim = {
     enable = true;
-    #defaultEditor = true;
-    #viAlias = true;
-    #vimAlias = true;
-    #performance.byteCompileLua.enable = true;
-    #clipboard.providers.wl-copy.enable = true;
-    #colorschemes.gruvbox.enable = true;  # Gruvbox colorscheme
-  
-    #extraConfigLua = ''
-    #  local format_enabled = true
-    #  vim.keymap.set("n", "<leader>lg", ":LazyGit<CR>", { noremap = true, silent = true })
-    #  vim.api.nvim_create_user_command(
-    #    "ToggleFormatNotified",
-    #    function()
-    #    if format_enabled then
-    #      vim.cmd("FormatDisable")
-    #      require("notify")("Disabled formatting")
-    #      format_enabled = false
-    #    else
-    #      vim.cmd("FormatEnable")
-    #      require("notify")("Enabled formatting")
-    #      format_enabled = true
-    #      end
-    #    end,
-    #    {}
-    #  )
-    #'';
-  
-  
+
+    # Editor basics
+    defaultEditor = true;
+    viAlias = true;
+    vimAlias = true;
+
+    # Sensible performance + clipboard for Wayland
+    performance.byteCompileLua.enable = true;
+    clipboard.providers.wl-copy.enable = true;
+
+    # Theme
+    colorschemes.gruvbox.enable = true;
+
+    # --- Plugins ---
     plugins = {
-      
-      #cmp = {
-      #  enable = true;
-      #  autoEnableSources = true;
-      #};
-      
-      lsp = {
+      # Disable LSP entirely to avoid nixvim's atopile option default hitting a missing pkgs.atopile.
+      # Re-enable later when your pin includes it.
+      lsp.enable = false;
+
+      # Useful, low-risk UI/UX plugins
+      treesitter = {
         enable = true;
-        servers = {
-          dockerls = {
-            enable = false;
-            package = pkgs.nodePackages.dockerfile-language-server-nodejs;
-          };
-      #    lua_ls.enable = true;
-      #    ts_ls.enable = true;
-      #    nil_ls.enable = true;
-      #    cssls.enable = true;
-      #    html.enable = true;
-      #    bashls.enable = true;
-      #    pylsp.enable = true;
-        };
+        settings.indent.enable = true;
       };
 
-      #treesitter = {
-      #  enable = true;            # Advanced syntax highlighting
-      #  settings = {
-      #    indent.enable = true;
-      #  };
-      #};
+      notify.enable = true;
+      lualine.enable = true;
+      telescope.enable = true;
+      web-devicons.enable = true;
+      bufferline.enable = true;
+      gitsigns.enable = true;
+      comment.enable = true;
+      nvim-autopairs.enable = true;
+      indent-blankline.enable = true;
 
-      #notify.enable = true;
-      #lualine.enable = true;               # Statusline plugin
-      #telescope.enable = true;             # Fuzzy finder for files and more
-      #web-devicons.enable = true;          # File icons for Neovim
-      #bufferline.enable = true;            # Buffer tabline for better navigation
-      #gitsigns.enable = true;              # Git integration in the editor
-      # comment.enable = true;               # Easy commenting of code
-      
-      #nvim-autopairs.enable = true;        # Automatic pairing of parentheses and brackets
-      #indent-blankline.enable = true;      # Visual indentation guides
-      #fugitive.enable = true;              # Git commands inside Neovim
+      # Git tooling inside Neovim
+      fugitive.enable = true;
+
+      # If you later re-enable LSP, this is how to keep dockerls off without overlays:
+      # lsp = {
+      #   enable = true;
+      #   servers = {
+      #     dockerls.enable = false;  # don't pull dockerfile-language-server
+      #     # nil_ls.enable = true;
+      #     # lua_ls.enable = true;
+      #     # ts_ls.enable = true;
+      #     # cssls.enable = true;
+      #     # html.enable = true;
+      #     # bashls.enable = true;
+      #     # pylsp.enable = true;
+      #   };
+      # };
     };
 
-    #opts = {
-      #number = true;                       # Show absolute line numbers
-      #undofile = true;                     # enable undo history between sessions
-      #shiftwidth = 2;                      # Set indentation width to 2 spaces
-      #tabstop = 2;                         # Set tab width to 2 spaces
-      #softtabstop = 2;
-      #expandtab = true;                    # Use spaces instead of tabs
-      #smartindent = true;                  # Enable smart indentation
-      #autoindent = true;                   # Enable automatic indentation
-      #clipboard = "unnamedplus";
-      #ignorecase = true;
-      #smartcase = true;
-      #signcolumn = "yes:1";
-      #termguicolors = true;
-      #scrolloff = 5;
-      #splitright = true;
-      #splitbelow = true;
-      #guicursor = "n-v-c:blinkon0";
-    #};
+    # --- Core options ---
+    opts = {
+      number = true;
+      undofile = true;
+
+      shiftwidth = 2;
+      tabstop = 2;
+      softtabstop = 2;
+      expandtab = true;
+      smartindent = true;
+      autoindent = true;
+
+      clipboard = "unnamedplus";
+      ignorecase = true;
+      smartcase = true;
+      signcolumn = "yes:1";
+      termguicolors = true;
+      scrolloff = 5;
+      splitright = true;
+      splitbelow = true;
+      guicursor = "n-v-c:blinkon0";
+    };
+
+    # Example: later, when LSP is back, you can add keymaps or extra Lua here.
+    # extraConfigLua = ''
+    #   vim.keymap.set("n", "<leader>lg", ":LazyGit<CR>", { noremap = true, silent = true })
+    # '';
   };
 }
