@@ -3,7 +3,7 @@
   # No overlays. Keep it simple.
 
   programs.nixvim = {
-    enable = true;
+    enable = false;
 
     # Editor basics
     #defaultEditor = true;
