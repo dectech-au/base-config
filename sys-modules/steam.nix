@@ -55,11 +55,3 @@
     steamtinkerlaunch
   ];
 }
-
-
-    # Prevent Steam from mangling runtime
-    STEAM_RUNTIME = "0";
-    # Prefer system Vulkan drivers
-    VK_ICD_FILENAMES = "${pkgs.mesa.drivers}/share/vulkan/icd.d/nvidia_icd.json";
-    # For Steam controller driver support
-    SDL_GAMECONTROLLERCONFIG = "/etc/SDLGameControllerDB.txt";
