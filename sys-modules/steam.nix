@@ -41,7 +41,7 @@
       nvidiaBusId = "PCI:1:0:0";
     };
     powerManagement.enable = true;
-    powerManagement.finegrained = true;
+    powerManagement.finegrained = false;
   };
 
   environment.sessionVariables = {
