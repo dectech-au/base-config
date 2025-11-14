@@ -12,7 +12,8 @@
 
     #themeFile = "GruvboxMaterialDarkMedium";
 	#themeFile = "GruvboxMaterialMedium";
-	themeFile = "Solarized_Light";
+	#themeFile = "Solarized_Light";
+	themeFile = "Chalk";
 
     shellIntegration.enableFishIntegration = true;
     settings.shell = "fish";
