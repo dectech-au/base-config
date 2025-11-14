@@ -1,4 +1,4 @@
-#/etc/nixos/sys-modules/netbird.nix
+#/etc/nixos/sys-modules/headscale.nix
 { config, lib, pkgs, ... }:
 {
   services.headscale = {
