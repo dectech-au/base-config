@@ -5,9 +5,16 @@
 
   sops = {
     defaultSopsFile = ../secrets/secrets.yaml;
-    secrets."headscale/server_key" = { };
-    secrets."ssh/z-home-mac" = { }; 
+    # secrets."headscale/server_key" = { };
+    # secrets."ssh/z-home-mac" = { }; 
   };
+
+  sops.secrets."headscale/server_key" = { };
+  services.tailscale.authKeyFile = config.sops.secrets."headscale/server_key".path;   # Headscale pre-auth key
+
+  sops.secrets."ssh/z-home-mac" = { };
+  
+
 
   environment.systemPackages = with pkgs; [
     sops
@@ -16,8 +23,16 @@
   ];
 }
 
+#################################
+#  using generally
+#################################
+# 1. add secret to list: sops /etc/nixos/secrets/secrets.yaml
+# 2. consume secret within the module you want: "
+
+
+
 ####################################
-# SETTING UP SOPS
+# SETTING UP SOPS (first time use)
 ####################################
 # 1. Generate age-key for admins
 #        mkdir -p ~/.config/sops/age/
