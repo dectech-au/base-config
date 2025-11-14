@@ -15,6 +15,12 @@
       command = "kitty";
     };
 
+    hotkeys.commands."open-journal" = {
+      name     = "Open Journal";
+      key      = "Meta+J";
+      command  = "${config.home.homeDirectory}/.local/bin/open-journal.sh";
+    };
+
     panels = [{
       location = "bottom";
       hiding   = "none";
