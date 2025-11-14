@@ -14,7 +14,7 @@
 	#themeFile = "GruvboxMaterialMedium";
 	#themeFile = "Solarized_Light";
 	#themeFile = "Chalk";
-	themeFile = "ayu-light";
+	themeFile = "ayu_light";
 
     shellIntegration.enableFishIntegration = true;
     settings.shell = "fish";
