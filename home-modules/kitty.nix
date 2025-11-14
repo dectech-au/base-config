@@ -10,7 +10,8 @@
       size = 11;
     };
 
-    themeFile = "GruvboxMaterialDarkMedium";
+    #themeFile = "GruvboxMaterialDarkMedium";
+	themeFile = "GruvboxMaterialMedium";
 
     shellIntegration.enableFishIntegration = true;
     settings.shell = "fish";
