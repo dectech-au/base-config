@@ -3,6 +3,8 @@
 {
 	fonts.packages = with pkgs; [
 		corefonts
+		vistafonts-chs
+		dejavu_fonts
 		cantarell-fonts
 	];
 }
