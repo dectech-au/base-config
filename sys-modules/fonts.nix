@@ -8,4 +8,5 @@
 		cantarell-fonts
 	];
 	fonts.enableDefaultPackages = true;
+	fonts.fontDir.enable = true;
 }
