@@ -7,4 +7,5 @@
 		dejavu_fonts
 		cantarell-fonts
 	];
+	fonts.enableDefaultPackages = true;
 }
