@@ -1,8 +1,8 @@
 { config, lib, pkgs, ... }:
 {
   #environment.systemPackages = with pkgs; [
-  #trezor-suite
-  trezorctl
+  trezor-suite
+  #trezorctl
   #];
 
   services.trezord.enable = true;
