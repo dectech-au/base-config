@@ -2,7 +2,7 @@
 {
   environment.systemPackages = with pkgs; [
   trezor-suite
-  #trezorctl
+  trezorctl
   ];
 
   services.trezord.enable = true;
