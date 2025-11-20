@@ -2,9 +2,9 @@
 {
   environment.systemPackages = with pkgs; [
   trezor-suite
-  trezorctl
+  #trezorctl
   ];
 
   services.trezord.enable = true;
-  #services.udev.packages = with pkgs; [ trezor-udev-rules ];
+  services.udev.packages = with pkgs; [ trezor-udev-rules ];
 }
