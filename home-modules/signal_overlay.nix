@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... };
+{ config, lib, pkgs, ... }:
 {
   home.packages = [
     (pkgs.writeShellScriptBin "signal-desktop-nogpu" ''
