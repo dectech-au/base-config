@@ -3,7 +3,7 @@
   description = "DecTec default flake";
   
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     
     flake-parts.url = "github:hercules-ci/flake-parts";
     #flake-parts.inputs.nixpkgs.follows = "nixpkgs";
