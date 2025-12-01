@@ -23,7 +23,7 @@
 		../../sys-modules/hostname.nix
 		../../sys-modules/htop.nix
 		../../sys-modules/input-remapper.nix
-		../../sys-modules/jellyfin.nix
+		#../../sys-modules/jellyfin.nix
 		../../sys-modules/kcalc.nix
 		../../sys-modules/kdeconnect-firewall.nix
 		../../sys-modules/killall.nix
