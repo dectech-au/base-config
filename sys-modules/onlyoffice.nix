@@ -2,7 +2,7 @@
 { config, lib, pkgs, ... }:
 {
 	environment.systemPackages = with pkgs; [
-		onlyoffice-bin
+		onlyoffice-desktopeditors
 	];
 }
 #	nixpkgs.config.allowUnfreePredicate = pkg:
