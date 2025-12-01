@@ -48,7 +48,7 @@
 
   environment.systemPackages = with pkgs; [
     protonup-ng
-    protonup-qt
+    # protonup-qt
     protonplus
     steamtinkerlaunch
   ];
