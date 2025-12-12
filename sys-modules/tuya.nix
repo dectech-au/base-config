@@ -4,7 +4,7 @@
     python313Packages.tinytuya
   ];
 
-  networking.allowedUDPPorts = [
+  networking.firewall.allowedUDPPorts = [
     6666
     6667
     7000
