@@ -49,6 +49,7 @@
 		../../sys-modules/protonvpn.nix
 		../../sys-modules/qbittorrent.nix
 		#../../sys-modules/qt.nix
+		../../sys-modules/rar.nix
 		../../sys-modules/remotemouse.nix
 		../../sys-modules/signal-desktop.nix
 		../../sys-modules/ssh.nix
