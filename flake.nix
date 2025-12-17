@@ -52,6 +52,7 @@
             git
             nixpkgs-fmt
             neovim
+            iproute2
           ];
           shellHook = ''
             echo "Developer Mode: Engaged."
