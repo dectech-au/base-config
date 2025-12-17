@@ -29,6 +29,7 @@
 		../../sys-modules/kdeconnect-firewall.nix
 		../../sys-modules/killall.nix
 		../../sys-modules/krdp.nix
+		../../sys-modules/networking.nix
 		../../sys-modules/nixpkgs-fmt.nix
 		#../../sys-modules/nix-ld.nix
 		../../sys-modules/papirus-theme.nix
@@ -167,12 +168,6 @@
   #   enable = true;
   #   enableSSHSupport = true;
   # };
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
