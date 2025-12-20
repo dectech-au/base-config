@@ -52,6 +52,7 @@
 		#../../sys-modules/qt.nix
 		../../sys-modules/rar.nix
 		../../sys-modules/remotemouse.nix
+		../../sys-modules/sensors.nix
 		../../sys-modules/signal-desktop.nix
 		../../sys-modules/ssh.nix
 		../../sys-modules/sshfs.nix
