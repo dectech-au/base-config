@@ -73,6 +73,7 @@
 		../../sys-modules/wine.nix
 		#../../sys-modules/wordpress.nix
 		#./personalisation/wallpaper-service.nix
+		../../sys-modules/zen-browser.nix
 	];
   
   # Bootloader.
