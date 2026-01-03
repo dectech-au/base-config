@@ -154,6 +154,15 @@
     ];
   };
 
+	users.users.seulgee = {
+		isNormalUser = true;
+		description = "seulgee";
+		extraGroups = [ "networkmanager" "wheel" "vboxusers" ];
+		packages with pkgs; [
+			kdePackages.kate
+		];
+	};
+
 	# Enable automatic login for the user.
 	#  services.displayManager.autoLogin = {
 	# enable = false;
