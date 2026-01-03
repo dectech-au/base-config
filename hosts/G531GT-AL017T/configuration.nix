@@ -158,7 +158,7 @@
 		isNormalUser = true;
 		description = "seulgee";
 		extraGroups = [ "networkmanager" "wheel" "vboxusers" ];
-		packages with pkgs; [
+		packages = with pkgs; [
 			kdePackages.kate
 		];
 	};
