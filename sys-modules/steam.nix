@@ -8,15 +8,15 @@
 
   services.xserver.videoDrivers = [ "nvidia" ];
 
-  systemd.user.services.steam-autostart = {
-    enable = true;
-    description = "Auto-start Steam on login";
-    wantedBy = [ "graphical-session.target" ];
-    serviceConfig = {
-      ExecStart = "${pkgs.steam}/bin/steam";
-      Restart = "on-failure";
-    };
-  };
+  # systemd.user.services.steam-autostart = {
+  #  enable = true;
+  #  description = "Auto-start Steam on login";
+  #  wantedBy = [ "graphical-session.target" ];
+  #  serviceConfig = {
+  #    ExecStart = "${pkgs.steam}/bin/steam";
+  #    Restart = "on-failure";
+  #  };
+  # };
 
   hardware.graphics = {
     enable = true;
