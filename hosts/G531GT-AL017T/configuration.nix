@@ -52,6 +52,7 @@
 		../../sys-modules/qbittorrent.nix
 		#../../sys-modules/qt.nix
 		../../sys-modules/rar.nix
+		../../sys-modules/reliquary-archiver.nix
 		../../sys-modules/remotemouse.nix
 		../../sys-modules/sensors.nix
 		../../sys-modules/signal-desktop.nix
