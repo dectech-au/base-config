@@ -19,6 +19,7 @@
 		../../sys-modules/firewall.nix
 		../../sys-modules/flatpak.nix
 		../../sys-modules/fonts.nix
+		../../sys-modules/gaming.nix
 		../../sys-modules/github-desktop.nix
 		../../sys-modules/gnome-disks.nix
 		../../sys-modules/gparted.nix
