@@ -2,6 +2,7 @@
 { config, pkgs, HOME-MODULES, ... }:
 {
   imports = [
+		../../home-modules/btop.nix
 		../../home-modules/dropbox.nix
 		#../../home-modules/emacs.nix
 		../../home-modules/fastfetch.nix
