@@ -3,5 +3,6 @@
 {
   environment.systemPackages = with pkgs; [
     signal-desktop-bin
+    signal-export
   ];
 }
