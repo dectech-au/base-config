@@ -56,7 +56,7 @@
 		../../sys-modules/reliquary-archiver.nix
 		../../sys-modules/remotemouse.nix
 		../../sys-modules/sensors.nix
-		../../sys-modules/server-mount.nix
+		#../../sys-modules/server-mount.nix
 		../../sys-modules/signal-desktop.nix
 		../../sys-modules/ssh.nix
 		../../sys-modules/sshfs.nix
