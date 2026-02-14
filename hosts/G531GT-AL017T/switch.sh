@@ -49,3 +49,39 @@ fi
 echo "[+] nixos-rebuild switch"
 nixos-rebuild switch --flake "$FLAKE" --show-trace
 bash /etc/nixos/scripts/refresh-plasma.sh
+
+###############################################################################
+# 4. Cleanup
+###############################################################################
+
+keep=3
+system_profile=/nix/var/nix/profiles/system
+
+echo "==> Optimising nix store (dedupe)..."
+if command -v nix >/dev/null 2>&1; then
+  sudo nix store optimise || sudo nix-store --optimise
+else
+  sudo nix-store --optimise
+fi
+
+echo "==> Pruning system generations (keeping latest ${keep})..."
+mapfile -t gens < <(
+  nix-env --profile "$system_profile" --list-generations \
+    | awk '{print $1}'
+)
+
+count="${#gens[@]}"
+if (( count > keep )); then
+  del_count=$(( count - keep ))
+  del=( "${gens[@]:0:del_count}" )
+
+  echo "Deleting generations: ${del[*]}"
+  sudo nix-env --profile "$system_profile" --delete-generations "${del[@]}"
+else
+  echo "Nothing to prune (have ${count}, keep ${keep})."
+fi
+
+echo "==> Garbage collecting unreachable store paths..."
+sudo nix-collect-garbage
+
+echo "==> Done."
