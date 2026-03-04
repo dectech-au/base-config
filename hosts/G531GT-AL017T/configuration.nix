@@ -31,6 +31,7 @@
 		../../sys-modules/kdeconnect-firewall.nix
 		../../sys-modules/killall.nix
 		../../sys-modules/krdp.nix
+		../../sys-modules/language.nix
 		../../sys-modules/networking.nix
 		../../sys-modules/nixpkgs-fmt.nix
 		#../../sys-modules/nix-ld.nix
