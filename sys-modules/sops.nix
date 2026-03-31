@@ -3,11 +3,7 @@
 {
   imports = [ inputs.sops-nix.nixosModules.sops ];
 
-  sops = {
-    defaultSopsFile = ../secrets/secrets.yaml;
-    # secrets."headscale/server_key" = { };
-    # secrets."ssh/z-home-mac" = { }; 
-  };
+  sops.defaultSopsFile = ../secrets/secrets.yaml;
 
   sops.secrets."headscale/server_key" = { };
   services.tailscale.authKeyFile = config.sops.secrets."headscale/server_key".path;   # Headscale pre-auth key
