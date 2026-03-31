@@ -9,8 +9,6 @@
   services.tailscale.authKeyFile = config.sops.secrets."headscale/server_key".path;   # Headscale pre-auth key
 
   sops.secrets."ssh/z-home-mac" = { };
-  
-
 
   environment.systemPackages = with pkgs; [
     sops
