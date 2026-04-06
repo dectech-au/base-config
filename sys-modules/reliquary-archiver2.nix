@@ -143,7 +143,7 @@ in
     };
 
     # Home-manager integration
-    home-manager.users.zozano = {
+    home-manager.users.dectec = {
       # Put the unwrapped binary on PATH too (for --help, etc.)
       home.packages = [ reliquary-archiver ];
 
