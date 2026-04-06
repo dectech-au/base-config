@@ -56,6 +56,7 @@
 		../../sys-modules/rar.nix
 		../../sys-modules/recording.nix
 		../../sys-modules/reliquary-archiver.nix
+		../../sys-modules/reliquary-archiver2.nix
 		../../sys-modules/remotemouse.nix
 		../../sys-modules/sensors.nix
 		#../../sys-modules/server-mount.nix
