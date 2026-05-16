@@ -4,7 +4,9 @@
   services.sunshine = {
     enable = true;
     openFirewall = true;
+    settings.sunshine_name = "nixos-laptop";
   };
+
   programs.steam = {
     enable = true;
     extraCompatPackages = with pkgs; [ proton-ge-bin ];
