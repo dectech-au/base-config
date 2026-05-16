@@ -7,10 +7,10 @@
     #autoStart = true; 
     capSysAdmin = true;
     settings.sunshine_name = "nixos-laptop";
-    package = pkgs.sunshine.override {
-      cudaSupport = true;
-      cudaPackages = pkgs.cudaPackages;
-    };
+    #package = pkgs.sunshine.override {
+    #  cudaSupport = true;
+    #  cudaPackages = pkgs.cudaPackages;
+    #};
   };
 
 services.avahi.publish.enable = true;
