@@ -172,6 +172,15 @@
 		];
 	};
 
+  users.users.leo = {
+    isNormalUser = true;
+    description = "leo";
+    extraGroups = [ "networkmanager" "wheel" "vboxusers" ];
+    packages = with pkgs; [
+      kdePackages.kate
+    ];
+  };
+
 	# Enable automatic login for the user.
 	#  services.displayManager.autoLogin = {
 	# enable = false;
