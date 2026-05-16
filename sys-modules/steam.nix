@@ -15,6 +15,8 @@
 
 services.avahi.publish.enable = true;
 services.avahi.publish.userServices = true;
+hardware.uinput.enable = true;
+users.users.leo.extraGroups = [ "uinput" ];
 
 
   programs.steam = {
