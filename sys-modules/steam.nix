@@ -4,7 +4,7 @@
   services.sunshine = {
     enable = true;
     openFirewall = true;
-    autoStart = true; 
+    #autoStart = true; 
     capSysAdmin = true;
     settings.sunshine_name = "nixos-laptop";
     package = pkgs.sunshine.override {
@@ -12,6 +12,10 @@
       cudaPackages = pkgs.cudaPackages;
     };
   };
+
+services.avahi.publish.enable = true;
+services.avahi.publish.userServices = true;
+
 
   programs.steam = {
     enable = true;
