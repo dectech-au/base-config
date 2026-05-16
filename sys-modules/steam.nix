@@ -1,8 +1,10 @@
 #~/.dotfiles/modules/steam.nix
 { config, lib, pkgs, ... }:
 {
-  services.sunshine.enable = true;
-
+  services.sunshine = {
+    enable = true;
+    openFirewall = true;
+  };
   programs.steam = {
     enable = true;
     extraCompatPackages = with pkgs; [ proton-ge-bin ];
