@@ -46,7 +46,7 @@
 		../../sys-modules/openssl.nix
 		../../sys-modules/papirus.nix
 		#../../sys-modules/pinegrow.nix
-		../../sys-modules/plasma.nix
+		#../../sys-modules/plasma.nix
 		../../sys-modules/poppler.nix
 		../../sys-modules/prometheus.nix
 		#../../sys-modules/protonmail-bridge.nix
@@ -82,6 +82,7 @@
 		../../sys-modules/wine.nix
 		#../../sys-modules/wordpress.nix
 		#./personalisation/wallpaper-service.nix
+		../../sys-modules/xfce4.nix
 		../../sys-modules/yt-dlp.nix
 		../../sys-modules/zen-browser.nix
 	];
