@@ -1,5 +1,5 @@
 { config, lib, pkgs, ... }:
-
+{
   services.sunshine = {
     enable = true;
     autoStart = true;       # starts on user login (needs a graphical session)
