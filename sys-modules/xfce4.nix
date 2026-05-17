@@ -11,7 +11,7 @@
   };
 
   # XFCE extras
-  environment.systemPackages = with pkgs; [
-    xfce4-screenshooter
-  ];
+  #environment.systemPackages = with pkgs; [
+  #  xfce4-screenshooter
+  #];
 }
