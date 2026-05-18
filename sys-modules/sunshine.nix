@@ -40,12 +40,12 @@
     enable32Bit = true;
     extraPackages = with pkgs; [
       intel-media-driver       # iHD — preferred for Gen 8+ (UHD 630 = Gen 9.5)
-      vaapiIntel               # i965 — fallback older driver
+      intel-vaapi-driver               # i965 — fallback older driver
       libvdpau-va-gl
     ];
     extraPackages32 = with pkgs.pkgsi686Linux; [
       intel-media-driver
-      vaapiIntel
+      intel-vaapi-driver
     ];
   };
 
