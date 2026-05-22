@@ -51,7 +51,7 @@
 		../../sys-modules/prometheus.nix
 		#../../sys-modules/protonmail-bridge.nix
 		../../sys-modules/protonvpn.nix
-	`	../../sys-modules/printer.nix
+		../../sys-modules/printer.nix
 		../../sys-modules/qbittorrent.nix
 		#../../sys-modules/qt.nix
 		../../sys-modules/rar.nix
