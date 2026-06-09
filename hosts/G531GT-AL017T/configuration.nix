@@ -14,7 +14,7 @@
 		../../sys-modules/chrome.nix
 		../../sys-modules/core-packages.nix
 		../../sys-modules/cursor.nix
-		../../sys-modules/docker.nix
+		#../../sys-modules/docker.nix
 		../../sys-modules/evolution.nix
 		../../sys-modules/firefox.nix
 		../../sys-modules/firewall.nix
