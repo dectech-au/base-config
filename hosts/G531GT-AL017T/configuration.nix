@@ -81,7 +81,7 @@
 		../../sys-modules/vlc.nix
 		../../sys-modules/whisper.nix
 		../../sys-modules/windows-reboot.nix
-		../../sys-modules/wine.nix
+		#../../sys-modules/wine.nix
 		#../../sys-modules/wordpress.nix
 		#./personalisation/wallpaper-service.nix
 		../../sys-modules/xfce4.nix
