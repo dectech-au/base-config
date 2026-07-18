@@ -11,15 +11,20 @@ let
     stdenv.cc.cc.lib stdenv.cc.libc
 
     # Core X + extensions & xcb utils (fixes 'xcb plugin' load failures)
-    xorg.libX11 xorg.libXext xorg.libXrender xorg.libXtst xorg.libXi
-    xorg.libXcursor xorg.libXrandr xorg.libSM xorg.libICE
-    xorg.libxcb
-    xorg.xcbutil
-    xorg.xcbutilwm          # libxcb-icccm.so.*
-    xorg.xcbutilimage
-    xorg.xcbutilkeysyms
-    xorg.xcbutilrenderutil
-    xorg.xcbutilcursor
+    libx11 
+    libxext
+    libxrender
+    libxtst 
+    libxi
+    libxcursor
+    libxrandr libsm libice
+    libxcb
+    xcbutil
+    xcbutilwm          # libxcb-icccm.so.*
+    xcbutilimage
+    xcbutilkeysyms
+    xcbutilrenderutil
+    xcbutilcursor
   ];
 in
 stdenv.mkDerivation rec {
