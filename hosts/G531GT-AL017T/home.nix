@@ -28,6 +28,7 @@
 		../../home-modules/start-menu/teams.nix
 		../../home-modules/start-menu/update.nix
 		../../home-modules/start-menu/windows.nix
+		../../home-modules/super-nintendo.nix
 		../../home-modules/syncthing.nix
 		#./personalisation/wallpaper.nix
 		../../custom-modules/hastings-preschool/0-imports.nix
@@ -35,7 +36,7 @@
 
   home.username = "dectec";
   home.homeDirectory = "/home/dectec";
-  home.stateVersion = "25.05"; # Do not change this after initial setup
+  home.stateVersion = "26.05"; # Do not change this after initial setup
 
   # home.file.".local/share/applications/teams.desktop".text = ''
   #   test
