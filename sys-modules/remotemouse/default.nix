@@ -17,14 +17,16 @@ let
     libxtst 
     libxi
     libxcursor
-    libxrandr libsm libice
+    libxrandr 
+    libsm 
+    libice
     libxcb
-    xcbutil
-    xcbutilwm          # libxcb-icccm.so.*
-    xcbutilimage
-    xcbutilkeysyms
-    xcbutilrenderutil
-    xcbutilcursor
+    libxcb-util
+    libxcb-wm          # libxcb-icccm.so.*
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
+    libxcb-cursor
   ];
 in
 stdenv.mkDerivation rec {
