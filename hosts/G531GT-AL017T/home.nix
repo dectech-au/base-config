@@ -28,7 +28,6 @@
 		../../home-modules/start-menu/teams.nix
 		../../home-modules/start-menu/update.nix
 		../../home-modules/start-menu/windows.nix
-		../../home-modules/super-nintendo.nix
 		../../home-modules/syncthing.nix
 		#./personalisation/wallpaper.nix
 		../../custom-modules/hastings-preschool/0-imports.nix
