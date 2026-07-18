@@ -2,7 +2,7 @@
 { pkgs, ... }:
 {
   config = {
-    environment.systemPackages = [ pkgs.xorg.xhost ];
+    environment.systemPackages = [ pkgs.xhost ];
     nixpkgs.config.allowUnfree = true;
     networking.firewall.allowedTCPPorts = [ 1978 6666 ];
     networking.firewall.allowedUDPPorts = [ 1978 6666 ];
