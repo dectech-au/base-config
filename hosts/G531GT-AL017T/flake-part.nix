@@ -27,6 +27,7 @@ in
         ./configuration.nix
         ../../sys-modules/sops.nix
         inputs.nixvim.nixosModules.nixvim
+        inputs.remotemouse.nixosModules.remotemouse
         inputs.home-manager.nixosModules.home-manager
 
         {
