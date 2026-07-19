@@ -42,6 +42,7 @@
 		../../sys-modules/morph.nix
 		../../sys-modules/nixvim.nix
 		#../../sys-modules/nextcloud.nix
+		../../sys-modules/networking.nix
 		../../sys-modules/ntfs.nix
 		../../sys-modules/nvidia.nix
 		../../sys-modules/onlyoffice.nix
