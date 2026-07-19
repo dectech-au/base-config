@@ -68,6 +68,7 @@
 		../../sys-modules/sshfs.nix
 		#../../sys-modules/star-rail-macro.nix
 		../../sys-modules/steam.nix
+		../../sys-modules/steam-big-picture-leo.nix
 		../../sys-modules/sunshine.nix
 		../../sys-modules/super-nintendo.nix
 
