@@ -11,7 +11,7 @@
     Service = {
       Type = "simple";
       ExecStartPre = "${pkgs.writeShellScript "wait-for-xwayland" ''
-        until ${pkgs.xorg.xset}/bin/xset q >/dev/null 2>&1; do
+        until ${pkgs.xset}/bin/xset q >/dev/null 2>&1; do
           sleep 0.5
         done
       ''}";
