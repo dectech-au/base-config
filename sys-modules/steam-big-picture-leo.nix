@@ -1,5 +1,7 @@
 { config, lib, pkgs, ... }:
 {
+  home-manager.users.leo.home.stateVersion = "25.05";
+
   home-manager.users.leo.systemd.user.services.steam-bigpicture = {
     Unit = {
       Description = "Autostart Steam in Big Picture mode once XWayland is ready";
