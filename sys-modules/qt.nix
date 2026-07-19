@@ -3,8 +3,8 @@
 {
   qt = {
     enable = true;
-    platformTheme = "gnome";
-    style.name = "papirus";
+    platformTheme = "kde";
+    style.name = "breeze";
   };
 
 
