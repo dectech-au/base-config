@@ -191,10 +191,10 @@
   };
 
 	# Enable automatic login for the user.
-	#  services.displayManager.autoLogin = {
-	# enable = false;
-	#  	user = "dectec";
-	#  };
+	services.displayManager.autoLogin = {
+		enable = true;
+		user = "leo";
+	};
   
   # Allow unfree packages
   # nixpkgs.config.allowUnfree = true;
