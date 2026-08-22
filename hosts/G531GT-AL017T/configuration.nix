@@ -23,6 +23,7 @@
 		../../sys-modules/fonts.nix
 		../../sys-modules/gaming.nix
 		../../sys-modules/github-desktop.nix
+		../../sys-modules/gnome.nix
 		../../sys-modules/gnome-disks.nix
 		../../sys-modules/gparted.nix
 		../../sys-modules/hostname.nix
@@ -195,7 +196,10 @@
 		enable = true;
 		user = "leo";
 	};
-  
+
+  systemd.services."getty@tty1".enable = false;
+  systemd.services."autovt@tty1".enable = false;
+
   # Allow unfree packages
   # nixpkgs.config.allowUnfree = true;
 
