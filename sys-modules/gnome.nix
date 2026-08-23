@@ -1,21 +1,14 @@
 #/etc/nixos/sys-modules/gnome.nix
 { pkgs, ... }:
 {
-  services.xserver.enable = true;
+  services.displayManager.gdm.enable = true;
+  services.desktopManager.gnome.enable = true;
 
-  services.displayManager.gdm = {
+  services.displayManager.autoLogin = {
     enable = true;
+    user = "leo";
   };
 
-  services.desktopManager.gnome.enable = true;
-  services.displayManager.defaultSession = "gnome";
-
-  environment.gnome.excludePackages = with pkgs; [
-    epiphany
-    geary
-    gnome-maps
-    gnome-music
-    gnome-tour
-    totem
-  ];
+  systemd.services."getty@tty1".enable = false;
+  systemd.services."autovt@tty1".enable = false;
 }
