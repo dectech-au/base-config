@@ -75,7 +75,7 @@
 		../../sys-modules/sunshine.nix
 		../../sys-modules/super-nintendo.nix
 
-		../../sys-modules/tailscale.nix
+		#../../sys-modules/tailscale.nix
 		#../../sys-modules/teams.nix
 		../../sys-modules/teamviewer.nix
 		../../sys-modules/terminal.nix
