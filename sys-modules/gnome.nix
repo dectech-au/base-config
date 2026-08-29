@@ -22,7 +22,7 @@
     user = "leo";
   };
 
-  #services.udev.extraRules = ''
-  #  SUBSYSTEM=="drm", KERNEL=="card*", DRIVERS=="i915", TAG+="mutter-device-preferred-primary"
-  #'';
+  services.udev.extraRules = ''
+    SUBSYSTEM=="drm", KERNEL=="card*", DRIVERS=="i915", TAG+="mutter-device-preferred-primary"
+  '';
 }
