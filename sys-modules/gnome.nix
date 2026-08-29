@@ -17,7 +17,7 @@
 
   home-manager.users.dectec.home.pointerCursor = {
     enable = true;
-    name = "Vanilla-DMZ";
+    #name = "Vanilla-DMZ";
     size = 32;
   };
 
