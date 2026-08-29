@@ -3,7 +3,6 @@
 {
   nixpkgs.config.allowUnfree = true;
 
-  programs.gamemode.enable = true;
 
   environment.sessionVariables = {
     __GL_THREADED_OPTIMIZATIONS = "1";
