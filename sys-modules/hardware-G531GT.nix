@@ -1,13 +1,8 @@
 #~/.dotfiles/sys-modules/nvidia.nix
 { config, lib, pkgs, ... }:
 {
-  nixpkgs.config.allowUnfree = true;
-
-
   environment.sessionVariables = {
     __GL_THREADED_OPTIMIZATIONS = "1";
-    __GL_GSYNC_ALLOWED          = "1";
-    __GL_VRR_ALLOWED            = "1";
   };
 
   services.xserver.videoDrivers = [ "nvidia" ];
