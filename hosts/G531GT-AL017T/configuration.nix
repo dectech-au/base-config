@@ -1,8 +1,8 @@
 #/etc/nixos/hosts/G531GT-AL017T/configuration.nix
 { config, lib, pkgs, ... }:
 {
-	nix.settings.max-jobs = 2;
-	nix.settings.cores = 1;
+nix.daemonCPUSchedPolicy = "idle";
+nix.daemonIOSchedClass = "idle";
 
 	imports = [ 
 		../../hardware-configuration.nix
