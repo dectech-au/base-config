@@ -14,7 +14,7 @@
 
   home-manager.users.dectec.home.pointerCursor = {
     enable = true;
-    package = "pkgs.vanilla-dmz";    
+    package = "vanilla-dmz";    
     name = "Vanilla-DMZ";
     size = 32;
   };
