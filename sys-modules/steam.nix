@@ -6,8 +6,7 @@
     extraCompatPackages = with pkgs; [ proton-ge-bin ];
   };
 
-
-
+  programs.gamemode.enable = true;
 
   # systemd.user.services.steam-autostart = {
   #  enable = true;
@@ -23,8 +22,6 @@
     enable = true;
     enable32Bit = true;
   };
-
-
 
   environment.sessionVariables = {
     STEAM_RUNTIME = "1";
