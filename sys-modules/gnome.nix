@@ -10,6 +10,11 @@
 
   services.desktopManager.gnome.enable = true;
 
+  services.displayManager.autoLogin = {
+    enable = true;
+    user = "leo";
+  };
+
   #services.udev.extraRules = ''
   #  SUBSYSTEM=="drm", KERNEL=="card*", DRIVERS=="i915", TAG+="mutter-device-preferred-primary"
   #'';
