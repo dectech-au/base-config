@@ -10,11 +10,13 @@
 
   services.desktopManager.gnome.enable = true;
 
-  environment.systemPackages = with pkgs; [ adwaita-icon-theme ];
+  environment.systemPackages = with pkgs; [ 
+    adwaita-icon-theme
+    vanilla-dmz
+  ];
 
   home-manager.users.dectec.home.pointerCursor = {
     enable = true;
-    package = "vanilla-dmz";    
     name = "Vanilla-DMZ";
     size = 32;
   };
