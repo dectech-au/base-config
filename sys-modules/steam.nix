@@ -18,11 +18,6 @@
   #  };
   # };
 
-  hardware.graphics = {
-    enable = true;
-    enable32Bit = true;
-  };
-
   environment.sessionVariables = {
     STEAM_RUNTIME = "1";
   };
