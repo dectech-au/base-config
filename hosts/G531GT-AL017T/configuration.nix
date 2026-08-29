@@ -11,6 +11,7 @@ nix.daemonIOSchedClass = "idle";
 		../../sys-modules/hostname.nix
 		../../sys-modules/ssh.nix
 		../../sys-modules/steam.nix
+		../../sys-modules/nvidia.nix
 
 
 
@@ -71,7 +72,6 @@ nix.daemonIOSchedClass = "idle";
 		#../../sys-modules/nixvim.nix
 		#../../sys-modules/networking.nix
 		#../../sys-modules/ntfs.nix
-		#../../sys-modules/nvidia.nix
 		#../../sys-modules/onlyoffice.nix
 		#../../sys-modules/openssl.nix
 		#../../sys-modules/papirus.nix
