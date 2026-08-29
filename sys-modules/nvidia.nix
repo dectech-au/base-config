@@ -26,16 +26,6 @@
         finegrained = false;
       };
 
-    #extraPackages = with pkgs; [
-    #  intel-media-driver       # iHD — preferred for Gen 8+ (UHD 630 = Gen 9.5)
-    #  intel-vaapi-driver               # i965 — fallback older driver
-    #  libvdpau-va-gl
-    #];
-    #extraPackages32 = with pkgs.pkgsi686Linux; [
-    #  intel-media-driver
-    #  intel-vaapi-driver
-    #];
-
       nvidiaSettings = true;
 
       prime = {
