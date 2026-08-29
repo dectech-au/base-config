@@ -15,6 +15,8 @@
 
   hardware = {
     graphics.enable = true;
+    enable32Bit = true;
+
     
     nvidia = {
       modesetting.enable = true;
@@ -39,22 +41,3 @@
     };
   };
 }
-
-
-  # The missing piece — Intel VAAPI userspace
-  hardware.graphics = {
-    enable = true;
-    enable32Bit = true;
-    extraPackages = with pkgs; [
-      intel-media-driver       # iHD — preferred for Gen 8+ (UHD 630 = Gen 9.5)
-      intel-vaapi-driver               # i965 — fallback older driver
-      libvdpau-va-gl
-    ];
-    extraPackages32 = with pkgs.pkgsi686Linux; [
-      intel-media-driver
-      intel-vaapi-driver
-    ];
-  };
-
-  # Keep modesetting on — it's what put nvidia-drm into the right mode
-  hardware.nvidia.modesetting.enable = true;
