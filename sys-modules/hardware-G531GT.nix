@@ -14,7 +14,7 @@
 
     powerManagement = {
       enable = true;
-      finegrained = false # Runtime D3. Revert to false first if suspend/resume misbehaves.
+      finegrained = false; # Runtime D3. Revert to false first if suspend/resume misbehaves.
     };
 
     prime.offload = {
