@@ -1,35 +1,31 @@
 #~/.dotfiles/sys-modules/nvidia.nix
 { config, lib, pkgs, ... }:
 {
-  environment.sessionVariables = {
-    __GL_THREADED_OPTIMIZATIONS = "1";
-  };
+  services.xserver.videoDrivers = [ "nvidia" ]; # Gates the hardware.nvidia block below. required even on Wayland.
 
-  services.xserver.videoDrivers = [ "nvidia" ];
-
-  hardware.graphics = {
-    enable = true;
-    enable32Bit = true;
-  };
+  hardware.graphics.enable = true;
+  hardware.graphics.enable32Bit = true;
     
   hardware.nvidia = {
+    
     modesetting.enable = true;
-    nvidiaPersistenced = false;
-    nvidiaSettings = true;
     open = false;
+    nvidiaSettings = true;
 
     powerManagement = {
       enable = true;
-      finegrained = true;
+      finegrained = true; # Runtime D3. Revert to false first if suspend/resume misbehaves.
     };
 
     prime.offload = {
       enable = true;
-      enableOffloadCmd = true;
+      # enableOffloadCmd = true;
     };
+
     prime = {
       intelBusId = "PCI:0:2:0";
       nvidiaBusId = "PCI:1:0:0";
     };
+
   };
 }
