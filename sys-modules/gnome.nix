@@ -12,9 +12,9 @@
 
   environment.systemPackages = with pkgs; [ adwaita-icon-theme ];
 
-  environment.sessionVariables = {
-    XCURSOR_THEME = "Adwaita";
-    XCURSOR_SIZE = "24";
+  home-manager.users.dectec.pointerCursor = {
+    enable = true;
+    name = "Vanilla-DMZ";
   };
 
   services.displayManager.autoLogin = {
