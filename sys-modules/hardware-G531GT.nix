@@ -14,12 +14,12 @@
 
     powerManagement = {
       enable = true;
-      finegrained = true; # Runtime D3. Revert to false first if suspend/resume misbehaves.
+      finegrained = false # Runtime D3. Revert to false first if suspend/resume misbehaves.
     };
 
     prime.offload = {
-      enable = true;
-      # enableOffloadCmd = true;
+      enable = false;
+      enableOffloadCmd = false;
     };
 
     prime = {
