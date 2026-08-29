@@ -4,8 +4,8 @@
 {
   services.displayManager.gdm = {
     enable = true;
-    after = [ "systemd-udev-settle.service" ];
-    wants = [ "systemd-udev-settle.service" ];
+    #after = [ "systemd-udev-settle.service" ];
+    #wants = [ "systemd-udev-settle.service" ];
   };
 
   services.desktopManager.gnome.enable = true;
