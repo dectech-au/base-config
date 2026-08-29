@@ -1,5 +1,5 @@
 #/etc/nixos/sys-modules/gnome.nix
-{ ... }:
+{ config, lib, pkgs, ... }:
 
 {
   services.displayManager.gdm = {
