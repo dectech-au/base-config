@@ -2,8 +2,8 @@
 { ... }:
 
 {
-  services.displayManager = {
-    gdm.enable = true;
+  services.displayManager.gdm = {
+    enable = true;
     after = [ "systemd-udev-settle.service" ];
     wants = [ "systemd-udev-settle.service" ];
   };
