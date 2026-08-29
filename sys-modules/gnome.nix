@@ -10,6 +10,8 @@
 
   services.desktopManager.gnome.enable = true;
 
+  environment.systemPackages = with pkgs; [ adwaita-icon-theme ];
+
   services.displayManager.autoLogin = {
     enable = true;
     user = "leo";
