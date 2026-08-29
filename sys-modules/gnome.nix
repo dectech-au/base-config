@@ -12,7 +12,7 @@
 
   environment.systemPackages = with pkgs; [ adwaita-icon-theme ];
 
-  home-manager.users.home.dectec.pointerCursor = {
+  home-manager.users.dectec.home.pointerCursor = {
     enable = true;
     package = "pkgs.vanilla-dmz";    
     name = "Vanilla-DMZ";
