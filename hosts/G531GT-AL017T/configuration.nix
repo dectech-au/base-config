@@ -10,6 +10,7 @@ nix.daemonIOSchedClass = "idle";
 		../../sys-modules/networking.nix
 		../../sys-modules/hostname.nix
 		../../sys-modules/ssh.nix
+		../../sys-modules/steam.nix
 
 
 
@@ -87,7 +88,6 @@ nix.daemonIOSchedClass = "idle";
 		#../../sys-modules/sensors.nix
 		#../../sys-modules/signal-desktop.nix
 		#../../sys-modules/sshfs.nix
-		#../../sys-modules/steam.nix
 		#../../sys-modules/sunshine.nix
 		#../../sys-modules/super-nintendo.nix
 		#../../sys-modules/teamviewer.nix
