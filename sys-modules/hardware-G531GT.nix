@@ -15,7 +15,7 @@
 
   hardware = {
     graphics.enable = true;
-    enable32Bit = true;
+    graphics.enable32Bit = true;
 
     
     nvidia = {
