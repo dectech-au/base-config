@@ -12,6 +12,9 @@ nix.daemonIOSchedClass = "idle";
 		../../sys-modules/ssh.nix
 		../../sys-modules/steam.nix
 		../../sys-modules/hardware-G531GT.nix
+		../../sys-modules/cursor.nix
+		../../sys-modules/firefox.nix
+
 
 
 
@@ -48,10 +51,8 @@ nix.daemonIOSchedClass = "idle";
 		#../../sys-modules/btrfs.nix
 		#../../sys-modules/chrome.nix
 		#../../sys-modules/core-packages.nix
-		#../../sys-modules/cursor.nix
 		#../../sys-modules/dev.nix
 		#../../sys-modules/evolution.nix
-		#../../sys-modules/firefox.nix
 		#../../sys-modules/firewall.nix
 		#../../sys-modules/flatpak.nix
 		#../../sys-modules/fonts.nix
