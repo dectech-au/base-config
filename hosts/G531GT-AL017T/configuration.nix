@@ -11,7 +11,7 @@ nix.daemonIOSchedClass = "idle";
 		../../sys-modules/hostname.nix
 		../../sys-modules/ssh.nix
 		../../sys-modules/steam.nix
-		../../sys-modules/nvidia.nix
+		../../sys-modules/hardware-G531GT.nix
 
 
 
