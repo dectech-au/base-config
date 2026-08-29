@@ -14,7 +14,9 @@
 
   home-manager.users.dectec.pointerCursor = {
     enable = true;
+    package = "pkgs.vanilla-dmz";    
     name = "Vanilla-DMZ";
+    size = 32;
   };
 
   services.displayManager.autoLogin = {
