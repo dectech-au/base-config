@@ -13,31 +13,28 @@
 
   services.xserver.videoDrivers = [ "nvidia" ];
 
-  hardware = {
-    graphics.enable = true;
-    graphics.enable32Bit = true;
-
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
     
-    nvidia = {
-      modesetting.enable = true;
-      nvidiaPersistenced = false;
+  hardware.nvidia = {
+    modesetting.enable = true;
+    nvidiaPersistenced = false;
+    nvidiaSettings = true;
+    open = false;
 
-      open = false;
-      powerManagement = {
-        enable = true;
-        finegrained = false;
-      };
-
-      nvidiaSettings = true;
-
-      prime = {
-        offload = {
-          enable = true;
-          enableOffloadCmd = true;
-        };
-        intelBusId = "PCI:0:2:0";
-        nvidiaBusId = "PCI:1:0:0";
-      };
+    powerManagement = {
+      enable = true;
+      finegrained = false;
     };
+
+    prime.offload = {
+      enable = true;
+      enableOffloadCmd = true;
+    };
+    prime = {
+      intelBusId = "PCI:0:2:0";
+      nvidiaBusId = "PCI:1:0:0";
+    }
   };
 }
