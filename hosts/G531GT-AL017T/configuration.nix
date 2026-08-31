@@ -15,6 +15,7 @@ nix.daemonIOSchedClass = "idle";
 		../../sys-modules/hardware-G531GT.nix
 		../../sys-modules/cursor.nix
 		../../sys-modules/firefox.nix
+		../../sys-modules/steam-big-picture-leo.nix
 
 
 
@@ -32,7 +33,6 @@ nix.daemonIOSchedClass = "idle";
 		#../../sys-modules/server-mount.nix
 		#../../sys-modules/session.nix
 		#../../sys-modules/star-rail-macro.nix
-		#../../sys-modules/steam-big-picture-leo.nix
 		#../../sys-modules/tailscale.nix
 		#../../sys-modules/teams.nix
 		#../../sys-modules/update-passwordless.nix
