@@ -15,15 +15,6 @@
     user = "leo";
   };
 
-  home-manager.users.leo = {
-  dconf.settings."org/gnome/shell" = {
-      disable-user-extensions = false;
-      enabled-extensions = [ 
-        "no-overview@fthx"
-      ];
-    };
-  };
-
   #services.udev.extraRules = ''
   #  SUBSYSTEM=="drm", KERNEL=="card*", DRIVERS=="i915", TAG+="mutter-device-preferred-primary"
   #'';
