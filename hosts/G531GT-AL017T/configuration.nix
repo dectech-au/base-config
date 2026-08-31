@@ -6,6 +6,7 @@ nix.daemonIOSchedClass = "idle";
 
 	imports = [ 
 		../../hardware-configuration.nix
+		./leo.nix
 		../../sys-modules/gnome.nix
 		../../sys-modules/networking.nix
 		../../sys-modules/hostname.nix
