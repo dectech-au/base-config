@@ -16,6 +16,7 @@ nix.daemonIOSchedClass = "idle";
 		../../sys-modules/cursor.nix
 		../../sys-modules/firefox.nix
 		../../sys-modules/steam-big-picture-leo.nix
+		../../sys-modules/signal-desktop.nix
 
 
 
@@ -88,7 +89,6 @@ nix.daemonIOSchedClass = "idle";
 		#../../sys-modules/reliquary-archiver2.nix
 		#../../sys-modules/remotemouse.nix
 		#../../sys-modules/sensors.nix
-		#../../sys-modules/signal-desktop.nix
 		#../../sys-modules/sshfs.nix
 		#../../sys-modules/sunshine.nix
 		#../../sys-modules/super-nintendo.nix
