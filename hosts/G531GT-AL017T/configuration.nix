@@ -21,7 +21,7 @@ nix.daemonIOSchedClass = "idle";
 
 
 
-		#../../sys-modules/adb.nix
+		../../sys-modules/adb.nix
 		#../../sys-modules/docker.nix
 		#../../sys-modules/jellyfin.nix
 		#../../sys-modules/krdp.nix
