@@ -1,5 +1,6 @@
 { config, lib, pkgs, ... }:
 {
-  programs.adb.enable = true;
-  users.users.dectec.extraGroups = [ "adbusers" ];
+  environment.systemPackages = with pkgs; [
+    android-tools
+  ];
 }
