@@ -1,6 +1,11 @@
 { config, lib, pkgs, ... }:
 {
 
+imports = [
+
+  ../../home-modules/lutris.nix
+];
+
   home-manager.users.leo = {
     home.stateVersion = "26.05";  
 
