@@ -1,5 +1,8 @@
 #./home-modules/lutris.nix
 { config, lib, pkgs, ... }:
 {
-  programs.lutris.enable = true;
+
+  home-manager.users.leo = {
+    programs.lutris.enable = true;
+  };
 }
