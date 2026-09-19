@@ -18,6 +18,7 @@ nix.daemonIOSchedClass = "idle";
 		../../sys-modules/steam-big-picture-leo.nix
 		../../sys-modules/signal-desktop.nix
 		../../sys-modules/claude.nix
+		../../sys-modules/lutris.nix
 
 
 
