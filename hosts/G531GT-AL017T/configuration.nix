@@ -4,6 +4,8 @@
 nix.daemonCPUSchedPolicy = "idle";
 nix.daemonIOSchedClass = "idle";
 
+  boot.blacklistedKernelModules = [ "hid_asus" ];
+
 	imports = [ 
 		../../hardware-configuration.nix
 		./leo.nix
