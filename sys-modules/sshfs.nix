@@ -18,7 +18,7 @@ fileSystems."/home/Games/SteamLibrary-dectech-6af36c" = {
     "_netdev"
     "reconnect"
     "ServerAliveInterval=15"
-    "IdentityFile=/root/.ssh/id_ed25519"
+    "IdentityFile=/root/.ssh/id_ed25519_sshfs"
     "uid=1000"
     "gid=100"
     "allow_other"
