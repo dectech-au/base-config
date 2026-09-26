@@ -22,6 +22,7 @@ nix.daemonIOSchedClass = "idle";
 		../../sys-modules/claude.nix
 		../../sys-modules/qbittorrent.nix
 		../../sys-modules/tailscale.nix
+		../../sys-modules/sshfs.nix
 
 
 		../../sys-modules/adb.nix
