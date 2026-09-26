@@ -10,7 +10,7 @@
 # or declaratively:
 
 fileSystems."/home/Games/SteamLibrary-dectech-6af36c" = {
-  device = "zozano@192.168.1.199:/home/SteamLibrary";
+  device = "zozano@100.64.0.5:/home/SteamLibrary";
   fsType = "sshfs";
     options = [
     "nodev"
