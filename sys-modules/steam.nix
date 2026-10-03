@@ -9,6 +9,11 @@
 
   programs.gamemode.enable = true;
 
+  users.groups.steamshare = { };
+
+  users.users.leo.extraGroups = [ "steamshare" ];
+  users.users.dectec.extraGroups = [ "steamshare" ];
+
   # systemd.user.services.steam-autostart = {
   #  enable = true;
   #  description = "Auto-start Steam on login";
