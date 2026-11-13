@@ -30,7 +30,7 @@
 		../../home-modules/start-menu/windows.nix
 		../../home-modules/syncthing.nix
 		#./personalisation/wallpaper.nix
-		../../custom-modules/hastings-preschool/0-imports.nix
+		#../../custom-modules/hastings-preschool/0-imports.nix
   ];
 
   home.username = "dectec";
