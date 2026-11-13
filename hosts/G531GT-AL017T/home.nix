@@ -15,7 +15,7 @@
 		#../../home-modules/lutris.nix
 		#../../home-modules/onlyoffice.nix
 		#../../home-modules/papirus-theme.nix
-		../../home-modules/plasma-manager.nix
+		#../../home-modules/plasma-manager.nix
 		#../../home-modules/remotemouse.nix
 		../../home-modules/tabula-java.nix
 		../../home-modules/thunderbird.nix
