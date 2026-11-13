@@ -20,7 +20,7 @@
 		../../home-modules/tabula-java.nix
 		../../home-modules/thunderbird.nix
 		#../../home-modules/thunderbird-theme.nix
-		../../home-modules/vscode.nix
+		#../../home-modules/vscode.nix
 		../../home-modules/yt-dlp.nix
 		../../home-modules/signal_overlay.nix
 		../../home-modules/scripts/open-journal.nix
